@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 function Header() {
   const navigate = useNavigate();
-  const userName = "María Carmen";
+  const userName = "Marí Carmen";
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {

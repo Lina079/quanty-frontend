@@ -257,6 +257,44 @@ function Inversiones() {
               </div>
             ))}
           </div>
+
+          {/* Disclaimer de CoinGecko */}
+          <div style={{ 
+            maxWidth: '800px',
+            margin: '40px auto 0',
+            padding: '24px',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            textAlign: 'center'
+          }}>
+            <p style={{ 
+              fontSize: '14px', 
+              color: 'var(--text-secondary)',
+              marginBottom: '8px',
+              lineHeight: '1.6'
+            }}>
+              📊 Datos de mercado en tiempo real proporcionados por{' '}
+              <a 
+                href="https://www.coingecko.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ 
+                  color: 'var(--cyan-accent)', 
+                  textDecoration: 'none',
+                  fontWeight: '700'
+                }}
+              >
+                CoinGecko API
+              </a>
+            </p>
+            <p style={{ 
+              fontSize: '12px', 
+              color: 'var(--text-secondary)',
+              margin: 0,
+              opacity: 0.7
+            }}>
+              S&P 500 es un valor de referencia
+            </p>
+          </div>
         </>
       )}
     </div>

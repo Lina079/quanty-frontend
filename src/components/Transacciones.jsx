@@ -7,13 +7,18 @@ function Transacciones() {
   // Calcular totales desde localStorage
   const calcularTotales = () => {
     const gastos = JSON.parse(localStorage.getItem('gastos') || '[]');
+    const ingresos = JSON.parse(localStorage.getItem('ingresos') || '[]');
+    const ahorros = JSON.parse(localStorage.getItem('ahorros') || '[]');
+    
     const totalGastos = gastos.reduce((sum, g) => sum + g.monto, 0);
+    const totalIngresos = ingresos.reduce((sum, i) => sum + i.monto, 0);
+    const totalAhorros = ahorros.reduce((sum, a) => sum + a.monto, 0);
 
     return {
       gastos: totalGastos,
-      ingresos: 2500, // Hardcodeado por ahora
-      ahorro: 500,
-      inversion: 800
+      ingresos: totalIngresos,
+      ahorro: totalAhorros,
+      inversion: 800 // Hardcodeado por ahora
     };
   };
 
@@ -27,49 +32,46 @@ function Transacciones() {
       </p>
 
       {/* Quantum con mensaje */}
-    <div style={{ 
-      position: 'relative',
-      maxWidth: '800px',
-      margin: '0 auto 40px'
-    }}>
       <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '20px', 
-        background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
-        padding: '20px 24px',
-        borderRadius: '20px',
-        border: '1px solid rgba(255,255,255,.08)',
-        position: 'relative'
+        position: 'relative',
+        maxWidth: '800px',
+        margin: '0 auto 40px'
       }}>
-        <img 
-          src={quantumHalf} 
-          alt="Quantum" 
-          style={{ 
-            width: '80px', 
-            height: '80px',
-            flexShrink: 0
-          }} 
-        />
-        <p style={{ 
-          fontSize: '18px', 
-          fontWeight: '600', 
-          margin: 0,
-          lineHeight: '1.4'
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '20px', 
+          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+          padding: '20px 24px',
+          borderRadius: '20px',
+          border: '1px solid rgba(255,255,255,.08)',
+          position: 'relative'
         }}>
-          🌟 Tu panorama financiero en una vista. ¡El conocimiento es poder!
-        </p>
-      </div>
-    </div>
-
-      <div className="cards" style={{ marginTop: '40px' }}>
+          <img 
+            src={quantumHalf} 
+            alt="Quantum" 
+            style={{ 
+              width: '80px', 
+              height: '80px',
+              flexShrink: 0
+            }} 
+          />
+          <p style={{ 
+            fontSize: '18px', 
+            fontWeight: '600', 
+            margin: 0,
+            lineHeight: '1.4'
+          }}>
+            🌟 Tu panorama financiero en una vista. ¡El conocimiento es poder!
+          </p>
+        </div>
       </div>
 
       <div className="cards" style={{ marginTop: '40px' }}>
         {/* Card Gastos */}
         <div 
           className="card"
-          onClick={() => navigate('/detalle-gastos')}
+          onClick={() => navigate('/gastos')}
           style={{ cursor: 'pointer' }}
         >
           <h3>💸 Gastos Totales</h3>
@@ -82,18 +84,32 @@ function Transacciones() {
         </div>
 
         {/* Card Ingresos */}
-        <div className="card">
+        <div 
+          className="card"
+          onClick={() => navigate('/ingresos')}
+          style={{ cursor: 'pointer' }}
+        >
           <h3>💰 Ingresos Totales</h3>
           <p style={{ fontSize: '36px', fontWeight: '800', color: '#4ADE80', marginTop: '16px' }}>
             €{totales.ingresos.toFixed(2)}
           </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
+            👉 Ver detalle
+          </p>
         </div>
 
         {/* Card Ahorro */}
-        <div className="card">
+        <div 
+          className="card"
+          onClick={() => navigate('/ahorros')}
+          style={{ cursor: 'pointer' }}
+        >
           <h3>🏦 Ahorro Total</h3>
           <p style={{ fontSize: '36px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '16px' }}>
             €{totales.ahorro.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
+            👉 Ver detalle
           </p>
         </div>
 
