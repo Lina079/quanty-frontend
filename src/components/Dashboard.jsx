@@ -7,11 +7,19 @@ import iconoInversion from '../images/inversion_planta_256x256.png';
 
 function Dashboard() {
   const navigate = useNavigate();
+  const userName = "Marí Carmen";
   
-  // Datos hardcodeados por ahora
-  const userName = "María";
+  // Calcular total de gastos directamente (se recalcula en cada render)
+  const calcularTotalGastos = () => {
+    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
+    return gastosGuardados.reduce((sum, gasto) => sum + gasto.monto, 0);
+  };
+
   const financialData = {
-    gastos: { porcentaje: 60, monto: 1800 },
+    gastos: { 
+      porcentaje: 60, 
+      monto: calcularTotalGastos() // Se recalcula cada vez
+    },
     ingresos: { monto: 2500 },
     ahorro: { monto: 500 },
     inversion: { porcentaje: 5.4 }
@@ -39,15 +47,21 @@ function Dashboard() {
 
       {/* Grid de 4 tarjetas */}
       <div className="cards">
-        {/* Card Gastos */}
-        <div className="card">
+        {/* Card Gastos - CLICKEABLE */}
+        <div 
+          className="card"
+          onClick={() => navigate('/gastos')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="card__icon">
             <img src={iconoGastos} alt="Gastos" />
           </div>
           <h3>Gastos</h3>
-          <p>Has usado {financialData.gastos.porcentaje}%</p>
-          <p style={{ fontSize: '24px', fontWeight: '700', color: 'var(--text-primary)', marginTop: '8px' }}>
-            €{financialData.gastos.monto}
+          <p style={{ fontSize: '32px', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
+            €{financialData.gastos.monto.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '22px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para agregar gasto
           </p>
         </div>
 

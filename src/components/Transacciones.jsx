@@ -1,33 +1,76 @@
+import { useNavigate } from 'react-router-dom';
+
 function Transacciones() {
-  const transactions = [
-    { id: 1, type: 'Ingreso', category: 'Sueldo', amount: 2500, date: '2025-01-31' },
-    { id: 2, type: 'Gasto', category: 'Mercado', amount: -85, date: '2025-01-28' },
-    { id: 3, type: 'Ahorro', category: 'Reserva', amount: 500, date: '2025-01-25' },
-  ];
+  const navigate = useNavigate();
+
+  // Calcular totales desde localStorage
+  const calcularTotales = () => {
+    const gastos = JSON.parse(localStorage.getItem('gastos') || '[]');
+    const totalGastos = gastos.reduce((sum, g) => sum + g.monto, 0);
+
+    return {
+      gastos: totalGastos,
+      ingresos: 2500, // Hardcodeado por ahora
+      ahorro: 500,
+      inversion: 800
+    };
+  };
+
+  const totales = calcularTotales();
 
   return (
     <div className="wrapper">
-      <h1>Transacciones</h1>
-      <p className="subtitle">Historial de tus movimientos financieros</p>
+      <h1 style={{ textAlign: 'center' }}>Transacciones</h1>
+      <p className="subtitle" style={{ textAlign: 'center' }}>
+        Resumen completo de tus finanzas
+      </p>
 
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        {transactions.map(tx => (
-          <div key={tx.id} className="card" style={{ marginBottom: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <h3 style={{ marginBottom: '4px' }}>{tx.category}</h3>
-                <p style={{ fontSize: '14px' }}>{tx.type} • {tx.date}</p>
-              </div>
-              <p style={{ 
-                fontSize: '24px', 
-                fontWeight: '700', 
-                color: tx.amount > 0 ? '#4ADE80' : '#EF4444' 
-              }}>
-                {tx.amount > 0 ? '+' : ''}€{Math.abs(tx.amount)}
-              </p>
-            </div>
-          </div>
-        ))}
+      <div className="cards" style={{ marginTop: '40px' }}>
+        {/* Card Gastos */}
+        <div 
+          className="card"
+          onClick={() => navigate('/detalle-gastos')}
+          style={{ cursor: 'pointer' }}
+        >
+          <h3>💸 Gastos Totales</h3>
+          <p style={{ fontSize: '36px', fontWeight: '800', color: '#EF4444', marginTop: '16px' }}>
+            €{totales.gastos.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
+            👉 Ver detalle
+          </p>
+        </div>
+
+        {/* Card Ingresos */}
+        <div className="card">
+          <h3>💰 Ingresos Totales</h3>
+          <p style={{ fontSize: '36px', fontWeight: '800', color: '#4ADE80', marginTop: '16px' }}>
+            €{totales.ingresos.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Card Ahorro */}
+        <div className="card">
+          <h3>🏦 Ahorro Total</h3>
+          <p style={{ fontSize: '36px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '16px' }}>
+            €{totales.ahorro.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Card Inversión */}
+        <div 
+          className="card"
+          onClick={() => navigate('/inversiones')}
+          style={{ cursor: 'pointer' }}
+        >
+          <h3>📈 Inversión Total</h3>
+          <p style={{ fontSize: '36px', fontWeight: '800', color: '#FFD700', marginTop: '16px' }}>
+            €{totales.inversion.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
+            👉 Ver portfolio
+          </p>
+        </div>
       </div>
     </div>
   );
