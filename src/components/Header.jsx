@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
   const userName = "Marí Carmen"; // Hardcodeado por ahora
 
   return (
@@ -12,14 +13,17 @@ function Header() {
       maxWidth: '1080px',
       margin: '0 auto'
     }}>
-      {/* Logo */}
-      <h2 style={{ 
+      {/* Logo - clickeable */}
+      <h2 
+        onClick={() => navigate('/')}
+        style={{ 
         fontSize: '24px', 
         fontWeight: '800',
         background: 'linear-gradient(135deg, #38E1FF 0%, #2BE3FF 100%)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        margin: 0
+        margin: 0,
+        cursor: 'pointer' //agregado
       }}>
         QUANTY
       </h2>
@@ -34,15 +38,7 @@ function Header() {
         }}>
           Inicio
         </Link>
-        <Link to="/transacciones" style={{
-          color: 'var(--text-primary)',
-          textDecoration: 'none',
-          fontWeight: '600',
-          transition: 'color 0.2s'
-        }}>
-          Transacciones
-        </Link>
-        
+
         {/* Nombre de usuario */}
         <span style={{
           color: 'var(--cyan-accent)',

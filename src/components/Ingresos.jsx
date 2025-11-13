@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
 import quantumHalf from '../images/quantum_half_fade_256x256.png';
 
-function Gastos() {
-  const [gastos, setGastos] = useState([]);
+function Ingresos() {
+  const [ingresos, setIngresos] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [gastoAEliminar, setGastoAEliminar] = useState(null);
+  const [ingresoAEliminar, setIngresoAEliminar] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -20,30 +20,26 @@ function Gastos() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'compra', label: '🛒 La compra' },
-    { value: 'alquiler', label: '🏠 Alquiler' },
-    { value: 'suministros', label: '💡 Suministros' },
-    { value: 'transporte', label: '🚗 Transporte' },
-    { value: 'gimnasio', label: '💪 Gimnasio' },
-    { value: 'salud', label: '🏥 Salud' },
-    { value: 'viajes', label: '✈️ Viajes' },
-    { value: 'ocio', label: '🎉 Ocio' },
+    { value: 'sueldo', label: '💼 Sueldo' },
+    { value: 'freelance', label: '💻 Freelance' },
+    { value: 'comisiones', label: '💰 Comisiones' },
+    { value: 'dividendos', label: '📈 Dividendos' },
     { value: 'otro', label: '📝 Otro' }
   ];
 
   // Estado para categorías dinámicas
   const [categorias, setCategorias] = useState(categoriasBase);
 
-  const cargarGastos = () => {
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    const gastosOrdenados = gastosGuardados.sort((a, b) => 
+  const cargarIngresos = () => {
+    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
+    const ingresosOrdenados = ingresosGuardados.sort((a, b) => 
       new Date(b.fecha) - new Date(a.fecha)
     );
-    setGastos(gastosOrdenados);
+    setIngresos(ingresosOrdenados);
   };
 
   useEffect(() => {
-    cargarGastos();
+    cargarIngresos();
   }, []);
 
   const handleSubmit = (e) => {
@@ -54,16 +50,16 @@ function Gastos() {
       return;
     }
 
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    const nuevoGasto = {
+    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
+    const nuevoIngreso = {
       id: Date.now(),
       ...formData,
-      tipo: 'gasto',
+      tipo: 'ingreso',
       monto: parseFloat(formData.monto)
     };
 
-    gastosGuardados.push(nuevoGasto);
-    localStorage.setItem('gastos', JSON.stringify(gastosGuardados));
+    ingresosGuardados.push(nuevoIngreso);
+    localStorage.setItem('ingresos', JSON.stringify(ingresosGuardados));
     
     // Reset form
     setFormData({
@@ -73,20 +69,20 @@ function Gastos() {
       fecha: new Date().toISOString().split('T')[0]
     });
     setMostrarFormulario(false);
-    cargarGastos();
+    cargarIngresos();
   };
 
-  const abrirModalEliminar = (gasto) => {
-    setGastoAEliminar(gasto);
+  const abrirModalEliminar = (ingreso) => {
+    setIngresoAEliminar(ingreso);
     setModalOpen(true);
   };
 
   const confirmarEliminar = () => {
-    const gastosActualizados = gastos.filter(g => g.id !== gastoAEliminar.id);
-    localStorage.setItem('gastos', JSON.stringify(gastosActualizados));
-    setGastos(gastosActualizados);
+    const ingresosActualizados = ingresos.filter(i => i.id !== ingresoAEliminar.id);
+    localStorage.setItem('ingresos', JSON.stringify(ingresosActualizados));
+    setIngresos(ingresosActualizados);
     setModalOpen(false);
-    setGastoAEliminar(null);
+    setIngresoAEliminar(null);
   };
 
   const handleAddCustomCategory = () => {
@@ -96,7 +92,7 @@ function Gastos() {
         value: customCategory.toLowerCase().replace(/\s+/g, '-'),
         label: `✨ ${customCategory}`
       };
-      setCategorias([...categoriasBase, nuevaCategoria]);
+      setCategorias([...categorias, nuevaCategoria]);
       
       // Seleccionar la nueva categoría
       setFormData({ ...formData, categoria: customCategory });
@@ -107,20 +103,22 @@ function Gastos() {
 
   const getCategoriaEmoji = (categoria) => {
     const emojis = {
-      'compra': '🛒', 'alquiler': '🏠', 'suministros': '💡',
-      'transporte': '🚗', 'gimnasio': '💪', 'salud': '🏥',
-      'viajes': '✈️', 'ocio': '🎉', 'otro': '📝'
+      'sueldo': '💼',
+      'freelance': '💻',
+      'comisiones': '💰',
+      'dividendos': '📈',
+      'otro': '📝'
     };
-    return emojis[categoria] || '💰';
+    return emojis[categoria] || '💵';
   };
 
-  const totalGastos = gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
+  const totalIngresos = ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
 
   return (
     <div className="wrapper">
-      <h1 style={{ textAlign: 'center' }}>Gestión de Gastos</h1>
+      <h1 style={{ textAlign: 'center' }}>Gestión de Ingresos</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
-        Controla tus gastos de manera efectiva
+        Registra tus fuentes de ingreso
       </p>
 
       {/* Quantum con mensaje */}
@@ -154,7 +152,7 @@ function Gastos() {
             margin: 0,
             lineHeight: '1.4'
           }}>
-            ✨ Registra tu movimiento, pequeño impulso = gran cambio.
+            💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!
           </p>
         </div>
       </div>
@@ -169,12 +167,12 @@ function Gastos() {
           gap: '20px'
         }}>
           <div>
-            <h3 style={{ marginBottom: '8px' }}>Total Gastos</h3>
-            <p style={{ fontSize: '36px', fontWeight: '800', color: '#EF4444', margin: 0 }}>
-              €{totalGastos.toFixed(2)}
+            <h3 style={{ marginBottom: '8px' }}>Total Ingresos</h3>
+            <p style={{ fontSize: '36px', fontWeight: '800', color: '#4ADE80', margin: 0 }}>
+              €{totalIngresos.toFixed(2)}
             </p>
             <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {gastos.length} {gastos.length === 1 ? 'gasto' : 'gastos'} registrados
+              {ingresos.length} {ingresos.length === 1 ? 'ingreso' : 'ingresos'} registrados
             </p>
           </div>
           <button
@@ -184,9 +182,9 @@ function Gastos() {
               borderRadius: '12px',
               border: 'none',
               background: mostrarFormulario 
-                ? 'rgba(239, 68, 68, 0.2)' 
-                : 'linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%)',
-              color: mostrarFormulario ? '#EF4444' : '#00222F',
+                ? 'rgba(74, 222, 128, 0.2)' 
+                : 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
+              color: mostrarFormulario ? '#4ADE80' : '#00222F',
               fontSize: '16px',
               fontWeight: '800',
               cursor: 'pointer',
@@ -194,7 +192,7 @@ function Gastos() {
               transition: 'all 0.2s'
             }}
           >
-            {mostrarFormulario ? '✕ Cancelar' : '+ Agregar Gasto'}
+            {mostrarFormulario ? '✕ Cancelar' : '+ Agregar Ingreso'}
           </button>
         </div>
       </div>
@@ -204,7 +202,7 @@ function Gastos() {
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
             <div className="card">
-              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Gasto</h3>
+              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Ingreso</h3>
 
               {/* Categoría */}
               <div style={{ marginBottom: '20px' }}>
@@ -244,7 +242,7 @@ function Gastos() {
                 <div style={{ 
                   marginBottom: '20px', 
                   padding: '16px',
-                  background: 'rgba(56, 225, 255, 0.1)',
+                  background: 'rgba(74, 222, 128, 0.1)',
                   borderRadius: '12px'
                 }}>
                   <div style={{ display: 'flex', gap: '8px' }}>
@@ -270,7 +268,7 @@ function Gastos() {
                       style={{
                         padding: '10px 20px',
                         borderRadius: '8px',
-                        background: 'var(--cyan-accent)',
+                        background: '#4ADE80',
                         color: '#00222F',
                         border: 'none',
                         fontWeight: '700',
@@ -362,7 +360,7 @@ function Gastos() {
                   padding: '14px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%)',
+                  background: 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
                   color: '#00222F',
                   fontSize: '16px',
                   fontWeight: '800',
@@ -370,26 +368,26 @@ function Gastos() {
                   fontFamily: 'inherit'
                 }}
               >
-                💾 Guardar Gasto
+                💾 Guardar Ingreso
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Lista de gastos */}
+      {/* Lista de ingresos */}
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h3 style={{ marginBottom: '20px' }}>Historial de Gastos</h3>
-        {gastos.length === 0 ? (
+        <h3 style={{ marginBottom: '20px' }}>Historial de Ingresos</h3>
+        {ingresos.length === 0 ? (
           <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <p style={{ fontSize: '48px', margin: '0 0 16px' }}>📊</p>
+            <p style={{ fontSize: '48px', margin: '0 0 16px' }}>💵</p>
             <p style={{ color: 'var(--text-secondary)' }}>
-              No hay gastos registrados. ¡Comienza agregando uno!
+              No hay ingresos registrados. ¡Comienza agregando uno!
             </p>
           </div>
         ) : (
-          gastos.map(gasto => (
-            <div key={gasto.id} className="card" style={{ marginBottom: '12px' }}>
+          ingresos.map(ingreso => (
+            <div key={ingreso.id} className="card" style={{ marginBottom: '12px' }}>
               <div style={{ 
                 display: 'grid', 
                 gridTemplateColumns: '50px 1fr auto auto',
@@ -397,34 +395,34 @@ function Gastos() {
                 alignItems: 'center'
               }}>
                 <div style={{ fontSize: '28px', textAlign: 'center' }}>
-                  {getCategoriaEmoji(gasto.categoria)}
+                  {getCategoriaEmoji(ingreso.categoria)}
                 </div>
                 <div>
                   <h3 style={{ marginBottom: '4px', textTransform: 'capitalize', fontSize: '18px' }}>
-                    {gasto.categoria}
+                    {ingreso.categoria}
                   </h3>
-                  {gasto.descripcion && (
+                  {ingreso.descripcion && (
                     <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '0 0 4px' }}>
-                      {gasto.descripcion}
+                      {ingreso.descripcion}
                     </p>
                   )}
                   <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-                    {new Date(gasto.fecha).toLocaleDateString('es-ES')}
+                    {new Date(ingreso.fecha).toLocaleDateString('es-ES')}
                   </p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: '22px', fontWeight: '800', color: '#EF4444', margin: 0 }}>
-                    €{gasto.monto.toFixed(2)}
+                  <p style={{ fontSize: '22px', fontWeight: '800', color: '#4ADE80', margin: 0 }}>
+                    +€{ingreso.monto.toFixed(2)}
                   </p>
                 </div>
                 <button
-                  onClick={() => abrirModalEliminar(gasto)}
+                  onClick={() => abrirModalEliminar(ingreso)}
                   style={{
                     padding: '8px 16px',
                     borderRadius: '8px',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                    background: 'rgba(239, 68, 68, 0.1)',
-                    color: '#EF4444',
+                    border: '1px solid rgba(74, 222, 128, 0.3)',
+                    background: 'rgba(74, 222, 128, 0.1)',
+                    color: '#4ADE80',
                     fontSize: '13px',
                     fontWeight: '600',
                     cursor: 'pointer',
@@ -443,10 +441,10 @@ function Gastos() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmarEliminar}
-        mensaje="Este gasto se eliminará permanentemente."
+        mensaje="Este ingreso se eliminará permanentemente."
       />
     </div>
   );
 }
 
-export default Gastos;
+export default Ingresos;

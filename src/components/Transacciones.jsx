@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import quantumHalf from '../images/quantum_half_fade_256x256.png';
 
 function Transacciones() {
   const navigate = useNavigate();
@@ -24,6 +25,45 @@ function Transacciones() {
       <p className="subtitle" style={{ textAlign: 'center' }}>
         Resumen completo de tus finanzas
       </p>
+
+      {/* Quantum con mensaje */}
+    <div style={{ 
+      position: 'relative',
+      maxWidth: '800px',
+      margin: '0 auto 40px'
+    }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '20px', 
+        background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+        padding: '20px 24px',
+        borderRadius: '20px',
+        border: '1px solid rgba(255,255,255,.08)',
+        position: 'relative'
+      }}>
+        <img 
+          src={quantumHalf} 
+          alt="Quantum" 
+          style={{ 
+            width: '80px', 
+            height: '80px',
+            flexShrink: 0
+          }} 
+        />
+        <p style={{ 
+          fontSize: '18px', 
+          fontWeight: '600', 
+          margin: 0,
+          lineHeight: '1.4'
+        }}>
+          🌟 Tu panorama financiero en una vista. ¡El conocimiento es poder!
+        </p>
+      </div>
+    </div>
+
+      <div className="cards" style={{ marginTop: '40px' }}>
+      </div>
 
       <div className="cards" style={{ marginTop: '40px' }}>
         {/* Card Gastos */}

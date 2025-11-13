@@ -9,19 +9,33 @@ function Dashboard() {
   const navigate = useNavigate();
   const userName = "Marí Carmen";
   
-  // Calcular total de gastos directamente (se recalcula en cada render)
+  // Calcular totales dinámicos desde localStorage
   const calcularTotalGastos = () => {
     const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
     return gastosGuardados.reduce((sum, gasto) => sum + gasto.monto, 0);
   };
 
+  const calcularTotalIngresos = () => {
+    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
+    return ingresosGuardados.reduce((sum, ingreso) => sum + ingreso.monto, 0);
+  };
+
+  const calcularTotalAhorros = () => {
+    const ahorrosGuardados = JSON.parse(localStorage.getItem('ahorros') || '[]');
+    return ahorrosGuardados.reduce((sum, ahorro) => sum + ahorro.monto, 0);
+  };
+
   const financialData = {
     gastos: { 
       porcentaje: 60, 
-      monto: calcularTotalGastos() // Se recalcula cada vez
+      monto: calcularTotalGastos()
     },
-    ingresos: { monto: 2500 },
-    ahorro: { monto: 500 },
+    ingresos: { 
+      monto: calcularTotalIngresos()
+    },
+    ahorro: { 
+      monto: calcularTotalAhorros()
+    },
     inversion: { porcentaje: 5.4 }
   };
 
@@ -34,14 +48,18 @@ function Dashboard() {
 
       {/* Mensaje de bienvenida */}
       <h1 style={{ textAlign: 'center', margin: '0 0 8px' }}>
-        Bienvenido a Quanty, {userName}
+        Bienvenid@ a Quanty, {userName}
       </h1>
       <p className="subtitle" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 16px' }}>
         Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel cuántico! ✨
       </p>
 
       {/* Botón FAB - Centrado después del subtítulo */}
-      <button className="fab" aria-label="Agregar transacción">
+      <button 
+        className="fab" 
+        aria-label="Ver transacciones"
+        onClick={() => navigate('/transacciones')}
+      >
         +
       </button>
 
@@ -60,30 +78,44 @@ function Dashboard() {
           <p style={{ fontSize: '32px', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
             €{financialData.gastos.monto.toFixed(2)}
           </p>
-          <p style={{ fontSize: '22px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para agregar gasto
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para gestionar
           </p>
         </div>
 
-        {/* Card Ingresos */}
-        <div className="card">
+        {/* Card Ingresos - CLICKEABLE */}
+        <div 
+          className="card"
+          onClick={() => navigate('/ingresos')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="card__icon">
             <img src={iconoIngresos} alt="Ingresos" />
           </div>
           <h3>Ingreso</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
-            €{financialData.ingresos.monto}
+            €{financialData.ingresos.monto.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para gestionar
           </p>
         </div>
 
-        {/* Card Ahorro */}
-        <div className="card">
+        {/* Card Ahorro - CLICKEABLE */}
+        <div 
+          className="card"
+          onClick={() => navigate('/ahorros')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="card__icon">
             <img src={iconoAhorro} alt="Ahorro" />
           </div>
           <h3>Ahorro</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
-            €{financialData.ahorro.monto}
+            €{financialData.ahorro.monto.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para gestionar
           </p>
         </div>
 
@@ -101,7 +133,7 @@ function Dashboard() {
             +{financialData.inversion.porcentaje}%
           </p>
           <p>este mes</p>
-          <p style={{ fontSize: '22px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
             👉 Click para ver detalles
           </p>
         </div>
