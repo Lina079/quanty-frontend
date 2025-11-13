@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
 import Inversiones from './components/Inversiones';
 import Transacciones from './components/Transacciones';
@@ -18,12 +19,14 @@ function AppContent() {
         navigate('/');
       }
     };
+
     window.addEventListener('keydown', handleEsc);
 
   return () => {
     window.removeEventListener('keydown', handleEsc);
   };
 }, [navigate]);
+
   return (
     <>
       <Header />
@@ -35,6 +38,7 @@ function AppContent() {
         <Route path="/ingresos" element={<Ingresos />} />
         <Route path="/ahorros" element={<Ahorros />} />
       </Routes>
+      <Footer />
     </>
   );
 }

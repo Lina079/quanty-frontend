@@ -200,3 +200,201 @@ h3 {
     transform: translateY(0);
   }
 }
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer__copyright {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE FIRST
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* MENÚ HAMBURGUESA - Mostrar botón en móvil */
+  .hamburger-btn {
+    display: block !important;
+  }
+
+  /* Ocultar navegación desktop en móvil */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Mostrar navegación mobile */
+  .mobile-nav {
+    display: flex !important;
+  }
+
+  /* Mostrar overlay cuando menu está abierto */
+  .mobile-menu-overlay {
+    display: block !important;
+  }
+
+  /* Header responsive con hamburguesa */
+  header {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 16px !important;
+  }
+
+  header h2 {
+    font-size: 20px !important;
+  }
+
+  /* Grid de cards - 1 columna en móvil */
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Cards más compactas */
+  .card {
+    padding: 16px 18px !important;
+  }
+
+  .card h3 {
+    font-size: 18px !important;
+  }
+
+  /* Iconos de cards más pequeños */
+  .card__icon {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  /* Quantum más pequeño */
+  .quantum {
+    width: min(50vw, 200px) !important;
+    margin: 0 auto 20px !important;
+  }
+
+  /* Títulos responsive */
+  h1 {
+    font-size: clamp(28px, 8vw, 48px) !important;
+  }
+
+  h2 {
+    font-size: clamp(20px, 6vw, 32px) !important;
+  }
+
+  .subtitle {
+    font-size: 14px !important;
+  }
+
+  /* Botón FAB */
+  .fab {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 28px !important;
+    margin: 16px auto 20px !important;
+  }
+
+  /* Formularios responsive */
+  .card form input,
+  .card form select,
+  .card form button {
+    font-size: 14px !important;
+  }
+
+  /* Botones más pequeños en móvil */
+  button {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+
+  /* Quantum con mensaje - columna en móvil */
+  .quantum + p,
+  [style*="display: flex"][style*="gap: 20px"] {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+
+  [style*="display: flex"][style*="gap: 20px"] img {
+    margin: 0 auto !important;
+  }
+
+  /* Listas de transacciones - ajustar grid */
+  [style*="grid-template-columns: '50px 1fr auto auto'"],
+  [style*="gridTemplateColumns"] {
+    grid-template-columns: 40px 1fr auto !important;
+    gap: 8px !important;
+  }
+
+  /* Inversiones - tabla responsive */
+  [style*="grid-template-columns: '2fr 1fr 1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    text-align: center !important;
+  }
+
+  /* Gráfica responsive */
+  .recharts-wrapper {
+    width: 100% !important;
+  }
+
+  /* Modal más pequeño en móvil */
+  [style*="position: fixed"] .card {
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+
+  /* Resumen cards - stack vertical en móvil */
+  [style*="display: grid"][style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 480px) {
+  [style*="grid-template-columns"] button {
+    padding: 8px !important;
+    font-size: 18px !important;
+  }
+}
+
+/* Tablets y pantallas medianas */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .quantum {
+    width: min(35vw, 280px) !important;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 380px) {
+  .wrapper {
+    padding: 12px !important;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  .card {
+    padding: 12px !important;
+  }
+
+  .card__icon {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  /* Quantum mensaje más compacto */
+  [style*="fontSize: '18px'"] {
+    font-size: 14px !important;
+  }
+}
