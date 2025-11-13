@@ -37,6 +37,8 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   background-attachment: fixed;
+  margin: 0;
+  overflow-x: hidden;
 }
 
 /* Wrapper principal */
@@ -51,7 +53,7 @@ h1 {
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.02em;
-  font-size: clamp(36px, 6vw, 42px);
+  font-size: clamp(36px, 6vw, 38px);
   margin: 0 0 16px;
   color: var(--text-primary);
 }
@@ -133,11 +135,9 @@ h3 {
 
 /* Botón FAB */
 .fab {
-  position: fixed;
-  right: clamp(16px, 4vw, 40px);
-  bottom: clamp(16px, 4vw, 40px);
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
+  margin: 20px auto 24px;
   border-radius: 18px;
   background: linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%);
   color: #00222F;
@@ -149,6 +149,11 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.18);
   cursor: pointer;
   transition: transform 0.1s ease;
+  border: none;
+}
+
+.fab:hover {
+  transform: scale(1.05);
 }
 
 .fab:active {
@@ -158,8 +163,8 @@ h3 {
 /* Robot Quantum */
 .quantum {
   position: relative;
-  width: min(40vw, 360px);
-  margin: 0 auto 40px;
+  width: min(30vw, 280px);
+  margin: 0 auto 24px;
 }
 
 .quantum::before {
@@ -177,4 +182,10 @@ h3 {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* Animación del preloader */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -34,14 +34,6 @@ function Header() {
         }}>
           Inicio
         </Link>
-        <Link to="/inversiones" style={{
-          color: 'var(--text-primary)',
-          textDecoration: 'none',
-          fontWeight: '600',
-          transition: 'color 0.2s'
-        }}>
-          Inversiones
-        </Link>
         <Link to="/transacciones" style={{
           color: 'var(--text-primary)',
           textDecoration: 'none',

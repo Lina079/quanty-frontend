@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import quantumImg from '../images/Quantum-allBody.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
@@ -5,8 +6,10 @@ import iconoAhorro from '../images/ahorro_caja_fuerte_256x256.png';
 import iconoInversion from '../images/inversion_planta_256x256.png';
 
 function Dashboard() {
+  const navigate = useNavigate();
+  
   // Datos hardcodeados por ahora
-  const userName = "Marí Carmen";
+  const userName = "María";
   const financialData = {
     gastos: { porcentaje: 60, monto: 1800 },
     ingresos: { monto: 2500 },
@@ -22,12 +25,17 @@ function Dashboard() {
       </div>
 
       {/* Mensaje de bienvenida */}
-      <h1 style={{ textAlign: 'center' }}>
-        ¡Bienvenid@ a Quanty! {userName}
+      <h1 style={{ textAlign: 'center', margin: '0 0 8px' }}>
+        Bienvenido a Quanty, {userName}
       </h1>
-      <p className="subtitle" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 40px' }}>
-        Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel Qántico! ✨
+      <p className="subtitle" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 16px' }}>
+        Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel cuántico! ✨
       </p>
+
+      {/* Botón FAB - Centrado después del subtítulo */}
+      <button className="fab" aria-label="Agregar transacción">
+        +
+      </button>
 
       {/* Grid de 4 tarjetas */}
       <div className="cards">
@@ -65,8 +73,12 @@ function Dashboard() {
           </p>
         </div>
 
-        {/* Card Inversión */}
-        <div className="card">
+        {/* Card Inversión - CLICKEABLE */}
+        <div 
+          className="card" 
+          onClick={() => navigate('/inversiones')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="card__icon">
             <img src={iconoInversion} alt="Inversión" />
           </div>
@@ -75,13 +87,11 @@ function Dashboard() {
             +{financialData.inversion.porcentaje}%
           </p>
           <p>este mes</p>
+          <p style={{ fontSize: '22px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para ver detalles
+          </p>
         </div>
       </div>
-
-      {/* Botón FAB */}
-      <button className="fab" aria-label="Agregar transacción">
-        +
-      </button>
     </div>
   );
 }
