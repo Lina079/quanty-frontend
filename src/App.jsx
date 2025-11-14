@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Dashboard from './components/Dashboard';
+import Inversiones from './components/Inversiones';
+import Transacciones from './components/Transacciones';
+import Gastos from './components/Gastos';
+import Ingresos from './components/Ingresos';
+import Ahorros from './components/Ahorros';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        navigate('/');
+      }
+    };
+
+    window.addEventListener('keydown', handleEsc);
+
+  return () => {
+    window.removeEventListener('keydown', handleEsc);
+  };
+}, [navigate]);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/inversiones" element={<Inversiones />} />
+        <Route path="/transacciones" element={<Transacciones />} />
+        <Route path="/gastos" element={<Gastos />} />
+        <Route path="/ingresos" element={<Ingresos />} />
+        <Route path="/ahorros" element={<Ahorros />} />
+      </Routes>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+function App () {
+  return (
+    <BrowserRouter>
+    <AppContent />
+    </BrowserRouter>
+  );
+}
+
+
+export default App;

@@ -1,68 +1,400 @@
+/* Importar fuente Manrope de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap');
+
+/* Variables CSS */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --bg-1: #061A2B;
+  --bg-2: #0B2840;
+  --star-1: rgba(82, 224, 255, 0.6);
+  --star-2: rgba(28, 214, 242, 0.45);
+  --cyan-accent: #38E1FF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B7C8D6;
+  --card-bg-start: rgba(14, 49, 71, 0.85);
+  --card-bg-end: rgba(11, 36, 54, 0.85);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+/* Reset básico */
+* {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body con fondo de estrellas */
+body {
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 75% 20%, rgba(28, 214, 242, 0.12), transparent 60%),
+    radial-gradient(800px 400px at 20% 60%, rgba(82, 224, 255, 0.08), transparent 60%),
+    radial-gradient(2px 2px at 78% 18%, var(--star-1), transparent 60%),
+    radial-gradient(2px 2px at 70% 30%, var(--star-2), transparent 60%),
+    radial-gradient(1.5px 1.5px at 60% 10%, rgba(255, 255, 255, 0.35), transparent 60%),
+    radial-gradient(2px 2px at 25% 45%, var(--star-1), transparent 60%),
+    radial-gradient(1.5px 1.5px at 85% 60%, var(--star-2), transparent 60%),
+    radial-gradient(2px 2px at 15% 75%, rgba(255, 255, 255, 0.4), transparent 60%),
+    linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+  color: var(--text-primary);
   min-height: 100vh;
+  background-attachment: fixed;
+  margin: 0;
+  overflow-x: hidden;
 }
 
+/* Wrapper principal */
+.wrapper {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 40px);
+}
+
+/* Títulos */
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-size: clamp(36px, 6vw, 38px);
+  margin: 0 0 16px;
+  color: var(--text-primary);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+h2 {
+  font-weight: 700;
+  font-size: clamp(24px, 4vw, 36px);
+  margin: 0 0 12px;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+
+/* Subtítulo */
+.subtitle {
+  color: var(--text-secondary);
+  font-size: clamp(22px, 2.2vw, 18px);
+  margin: 8px 0 28px;
+  line-height: 1.5;
+}
+
+/* Grid de cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Card individual */
+.card {
+  position: relative;
+  border-radius: 20px;
+  padding: 20px 22px;
+  background: linear-gradient(160deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.card h3 {
+  color: var(--text-primary);
+}
+
+.card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* Icono de card */
+.card__icon {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Botón FAB */
+.fab {
+  width: 56px;
+  height: 56px;
+  margin: 20px auto 24px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%);
+  color: #00222F;
+  font-weight: 800;
+  font-size: 34px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 28px rgba(18, 180, 214, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: transform 0.1s ease;
+  border: none;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.fab:hover {
+  transform: scale(1.05);
+}
+
+.fab:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* Robot Quantum */
+.quantum {
+  position: relative;
+  width: min(30vw, 280px);
+  margin: 0 auto 24px;
+}
+
+.quantum::before {
+  content: "";
+  position: absolute;
+  inset: 10% -10% -10% -10%;
+  background: radial-gradient(50% 50% at 60% 30%, rgba(56, 225, 255, 0.18), transparent 70%);
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.quantum img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Animación del preloader */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  a:hover {
-    color: #747bff;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer__copyright {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE FIRST
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* MENÚ HAMBURGUESA - Mostrar botón en móvil */
+  .hamburger-btn {
+    display: block !important;
+  }
+
+  /* Ocultar navegación desktop en móvil */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Mostrar navegación mobile */
+  .mobile-nav {
+    display: flex !important;
+  }
+
+  /* Mostrar overlay cuando menu está abierto */
+  .mobile-menu-overlay {
+    display: block !important;
+  }
+
+  /* Header responsive con hamburguesa */
+  header {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 16px !important;
+  }
+
+  header h2 {
+    font-size: 20px !important;
+  }
+
+  /* Grid de cards - 1 columna en móvil */
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Cards más compactas */
+  .card {
+    padding: 16px 18px !important;
+  }
+
+  .card h3 {
+    font-size: 18px !important;
+  }
+
+  /* Iconos de cards más pequeños */
+  .card__icon {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  /* Quantum más pequeño */
+  .quantum {
+    width: min(50vw, 200px) !important;
+    margin: 0 auto 20px !important;
+  }
+
+  /* Títulos responsive */
+  h1 {
+    font-size: clamp(28px, 8vw, 48px) !important;
+  }
+
+  h2 {
+    font-size: clamp(20px, 6vw, 32px) !important;
+  }
+
+  .subtitle {
+    font-size: 14px !important;
+  }
+
+  /* Botón FAB */
+  .fab {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 28px !important;
+    margin: 16px auto 20px !important;
+  }
+
+  /* Formularios responsive */
+  .card form input,
+  .card form select,
+  .card form button {
+    font-size: 14px !important;
+  }
+
+  /* Botones más pequeños en móvil */
   button {
-    background-color: #f9f9f9;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+
+  /* Quantum con mensaje - columna en móvil */
+  .quantum + p,
+  [style*="display: flex"][style*="gap: 20px"] {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+
+  [style*="display: flex"][style*="gap: 20px"] img {
+    margin: 0 auto !important;
+  }
+
+  /* Listas de transacciones - ajustar grid */
+  [style*="grid-template-columns: '50px 1fr auto auto'"],
+  [style*="gridTemplateColumns"] {
+    grid-template-columns: 40px 1fr auto !important;
+    gap: 8px !important;
+  }
+
+  /* Inversiones - tabla responsive */
+  [style*="grid-template-columns: '2fr 1fr 1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    text-align: center !important;
+  }
+
+  /* Gráfica responsive */
+  .recharts-wrapper {
+    width: 100% !important;
+  }
+
+  /* Modal más pequeño en móvil */
+  [style*="position: fixed"] .card {
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+
+  /* Resumen cards - stack vertical en móvil */
+  [style*="display: grid"][style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 480px) {
+  [style*="grid-template-columns"] button {
+    padding: 8px !important;
+    font-size: 18px !important;
+  }
+}
+
+/* Tablets y pantallas medianas */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .quantum {
+    width: min(35vw, 280px) !important;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 380px) {
+  .wrapper {
+    padding: 12px !important;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  .card {
+    padding: 12px !important;
+  }
+
+  .card__icon {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  /* Quantum mensaje más compacto */
+  [style*="fontSize: '18px'"] {
+    font-size: 14px !important;
   }
 }
