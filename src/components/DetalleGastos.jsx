@@ -43,7 +43,7 @@ function DetalleGastos() {
   const totalGastos = gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <h1>Detalle de Gastos</h1>
       <p className="subtitle">Gestiona tus gastos registrados</p>
 
@@ -126,7 +126,7 @@ function DetalleGastos() {
         onConfirm={confirmarEliminar}
         mensaje="Este gasto se eliminará permanentemente."
       />
-    </div>
+    </main>
   );
 }
 

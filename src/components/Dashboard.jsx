@@ -64,7 +64,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       {/* Robot Quantum */}
       <div className="quantum">
         <img src={quantumImg} alt="Quantum - Tu asistente financiero" />
@@ -88,7 +88,7 @@ useEffect(() => {
       </button>
 
       {/* Grid de 4 tarjetas */}
-      <div className="cards">
+      <section className="cards">
         {/* Card Gastos - CLICKEABLE */}
         <div 
           className="card"
@@ -161,8 +161,8 @@ useEffect(() => {
             👉 Click para ver detalles
           </p>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { getCryptoPrices } from '../utils/CoinGeckoApi';
 import quantumInvest from '../images/quantum_invest_256x256.png';
+import { INITIAL_PORTFOLIO, SP500_PRICE, SP500_CHANGE_PERCENT, CHART_COLORS, ERROR_MESSAGES } from '../utils/constants';
 
 function Inversiones() {
   const [prices, setPrices] = useState(null);
@@ -9,12 +10,7 @@ function Inversiones() {
   const [error, setError] = useState(null);
 
   // Portfolio hardcodeado (cuánto invertiste)
-  const portfolio = {
-    bitcoin: 200,
-    ethereum: 200,
-    gold: 200,
-    sp500: 200
-  };
+  const portfolio = INITIAL_PORTFOLIO;
 
   useEffect(() => {
     const fetchPrices = async () => {
@@ -24,7 +20,7 @@ function Inversiones() {
         setPrices(data);
         setError(null);
       } catch (err) {
-        setError('No se pudieron cargar los precios. Intenta más tarde.');
+        setError(ERROR_MESSAGES.FETCH_PRICES);
         console.error(err);
       } finally {
         setLoading(false);
@@ -41,7 +37,7 @@ function Inversiones() {
     const btcChange = prices.bitcoin.change24h / 100;
     const ethChange = prices.ethereum.change24h / 100;
     const goldChange = prices.gold.change24h / 100;
-    const sp500Change = 0.012; // Hardcodeado +1.2%
+    const sp500Change = SP500_CHANGE_PERCENT; // Hardcodeado +1.2%
 
     const btcValue = portfolio.bitcoin * (1 + btcChange);
     const ethValue = portfolio.ethereum * (1 + ethChange);
@@ -88,7 +84,7 @@ function Inversiones() {
       invested: portfolio.sp500,
       current: sp500Value,
       change: sp500Change * 100,
-      price: 5234.50, // Hardcoded
+      price: SP500_PRICE, // Hardcoded
       icon: '📈'
     }
       ]
@@ -104,14 +100,14 @@ function Inversiones() {
   })) : [];
 
   const getBarColor = (value) => {
-    if (value >= 10) return '#FFD700';
-    if (value >= 5) return '#38E1FF';
-    if (value >= 0) return '#4ADE80';
-    return '#EF4444';
+    if (value >= 10) return CHART_COLORS.GOLD;
+    if (value >= 5) return CHART_COLORS.CYAN;
+    if (value >= 0) return CHART_COLORS.GREEN;
+    return CHART_COLORS.RED;
   };
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       {/* Quantum + Mensaje */}
       <div style={{ 
         display: 'flex', 
@@ -305,7 +301,7 @@ function Inversiones() {
           </div>
         </>
       )}
-    </div>
+    </main>
   );
 }
 

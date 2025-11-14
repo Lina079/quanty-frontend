@@ -25,7 +25,7 @@ function Transacciones() {
   const totales = calcularTotales();
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <h1 style={{ textAlign: 'center' }}>Transacciones</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
         Resumen completo de tus finanzas
@@ -128,7 +128,7 @@ function Transacciones() {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

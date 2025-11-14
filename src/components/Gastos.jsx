@@ -117,7 +117,7 @@ function Gastos() {
   const totalGastos = gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <h1 style={{ textAlign: 'center' }}>Gestión de Gastos</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
         Controla tus gastos de manera efectiva
@@ -445,7 +445,7 @@ function Gastos() {
         onConfirm={confirmarEliminar}
         mensaje="Este gasto se eliminará permanentemente."
       />
-    </div>
+    </main>
   );
 }
 

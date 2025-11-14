@@ -117,7 +117,7 @@ function Ahorros() {
   const totalAhorros = ahorros.reduce((sum, ahorro) => sum + ahorro.monto, 0);
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <h1 style={{ textAlign: 'center' }}>Gestión de Ahorros</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
         Construye tu futuro financiero
@@ -445,7 +445,7 @@ function Ahorros() {
         onConfirm={confirmarEliminar}
         mensaje="Este ahorro se eliminará permanentemente."
       />
-    </div>
+    </main>
   );
 }
 

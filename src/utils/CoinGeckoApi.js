@@ -1,11 +1,11 @@
 // CoinGecko API - obtener precios de criptomonedas y oro
-const BASE_URL = 'https://api.coingecko.com/api/v3';
+import { API_BASE_URL } from './constants.js';
 
 // Obtener precios en euros (BTC, ETH, Oro)
 export const getCryptoPrices = async () => {
   try {
     const response = await fetch(
-      `${BASE_URL}/simple/price?ids=bitcoin,ethereum,pax-gold&vs_currencies=eur&include_24hr_change=true`
+      `${API_BASE_URL}/simple/price?ids=bitcoin,ethereum,pax-gold&vs_currencies=eur&include_24hr_change=true`
     );
 
     if (!response.ok) {

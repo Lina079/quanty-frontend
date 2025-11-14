@@ -115,7 +115,7 @@ function Ingresos() {
   const totalIngresos = ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
 
   return (
-    <div className="wrapper">
+    <main className="wrapper">
       <h1 style={{ textAlign: 'center' }}>Gestión de Ingresos</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
         Registra tus fuentes de ingreso
@@ -443,7 +443,7 @@ function Ingresos() {
         onConfirm={confirmarEliminar}
         mensaje="Este ingreso se eliminará permanentemente."
       />
-    </div>
+    </main>
   );
 }
 
