@@ -193,7 +193,7 @@ function Inversiones() {
           </div>
 
           {/* Gráfica de Barras */}
-          <div style={{ maxWidth: '800px', margin: '0 auto 40px' }}>
+          <div className="chart-container" style={{ maxWidth: '800px', margin: '0 auto 40px' }}>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,.1)" />

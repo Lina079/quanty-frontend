@@ -349,16 +349,13 @@ h3 {
   }
 
   /* Gráfica responsive */
-  .recharts-wrapper {
-    width: 100% !important;
-    min-height: 200px !important;
-    max-height: 250px !important;
+  .chart-container {
+    height: 250px !important;
+    overflow: hidden !important;
   }
 
-  /* Contenedor de gráfica visible */
-  div[style*="maxWidth: '800px'"][style*="margin: '0 auto 40px'"] {
-    display: block !important;
-    min-height: 220px !important;
+  .chart-container .recharts-responsive-container {
+    height: 250px !important;
   }
 
 
