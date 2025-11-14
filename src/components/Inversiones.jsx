@@ -59,34 +59,38 @@ function Inversiones() {
       totalGain,
       totalGainPercent,
       assets: [
-        {
-          name: 'BTC',
-          invested: portfolio.bitcoin,
-          current: btcValue,
-          change: prices.bitcoin.change24h,
-          icon: '₿'
-        },
-        {
-          name: 'ETH',
-          invested: portfolio.ethereum,
-          current: ethValue,
-          change: prices.ethereum.change24h,
-          icon: 'Ξ'
-        },
-        {
-          name: 'ORO',
-          invested: portfolio.gold,
-          current: goldValue,
-          change: prices.gold.change24h,
-          icon: '🪙'
-        },
-        {
-          name: 'S&P 500',
-          invested: portfolio.sp500,
-          current: sp500Value,
-          change: sp500Change * 100,
-          icon: '📈'
-        }
+    {
+      name: 'BTC',
+      invested: portfolio.bitcoin,
+      current: btcValue,
+      change: prices.bitcoin.change24h,
+      price: prices.bitcoin.price,
+      icon: '₿'
+    },
+    {
+      name: 'ETH',
+      invested: portfolio.ethereum,
+      current: ethValue,
+      change: prices.ethereum.change24h,
+      price: prices.ethereum.price,
+      icon: 'Ξ'
+    },
+    {
+      name: 'ORO',
+      invested: portfolio.gold,
+      current: goldValue,
+      change: prices.gold.change24h,
+      price: prices.gold.price,
+      icon: '🪙'
+    },
+    {
+      name: 'S&P 500',
+      invested: portfolio.sp500,
+      current: sp500Value,
+      change: sp500Change * 100,
+      price: 5234.50, // Hardcoded
+      icon: '📈'
+    }
       ]
     };
   };
@@ -220,7 +224,7 @@ function Inversiones() {
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
             <div style={{ 
               display: 'grid', 
-              gridTemplateColumns: '2fr 1fr 1fr 1fr', 
+              gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', 
               gap: '16px',
               padding: '16px',
               borderBottom: '1px solid rgba(255,255,255,.1)',
@@ -228,8 +232,9 @@ function Inversiones() {
               color: 'var(--text-secondary)'
             }}>
               <div>Activo</div>
+              <div>Precio Actual</div>
               <div>Invertido</div>
-              <div>Valor actual</div>
+              <div>Valor</div>
               <div>Variación</div>
             </div>
 
@@ -237,7 +242,7 @@ function Inversiones() {
               <div key={index} className="card" style={{ marginBottom: '12px' }}>
                 <div style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: '2fr 1fr 1fr 1fr', 
+                  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', 
                   gap: '16px',
                   alignItems: 'center'
                 }}>
@@ -245,6 +250,9 @@ function Inversiones() {
                     <span style={{ fontSize: '24px' }}>{asset.icon}</span>
                     <span style={{ fontWeight: '700' }}>{asset.name}</span>
                   </div>
+                  <div style={{ frontWeith: '600', color: 'var(--can-accent)' }}>
+                    €{asset.price.toLocaleString('es-ES', { minimumFracrionDigitis: 2, maximumFractionDigits: 2 })}
+                    </div>
                   <div>€{asset.invested}</div>
                   <div>€{asset.current.toFixed(0)}</div>
                   <div style={{ 

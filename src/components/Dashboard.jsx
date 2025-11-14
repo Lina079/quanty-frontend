@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import quantumImg from '../images/Quantum-allBody.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
@@ -7,8 +8,31 @@ import iconoInversion from '../images/inversion_planta_256x256.png';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const userName = "Marí Carmen";
+  const [userName, setUserName] = useState("Marí Carmen");
   
+  // Cargar nombre desde localStorage y escuchar cambios
+useEffect(() => {
+  const nombreGuardado = localStorage.getItem('userName');
+  if (nombreGuardado) {
+    setUserName(nombreGuardado);
+  }
+
+  // Escuchar cambios de nombre desde otros componentes
+  const handleUserNameChange = () => {
+    const nuevoNombre = localStorage.getItem('userName');
+    if (nuevoNombre) {
+      setUserName(nuevoNombre);
+    }
+  };
+
+  window.addEventListener('userNameChanged', handleUserNameChange);
+
+  // Cleanup al desmontar componente
+  return () => {
+    window.removeEventListener('userNameChanged', handleUserNameChange);
+  };
+}, []);
+
   // Calcular totales dinámicos desde localStorage
   const calcularTotalGastos = () => {
     const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
