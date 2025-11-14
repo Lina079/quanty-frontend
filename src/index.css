@@ -332,16 +332,28 @@ h3 {
   }
 
   /* Inversiones - tabla responsive */
-  [style*="grid-template-columns: '2fr 1fr 1fr 1fr'"] {
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-    text-align: center !important;
+  .investments-header {
+    display: none !important;
+  }
+  
+  .investment-row-desktop {
+    display: none !important;
+  }
+  
+  .investment-row-mobile {
+    display: block !important;
+  }
+  
+  .investment-card {
+    padding: 20px !important;
   }
 
   /* Gráfica responsive */
   .recharts-wrapper {
     width: 100% !important;
+    max-height: 250px !important;
   }
+
 
   /* Modal más pequeño en móvil */
   [style*="position: fixed"] .card {

@@ -216,51 +216,95 @@ function Inversiones() {
             </ResponsiveContainer>
           </div>
 
-          {/* Tabla de activos */}
-          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', 
-              gap: '16px',
-              padding: '16px',
-              borderBottom: '1px solid rgba(255,255,255,.1)',
-              fontWeight: '700',
-              color: 'var(--text-secondary)'
-            }}>
-              <div>Activo</div>
-              <div>Precio Actual</div>
-              <div>Invertido</div>
-              <div>Valor</div>
-              <div>Variación</div>
-            </div>
+    {/* Tabla de activos */}
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        {/* Cabecera - Solo desktop */}
+      <div 
+        className="investments-header"
+        style={{ 
+        display: 'grid', 
+        gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', 
+        gap: '16px',
+        padding: '16px',
+        borderBottom: '1px solid rgba(255,255,255,.1)',
+        fontWeight: '700',
+        color: 'var(--text-secondary)'
+        }}>
+      <div>Activo</div>
+      <div>Precio actual</div>
+      <div>Invertido</div>
+      <div>Valor</div>
+      <div>Variación</div>
+    </div>
 
-            {portfolioData.assets.map((asset, index) => (
-              <div key={index} className="card" style={{ marginBottom: '12px' }}>
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', 
-                  gap: '16px',
-                  alignItems: 'center'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '24px' }}>{asset.icon}</span>
-                    <span style={{ fontWeight: '700' }}>{asset.name}</span>
-                  </div>
-                  <div style={{ frontWeith: '600', color: 'var(--can-accent)' }}>
-                    €{asset.price.toLocaleString('es-ES', { minimumFracrionDigitis: 2, maximumFractionDigits: 2 })}
-                    </div>
-                  <div>€{asset.invested}</div>
-                  <div>€{asset.current.toFixed(0)}</div>
-                  <div style={{ 
-                    color: asset.change >= 0 ? '#4ADE80' : '#EF4444',
-                    fontWeight: '700'
-                  }}>
-                    {asset.change >= 0 ? '+' : ''}{asset.change.toFixed(1)}%
-                  </div>
-                </div>
-              </div>
-            ))}
+      {portfolioData.assets.map((asset, index) => (
+        <div key={index} className="card investment-card" style={{ marginBottom: '12px' }}>
+          {/* Desktop layout */}
+        <div 
+          className="investment-row-desktop"
+          style={{ 
+          display: 'grid', 
+          gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', 
+          gap: '16px',
+          alignItems: 'center'
+        }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '24px' }}>{asset.icon}</span>
+          <span style={{ fontWeight: '700' }}>{asset.name}</span>
+        </div>
+        <div style={{ fontWeight: '600', color: 'var(--cyan-accent)' }}>
+          €{asset.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
+        <div>€{asset.invested}</div>
+        <div>€{asset.current.toFixed(0)}</div>
+        <div style={{ 
+          color: asset.change >= 0 ? '#4ADE80' : '#EF4444',
+          fontWeight: '700'
+        }}>
+          {asset.change >= 0 ? '+' : ''}{asset.change.toFixed(1)}%
+        </div>
+      </div>
+
+      {/* Mobile layout */}
+      <div className="investment-row-mobile" style={{ display: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+          <span style={{ fontSize: '32px' }}>{asset.icon}</span>
+          <span style={{ fontWeight: '700', fontSize: '20px' }}>{asset.name}</span>
+        </div>
+        
+        <div style={{ display: 'grid', gap: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Precio actual:</span>
+            <span style={{ fontWeight: '600', color: 'var(--cyan-accent)' }}>
+              €{asset.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
           </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Invertido:</span>
+            <span style={{ fontWeight: '600' }}>€{asset.invested}</span>
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Valor actual:</span>
+            <span style={{ fontWeight: '600' }}>€{asset.current.toFixed(0)}</span>
+          </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Variación:</span>
+            <span style={{ 
+              fontWeight: '700',
+              fontSize: '18px',
+              color: asset.change >= 0 ? '#4ADE80' : '#EF4444'
+            }}>
+              {asset.change >= 0 ? '+' : ''}{asset.change.toFixed(1)}%
+            </span>
+          </div>
+          </div>
+          </div>
+          </div>
+          ))}
+        </div>
 
           {/* Disclaimer de CoinGecko */}
           <div style={{ 
