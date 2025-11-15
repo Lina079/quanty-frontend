@@ -1,0 +1,41 @@
+/* Inversiones - tabla y gráfica */
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Listas de transacciones - ajustar grid */
+  [style*="grid-template-columns: '50px 1fr auto auto'"],
+  [style*="gridTemplateColumns"] {
+    grid-template-columns: 40px 1fr auto !important;
+    gap: 8px !important;
+  }
+
+  /* Inversiones - tabla responsive */
+  .investments-header {
+    display: none !important;
+  }
+  
+  .investment-row-desktop {
+    display: none !important;
+  }
+  
+  .investment-row-mobile {
+    display: block !important;
+  }
+  
+  .investment-card {
+    padding: 20px !important;
+  }
+
+  /* Contenedor de gráfica en móvil */
+  .chart-container {
+    height: 250px !important;
+    overflow: hidden !important;
+  }
+  
+  .chart-container .recharts-responsive-container {
+    height: 250px !important;
+  }
+}

@@ -1,0 +1,41 @@
+/* Header - estilos base se manejan con inline styles en componente */
+/* Aquí solo responsive overrides si son necesarios */
+/* Header */
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* MENÚ HAMBURGUESA - Mostrar botón en móvil */
+  .hamburger-btn {
+    display: block !important;
+  }
+
+  /* Ocultar navegación desktop en móvil */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Mostrar navegación mobile */
+  .mobile-nav {
+    display: flex !important;
+  }
+
+  /* Mostrar overlay cuando menu está abierto */
+  .mobile-menu-overlay {
+    display: block !important;
+  }
+
+  /* Header responsive con hamburguesa */
+  header {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 16px !important;
+  }
+
+  header h2 {
+    font-size: 20px !important;
+  }
+}

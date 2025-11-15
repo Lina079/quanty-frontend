@@ -1,0 +1,41 @@
+/* Robot Quantum */
+.quantum {
+  position: relative;
+  width: min(30vw, 280px);
+  margin: 0 auto 24px;
+}
+
+.quantum::before {
+  content: "";
+  position: absolute;
+  inset: 10% -10% -10% -10%;
+  background: radial-gradient(50% 50% at 60% 30%, rgba(56, 225, 255, 0.18), transparent 70%);
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.quantum img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Quantum más pequeño */
+  .quantum {
+    width: min(50vw, 200px) !important;
+    margin: 0 auto 20px !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .quantum {
+    width: min(35vw, 280px) !important;
+  }
+}

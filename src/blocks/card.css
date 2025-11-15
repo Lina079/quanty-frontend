@@ -1,0 +1,108 @@
+/* Grid de cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Card individual */
+.card {
+  position: relative;
+  border-radius: 20px;
+  padding: 20px 22px;
+  background: linear-gradient(160deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+}
+
+.card h3 {
+  color: var(--text-primary);
+}
+
+.card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* Icono de card */
+.card__icon {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Grid de cards - 1 columna en móvil */
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Cards más compactas */
+  .card {
+    padding: 16px 18px !important;
+  }
+
+  .card h3 {
+    font-size: 18px !important;
+  }
+
+  /* Iconos de cards más pequeños */
+  .card__icon {
+    width: 140px !important;
+    height: 140px !important;
+  }
+
+  /* Resumen cards - stack vertical en móvil */
+  [style*="display: grid"][style*="gridTemplateColumns: 'repeat(2, 1fr)'"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  [style*="grid-template-columns"] button {
+    padding: 8px !important;
+    font-size: 18px !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .card {
+    padding: 12px !important;
+  }
+
+  .card__icon {
+    width: 100px !important;
+    height: 100px !important;
+  }
+}

@@ -1,0 +1,53 @@
+/* Botón FAB */
+.fab {
+  width: 56px;
+  height: 56px;
+  margin: 20px auto 24px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%);
+  color: #00222F;
+  font-weight: 800;
+  font-size: 34px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 28px rgba(18, 180, 214, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  border: none;
+}
+
+.fab:hover {
+  transform: scale(1.05);
+}
+
+.fab:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Botón FAB */
+  .fab {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 28px !important;
+    margin: 16px auto 20px !important;
+  }
+
+  /* Formularios responsive */
+  .card form input,
+  .card form select,
+  .card form button {
+    font-size: 14px !important;
+  }
+
+  /* Botones más pequeños en móvil */
+  button {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+}

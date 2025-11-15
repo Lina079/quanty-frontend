@@ -1,0 +1,145 @@
+/* Variables CSS */
+:root {
+  --bg-1: #061A2B;
+  --bg-2: #0B2840;
+  --star-1: rgba(82, 224, 255, 0.6);
+  --star-2: rgba(28, 214, 242, 0.45);
+  --cyan-accent: #38E1FF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B7C8D6;
+  --card-bg-start: rgba(14, 49, 71, 0.85);
+  --card-bg-end: rgba(11, 36, 54, 0.85);
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body con fondo de estrellas */
+body {
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 75% 20%, rgba(28, 214, 242, 0.12), transparent 60%),
+    radial-gradient(800px 400px at 20% 60%, rgba(82, 224, 255, 0.08), transparent 60%),
+    radial-gradient(2px 2px at 78% 18%, var(--star-1), transparent 60%),
+    radial-gradient(2px 2px at 70% 30%, var(--star-2), transparent 60%),
+    radial-gradient(1.5px 1.5px at 60% 10%, rgba(255, 255, 255, 0.35), transparent 60%),
+    radial-gradient(2px 2px at 25% 45%, var(--star-1), transparent 60%),
+    radial-gradient(1.5px 1.5px at 85% 60%, var(--star-2), transparent 60%),
+    radial-gradient(2px 2px at 15% 75%, rgba(255, 255, 255, 0.4), transparent 60%),
+    linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 100%);
+  color: var(--text-primary);
+  min-height: 100vh;
+  background-attachment: fixed;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Wrapper principal */
+.wrapper {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 40px);
+}
+
+/* Títulos */
+h1 {
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-size: clamp(36px, 6vw, 38px);
+  margin: 0 0 16px;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-weight: 700;
+  font-size: clamp(24px, 4vw, 36px);
+  margin: 0 0 12px;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+
+/* Subtítulo */
+.subtitle {
+  color: var(--text-secondary);
+  font-size: clamp(22px, 2.2vw, 18px);
+  margin: 8px 0 28px;
+  line-height: 1.5;
+}
+
+/* Animaciones */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Wrapper */
+  .wrapper {
+    padding: clamp(12px, 4vw, 16px);
+  }
+
+  /* Títulos responsive */
+  h1 {
+    font-size: clamp(28px, 8vw, 48px) !important;
+  }
+
+  h2 {
+    font-size: clamp(20px, 6vw, 32px) !important;
+  }
+
+  .subtitle {
+    font-size: 14px !important;
+  }
+
+  /* Quantum con mensaje - columna en móvil */
+  .quantum + p,
+  [style*="display: flex"][style*="gap: 20px"] {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+
+  [style*="display: flex"][style*="gap: 20px"] img {
+    margin: 0 auto !important;
+  }
+
+  /* Quantum mensaje más compacto */
+  [style*="fontSize: '18px'"] {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .wrapper {
+    padding: 12px !important;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+}

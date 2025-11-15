@@ -1,0 +1,16 @@
+/* Popups y modales - estilos base en componentes */
+/* Responsive overrides */
+
+/* Popups y modales */
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Modal más pequeño en móvil */
+  [style*="position: fixed"] .card {
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+}

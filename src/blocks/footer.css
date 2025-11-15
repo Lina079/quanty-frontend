@@ -1,0 +1,14 @@
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer__copyright {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
