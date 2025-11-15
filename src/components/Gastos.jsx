@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
+import HistorialFiltrado from './HistorialFiltrado';
 import quantumHalf from '../images/quantum_half_fade_256x256.png';
 
 function Gastos() {
@@ -7,6 +8,8 @@ function Gastos() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [gastoAEliminar, setGastoAEliminar] = useState(null);
+  const [totalFiltrado, setTotalFiltrado] = useState(null);
+  const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -105,16 +108,8 @@ function Gastos() {
     }
   };
 
-  const getCategoriaEmoji = (categoria) => {
-    const emojis = {
-      'compra': '🛒', 'alquiler': '🏠', 'suministros': '💡',
-      'transporte': '🚗', 'gimnasio': '💪', 'salud': '🏥',
-      'viajes': '✈️', 'ocio': '🎉', 'otro': '📝'
-    };
-    return emojis[categoria] || '💰';
-  };
-
-  const totalGastos = gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
+  const totalGastos = totalFiltrado !== null ? totalFiltrado : gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
+  const cantidadGastos = cantidadFiltrada !== null ? cantidadFiltrada : gastos.length;
 
   return (
     <main className="wrapper">
@@ -174,7 +169,7 @@ function Gastos() {
               €{totalGastos.toFixed(2)}
             </p>
             <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {gastos.length} {gastos.length === 1 ? 'gasto' : 'gastos'} registrados
+              {cantidadGastos} {cantidadGastos === 1 ? 'gasto' : 'gastos'} {totalFiltrado !== null ? 'en este período' : 'registrados'}
             </p>
           </div>
           <button
@@ -349,7 +344,7 @@ function Gastos() {
                     border: '1px solid rgba(255,255,255,.2)',
                     background: 'rgba(14,49,71,.5)',
                     color: 'var(--text-primary)',
-                    fontSize: '16px',
+                    fontSize: '22px',
                     fontFamily: 'inherit'
                   }}
                 />
@@ -377,67 +372,16 @@ function Gastos() {
         </div>
       )}
 
-      {/* Lista de gastos */}
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h3 style={{ marginBottom: '20px' }}>Historial de Gastos</h3>
-        {gastos.length === 0 ? (
-          <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <p style={{ fontSize: '48px', margin: '0 0 16px' }}>📊</p>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              No hay gastos registrados. ¡Comienza agregando uno!
-            </p>
-          </div>
-        ) : (
-          gastos.map(gasto => (
-            <div key={gasto.id} className="card" style={{ marginBottom: '12px' }}>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '50px 1fr auto auto',
-                gap: '16px',
-                alignItems: 'center'
-              }}>
-                <div style={{ fontSize: '28px', textAlign: 'center' }}>
-                  {getCategoriaEmoji(gasto.categoria)}
-                </div>
-                <div>
-                  <h3 style={{ marginBottom: '4px', textTransform: 'capitalize', fontSize: '18px' }}>
-                    {gasto.categoria}
-                  </h3>
-                  {gasto.descripcion && (
-                    <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '0 0 4px' }}>
-                      {gasto.descripcion}
-                    </p>
-                  )}
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-                    {new Date(gasto.fecha).toLocaleDateString('es-ES')}
-                  </p>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: '22px', fontWeight: '800', color: '#EF4444', margin: 0 }}>
-                    €{gasto.monto.toFixed(2)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => abrirModalEliminar(gasto)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                    background: 'rgba(239, 68, 68, 0.1)',
-                    color: '#EF4444',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      {/* Historial con gráfica */}
+      <HistorialFiltrado 
+        type="expense" 
+        onDelete={abrirModalEliminar}
+        data={gastos}
+        onTotalChange={(total, cantidad) => {
+          setTotalFiltrado(total);
+          setCantidadFiltrada(cantidad);
+        }}
+      />
 
       <ModalConfirmacion
         isOpen={modalOpen}
