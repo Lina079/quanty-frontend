@@ -1,15 +1,54 @@
-/* Header - estilos base se manejan con inline styles en componente */
-/* Aquí solo responsive overrides si son necesarios */
 /* Header */
+
+/* Botón hamburguesa */
+.header__burger {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.header__burger span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animación cuando está abierto */
+.header__burger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.header__burger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.header__burger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
 
 /* ========================================
    RESPONSIVE
    ======================================== */
 
 @media (max-width: 768px) {
-  /* MENÚ HAMBURGUESA - Mostrar botón en móvil */
-  .hamburger-btn {
-    display: block !important;
+  /* Mostrar hamburguesa en móvil */
+  .header__burger {
+    display: flex !important;
   }
 
   /* Ocultar navegación desktop en móvil */

@@ -70,24 +70,18 @@ useEffect(() => {
         </h2>
 
         {/* Botón Hamburguesa - Solo móvil */}
+        {/* Botón Hamburguesa - Solo móvil */}
         <button
+          type="button"
+          className="header__burger"
+          aria-label="Abrir menú"
+          aria-controls="header-mobile"
+          aria-expanded={menuOpen}
           onClick={toggleMenu}
-          className="hamburger-btn"
-          style={{
-            display: 'none',
-            background: 'none',
-            border: 'none',
-            fontSize: '38px',
-            color: 'var(--text-primary)',
-            cursor: 'pointer',
-            padding: '8px 12px',
-            zIndex: 1001,
-            minWidth: '48px',
-            minHeight: '48px'
-          }}
-          aria-label="Menú"
         >
-          {menuOpen ? '✕' : '☰'}
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
 
         {/* Navegación Desktop */}
