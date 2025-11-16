@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
+import HistorialFiltrado from './HistorialFiltrado';
 import quantumHalf from '../images/quantum_half_fade_256x256.png';
 
 function Ahorros() {
@@ -7,6 +8,8 @@ function Ahorros() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [ahorroAEliminar, setAhorroAEliminar] = useState(null);
+  const [totalFiltrado, setTotalFiltrado] = useState(null);
+  const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -114,7 +117,8 @@ function Ahorros() {
     return emojis[categoria] || '💰';
   };
 
-  const totalAhorros = ahorros.reduce((sum, ahorro) => sum + ahorro.monto, 0);
+  const totalAhorros = totalFiltrado !== null ? totalFiltrado : ahorros.reduce((sum, ahorro) => sum + ahorro.monto, 0);
+  const cantidadAhorros = cantidadFiltrada !== null ? cantidadFiltrada : ahorros.length;
 
   return (
     <main className="wrapper">
@@ -174,7 +178,7 @@ function Ahorros() {
               €{totalAhorros.toFixed(2)}
             </p>
             <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {ahorros.length} {ahorros.length === 1 ? 'ahorro' : 'ahorros'} registrados
+              {cantidadAhorros} {cantidadAhorros === 1 ? 'ahorro' : 'ahorros'} {totalFiltrado !== null ? 'en este período' : 'registrados'}
             </p>
           </div>
           <button
@@ -377,67 +381,16 @@ function Ahorros() {
         </div>
       )}
 
-      {/* Lista de ahorros */}
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h3 style={{ marginBottom: '20px' }}>Historial de Ahorros</h3>
-        {ahorros.length === 0 ? (
-          <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <p style={{ fontSize: '48px', margin: '0 0 16px' }}>💰</p>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              No hay ahorros registrados. ¡Comienza a construir tu futuro!
-            </p>
-          </div>
-        ) : (
-          ahorros.map(ahorro => (
-            <div key={ahorro.id} className="card" style={{ marginBottom: '12px' }}>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '50px 1fr auto auto',
-                gap: '16px',
-                alignItems: 'center'
-              }}>
-                <div style={{ fontSize: '28px', textAlign: 'center' }}>
-                  {getCategoriaEmoji(ahorro.categoria)}
-                </div>
-                <div>
-                  <h3 style={{ marginBottom: '4px', textTransform: 'capitalize', fontSize: '18px' }}>
-                    {ahorro.categoria}
-                  </h3>
-                  {ahorro.descripcion && (
-                    <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '0 0 4px' }}>
-                      {ahorro.descripcion}
-                    </p>
-                  )}
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-                    {new Date(ahorro.fecha).toLocaleDateString('es-ES')}
-                  </p>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: '22px', fontWeight: '800', color: 'var(--cyan-accent)', margin: 0 }}>
-                    €{ahorro.monto.toFixed(2)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => abrirModalEliminar(ahorro)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(56, 225, 255, 0.3)',
-                    background: 'rgba(56, 225, 255, 0.1)',
-                    color: 'var(--cyan-accent)',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      {/* Historial con gráfica */}
+      <HistorialFiltrado 
+        type="saving" 
+        onDelete={abrirModalEliminar}
+        data={ahorros}
+        onTotalChange={(total, cantidad) => {
+          setTotalFiltrado(total);
+          setCantidadFiltrada(cantidad);
+        }}
+      />
 
       <ModalConfirmacion
         isOpen={modalOpen}
@@ -445,6 +398,7 @@ function Ahorros() {
         onConfirm={confirmarEliminar}
         mensaje="Este ahorro se eliminará permanentemente."
       />
+
     </main>
   );
 }

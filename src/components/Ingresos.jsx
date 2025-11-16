@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
+import HistorialFiltrado from './HistorialFiltrado';
 import quantumHalf from '../images/quantum_half_fade_256x256.png';
 
 function Ingresos() {
@@ -7,6 +8,8 @@ function Ingresos() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [ingresoAEliminar, setIngresoAEliminar] = useState(null);
+  const [totalFiltrado, setTotalFiltrado] = useState(null);
+  const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -112,7 +115,11 @@ function Ingresos() {
     return emojis[categoria] || '💵';
   };
 
-  const totalIngresos = ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
+  const totalIngresos = totalFiltrado !== null 
+  ? totalFiltrado 
+  : ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
+  const cantidadIngresos = cantidadFiltrada !== null ? cantidadFiltrada : ingresos.length;
+
 
   return (
     <main className="wrapper">
@@ -172,7 +179,7 @@ function Ingresos() {
               €{totalIngresos.toFixed(2)}
             </p>
             <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {ingresos.length} {ingresos.length === 1 ? 'ingreso' : 'ingresos'} registrados
+              {cantidadIngresos} {cantidadIngresos === 1 ? 'ingreso' : 'ingresos'} {totalFiltrado !== null ? 'en este período' : 'registrados'}
             </p>
           </div>
           <button
@@ -375,67 +382,16 @@ function Ingresos() {
         </div>
       )}
 
-      {/* Lista de ingresos */}
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h3 style={{ marginBottom: '20px' }}>Historial de Ingresos</h3>
-        {ingresos.length === 0 ? (
-          <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <p style={{ fontSize: '48px', margin: '0 0 16px' }}>💵</p>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              No hay ingresos registrados. ¡Comienza agregando uno!
-            </p>
-          </div>
-        ) : (
-          ingresos.map(ingreso => (
-            <div key={ingreso.id} className="card" style={{ marginBottom: '12px' }}>
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: '50px 1fr auto auto',
-                gap: '16px',
-                alignItems: 'center'
-              }}>
-                <div style={{ fontSize: '28px', textAlign: 'center' }}>
-                  {getCategoriaEmoji(ingreso.categoria)}
-                </div>
-                <div>
-                  <h3 style={{ marginBottom: '4px', textTransform: 'capitalize', fontSize: '18px' }}>
-                    {ingreso.categoria}
-                  </h3>
-                  {ingreso.descripcion && (
-                    <p style={{ fontSize: '14px', color: 'var(--text-secondary)', margin: '0 0 4px' }}>
-                      {ingreso.descripcion}
-                    </p>
-                  )}
-                  <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-                    {new Date(ingreso.fecha).toLocaleDateString('es-ES')}
-                  </p>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: '22px', fontWeight: '800', color: '#4ADE80', margin: 0 }}>
-                    +€{ingreso.monto.toFixed(2)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => abrirModalEliminar(ingreso)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(74, 222, 128, 0.3)',
-                    background: 'rgba(74, 222, 128, 0.1)',
-                    color: '#4ADE80',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      {/* Historial con gráfica */}
+      <HistorialFiltrado 
+        type="income" 
+        onDelete={abrirModalEliminar}
+        data={ingresos}
+        onTotalChange={(total, cantidad) => {
+          setTotalFiltrado(total);
+          setCantidadFiltrada(cantidad);
+        }}
+      />
 
       <ModalConfirmacion
         isOpen={modalOpen}

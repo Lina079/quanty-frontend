@@ -112,9 +112,10 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
 
     setChartData(chartArray);
 
+    // Notificar al componente padre el total filtrado y las transacciones filtradas
     const totalFiltered = filtered.reduce((sum, t) => sum + t.monto, 0);
     if (onTotalChange) {
-      onTotalChange(totalFiltered, filtered.length);
+      onTotalChange(totalFiltered, filtered.length, filtered); // AGREGAMOS: filtered
     }
   }, [allTransactions, filterType, selectedMonth, onTotalChange]);
 

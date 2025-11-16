@@ -23,10 +23,12 @@ function Gastos() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'compra', label: '🛒 La compra' },
-    { value: 'alquiler', label: '🏠 Alquiler' },
+    { value: 'compra', label: '🏠 Alquiler' },
+    { value: 'compra', label: '🏠 Hipoteca' },
+    { value: 'alquiler', label: '🛒 La compra' },
     { value: 'suministros', label: '💡 Suministros' },
     { value: 'transporte', label: '🚗 Transporte' },
+    { value: 'Tarjeta de credito', label: '💳 Tarjeta de credito'},
     { value: 'gimnasio', label: '💪 Gimnasio' },
     { value: 'salud', label: '🏥 Salud' },
     { value: 'viajes', label: '✈️ Viajes' },
