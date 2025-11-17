@@ -54,7 +54,7 @@ useEffect(() => {
 };
 
   // Calcular totales dinámicos desde localStorage
-    const calcularTotalGastos = () => {
+  const calcularTotalGastos = () => {
   const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
   const gastosFiltrados = filtrarPorPeriodo(gastosGuardados);
   return gastosFiltrados.reduce((sum, gasto) => sum + gasto.monto, 0);
@@ -102,12 +102,12 @@ const financialData = {
   alignItems: 'center',
   gap: '32px',
   maxWidth: '760px',
-  margin: '0 auto 32px auto'
+  margin: '0 auto 20px auto'
   }}>
   {/* Quantum a la izquierda */}
   <div style={{ 
     flexShrink: 0,
-    width: '150px'
+    width: '100px'
     }}>
     <img 
       src={quantumImg} 
@@ -118,7 +118,7 @@ const financialData = {
 
     {/* Textos a la derecha */}
   <div style={{ flex: 1 }}>
-    <h1 style={{ margin: '0 0 12px', fontSize: '32px' }}>
+    <h1 style={{ margin: '0 0 12px', fontSize: '28px' }}>
       Bienvenid@ a Quanty, {userName}
     </h1>
     <p className="subtitle" style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}>
@@ -132,7 +132,7 @@ const financialData = {
   display: 'flex',
   gap: '12px',
   justifyContent: 'center',
-  marginBottom: '24px'
+  marginBottom: '16px'
   }}>
   <button
     onClick={() => setPeriodo('mes')}
@@ -190,61 +190,25 @@ const financialData = {
 
       {/* Grid de 4 tarjetas */}
       <section className="cards">
-        {/* Card Gastos - CLICKEABLE */}
-        <div 
-          className="card"
-          onClick={() => navigate('/gastos')}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="card__icon">
-            <img src={iconoGastos} alt="Gastos" />
-          </div>
-          <h3>Gastos</h3>
-          <p style={{ fontSize: '32px', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
-            €{financialData.gastos.monto.toFixed(2)}
-          </p>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para gestionar
-          </p>
-        </div>
-
-        {/* Card Ingresos - CLICKEABLE */}
-        <div 
+      {/* Card Ingresos - CLICKEABLE */}
+      <div 
           className="card"
           onClick={() => navigate('/ingresos')}
           style={{ cursor: 'pointer' }}
-        >
-          <div className="card__icon">
-            <img src={iconoIngresos} alt="Ingresos" />
-          </div>
-          <h3>Ingreso</h3>
+      >
+      <div className="card__icon">
+          <img src={iconoIngresos} alt="Ingresos" />
+      </div>
+        <h3>Ingreso</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
             €{financialData.ingresos.monto.toFixed(2)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
             👉 Click para gestionar
           </p>
-        </div>
+      </div>
 
-        {/* Card Ahorro - CLICKEABLE */}
-        <div 
-          className="card"
-          onClick={() => navigate('/ahorros')}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="card__icon">
-            <img src={iconoAhorro} alt="Ahorro" />
-          </div>
-          <h3>Ahorro</h3>
-          <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
-            €{financialData.ahorro.monto.toFixed(2)}
-          </p>
-          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para gestionar
-          </p>
-        </div>
-
-        {/* Card Inversión - CLICKEABLE */}
+      {/* Card Inversión - CLICKEABLE */}
         <div 
           className="card" 
           onClick={() => navigate('/inversiones')}
@@ -261,6 +225,42 @@ const financialData = {
             👉 Click para gestionar
           </p>
         </div>
+
+       {/* Card Gastos - CLICKEABLE */}
+        <div 
+          className="card"
+          onClick={() => navigate('/gastos')}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="card__icon">
+            <img src={iconoGastos} alt="Gastos" />
+          </div>
+          <h3>Gastos</h3>
+          <p style={{ fontSize: '32px', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
+            €{financialData.gastos.monto.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para gestionar
+          </p>
+        </div>      
+
+      {/* Card Ahorro - CLICKEABLE */}
+        <div 
+          className="card"
+          onClick={() => navigate('/ahorros')}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="card__icon">
+            <img src={iconoAhorro} alt="Ahorro" />
+          </div>
+          <h3>Ahorro</h3>
+          <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
+            €{financialData.ahorro.monto.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
+            👉 Click para gestionar
+          </p>
+        </div> 
       </section>
     </main>
   );

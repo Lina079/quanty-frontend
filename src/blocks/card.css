@@ -11,7 +11,7 @@
 .card {
   position: relative;
   border-radius: 20px;
-  padding: 20px 22px;
+  padding: 16px 18px;
   background: linear-gradient(160deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
@@ -37,12 +37,12 @@
 
 /* Icono de card */
 .card__icon {
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
+  margin-bottom: 0 auto 8px;
 }
 
 .card__icon img {
