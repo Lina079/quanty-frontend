@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
+import CardResumen from './CardResumen';
 import HistorialFiltrado from './HistorialFiltrado';
-import quantumHalf from '../images/quantum_half_fade_256x256.png';
+
 
 function Ahorros() {
   const [ahorros, setAhorros] = useState([]);
@@ -127,81 +128,15 @@ function Ahorros() {
         Construye tu futuro financiero
       </p>
 
-      {/* Quantum con mensaje */}
-      <div style={{ 
-        position: 'relative',
-        maxWidth: '800px',
-        margin: '0 auto 32px'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '20px', 
-          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
-          padding: '20px 24px',
-          borderRadius: '20px',
-          border: '1px solid rgba(255,255,255,.08)',
-          position: 'relative'
-        }}>
-          <img 
-            src={quantumHalf} 
-            alt="Quantum" 
-            style={{ 
-              width: '80px', 
-              height: '80px',
-              flexShrink: 0
-            }} 
-          />
-          <p style={{ 
-            fontSize: '18px', 
-            fontWeight: '600', 
-            margin: 0,
-            lineHeight: '1.4'
-          }}>
-            💎 Ahorrar es plantar semillas para tu futuro. ¡Cada euro cuenta!
-          </p>
-        </div>
-      </div>
-
-      {/* Resumen + Botón Agregar */}
-      <div style={{ maxWidth: '800px', margin: '0 auto 32px' }}>
-        <div className="card" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '20px'
-        }}>
-          <div>
-            <h3 style={{ marginBottom: '8px' }}>Total Ahorros</h3>
-            <p style={{ fontSize: '36px', fontWeight: '800', color: 'var(--cyan-accent)', margin: 0 }}>
-              €{totalAhorros.toFixed(2)}
-            </p>
-            <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {cantidadAhorros} {cantidadAhorros === 1 ? 'ahorro' : 'ahorros'} {totalFiltrado !== null ? 'en este período' : 'registrados'}
-            </p>
-          </div>
-          <button
-            onClick={() => setMostrarFormulario(!mostrarFormulario)}
-            style={{
-              padding: '14px 28px',
-              borderRadius: '12px',
-              border: 'none',
-              background: mostrarFormulario 
-                ? 'rgba(56, 225, 255, 0.2)' 
-                : 'linear-gradient(180deg, #38E1FF 0%, #12B4D6 100%)',
-              color: mostrarFormulario ? 'var(--cyan-accent)' : '#00222F',
-              fontSize: '16px',
-              fontWeight: '800',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              transition: 'all 0.2s'
-            }}
-          >
-            {mostrarFormulario ? '✕ Cancelar' : '+ Agregar Ahorro'}
-          </button>
-        </div>
-      </div>
+      <CardResumen 
+        tipo="ahorros"
+        total={totalAhorros}
+        cantidad={cantidadAhorros}
+        mensaje="💎 Ahorrar es plantar semillas para tu futuro. ¡Cada euro cuenta!"
+        mostrarFormulario={mostrarFormulario}
+        onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
+        esPeriodoFiltrado={totalFiltrado !== null}
+      />
 
       {/* Formulario (condicional) */}
       {mostrarFormulario && (
