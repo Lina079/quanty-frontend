@@ -9,6 +9,7 @@ import iconoInversion from '../images/inversion_planta_256x256.png';
 function Dashboard() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("Marí Carmen");
+  const [periodo, setPeriodo] = useState('mes'); // 'mes' o 'año'
   
   // Cargar nombre desde localStorage y escuchar cambios
 useEffect(() => {
@@ -33,35 +34,65 @@ useEffect(() => {
   };
 }, []);
 
+  // Función para filtrar transacciones por período
+  const filtrarPorPeriodo = (transacciones) => {
+  const ahora = new Date();
+  const mesActual = ahora.getMonth(); // 0-11
+  const añoActual = ahora.getFullYear();
+
+  return transacciones.filter(transaccion => {
+    const fecha = new Date(transaccion.fecha);
+    
+    if (periodo === 'mes') {
+      // Filtrar por mes y año actual
+      return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
+    } else {
+      // Filtrar solo por año actual
+      return fecha.getFullYear() === añoActual;
+    }
+  });
+};
+
   // Calcular totales dinámicos desde localStorage
-  const calcularTotalGastos = () => {
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    return gastosGuardados.reduce((sum, gasto) => sum + gasto.monto, 0);
-  };
+    const calcularTotalGastos = () => {
+  const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
+  const gastosFiltrados = filtrarPorPeriodo(gastosGuardados);
+  return gastosFiltrados.reduce((sum, gasto) => sum + gasto.monto, 0);
+};
 
-  const calcularTotalIngresos = () => {
-    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
-    return ingresosGuardados.reduce((sum, ingreso) => sum + ingreso.monto, 0);
-  };
+const calcularTotalIngresos = () => {
+  const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
+  const ingresosFiltrados = filtrarPorPeriodo(ingresosGuardados);
+  return ingresosFiltrados.reduce((sum, ingreso) => sum + ingreso.monto, 0);
+};
 
-  const calcularTotalAhorros = () => {
-    const ahorrosGuardados = JSON.parse(localStorage.getItem('ahorros') || '[]');
-    return ahorrosGuardados.reduce((sum, ahorro) => sum + ahorro.monto, 0);
-  };
+const calcularTotalAhorros = () => {
+  const ahorrosGuardados = JSON.parse(localStorage.getItem('ahorros') || '[]');
+  const ahorrosFiltrados = filtrarPorPeriodo(ahorrosGuardados);
+  return ahorrosFiltrados.reduce((sum, ahorro) => sum + ahorro.monto, 0);
+};
 
-  const financialData = {
-    gastos: { 
-      porcentaje: 60, 
-      monto: calcularTotalGastos()
-    },
-    ingresos: { 
-      monto: calcularTotalIngresos()
-    },
-    ahorro: { 
-      monto: calcularTotalAhorros()
-    },
-    inversion: { porcentaje: 5.4 }
-  };
+const calcularTotalInversiones = () => {
+  const inversionesGuardadas = JSON.parse(localStorage.getItem('inversiones') || '[]');
+  const inversionesFiltradas = filtrarPorPeriodo(inversionesGuardadas);
+  return inversionesFiltradas.reduce((sum, inversion) => sum + inversion.monto, 0);
+};
+
+const financialData = {
+  gastos: { 
+    porcentaje: 60, 
+    monto: calcularTotalGastos()
+  },
+  ingresos: { 
+    monto: calcularTotalIngresos()
+  },
+  ahorro: { 
+    monto: calcularTotalAhorros()
+  },
+  inversion: { 
+    monto: calcularTotalInversiones()
+  }
+};
 
   return (
   <main className="wrapper">
@@ -95,6 +126,58 @@ useEffect(() => {
     </p>
   </div>
   </div>
+    
+    {/* Selector de período */}
+  <div style={{
+  display: 'flex',
+  gap: '12px',
+  justifyContent: 'center',
+  marginBottom: '24px'
+  }}>
+  <button
+    onClick={() => setPeriodo('mes')}
+    style={{
+      padding: '10px 24px',
+      borderRadius: '10px',
+      border: periodo === 'mes' 
+        ? '2px solid var(--cyan-accent)' 
+        : '1px solid rgba(255,255,255,.2)',
+      background: periodo === 'mes' 
+        ? 'rgba(56, 225, 255, 0.2)' 
+        : 'rgba(14,49,71,.5)',
+      color: periodo === 'mes' ? 'var(--cyan-accent)' : 'var(--text-primary)',
+      fontSize: '15px',
+      fontWeight: periodo === 'mes' ? '700' : '500',
+      cursor: 'pointer',
+      fontFamily: 'inherit',
+      transition: 'all 0.2s'
+    }}
+  >
+    📅 Mes actual
+  </button>
+  
+  <button
+    onClick={() => setPeriodo('año')}
+    style={{
+      padding: '10px 24px',
+      borderRadius: '10px',
+      border: periodo === 'año' 
+        ? '2px solid var(--cyan-accent)' 
+        : '1px solid rgba(255,255,255,.2)',
+      background: periodo === 'año' 
+        ? 'rgba(56, 225, 255, 0.2)' 
+        : 'rgba(14,49,71,.5)',
+      color: periodo === 'año' ? 'var(--cyan-accent)' : 'var(--text-primary)',
+      fontSize: '15px',
+      fontWeight: periodo === 'año' ? '700' : '500',
+      cursor: 'pointer',
+      fontFamily: 'inherit',
+      transition: 'all 0.2s'
+    }}
+    >
+       📊 Año actual
+    </button>
+    </div>
 
       {/* Botón FAB - Centrado después del subtítulo */}
       <button 
@@ -171,12 +254,11 @@ useEffect(() => {
             <img src={iconoInversion} alt="Inversión" />
           </div>
           <h3>Inversión</h3>
-          <p style={{ fontSize: '28px', fontWeight: '700', color: '#4ADE80', marginTop: '12px' }}>
-            +{financialData.inversion.porcentaje}%
+          <p style={{ fontSize: '32px', fontWeight: '800', color: '#8B5CF6', marginTop: '12px' }}>
+              €{financialData.inversion.monto.toFixed(2)}
           </p>
-          <p>este mes</p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para ver detalles
+            👉 Click para gestionar
           </p>
         </div>
       </section>
