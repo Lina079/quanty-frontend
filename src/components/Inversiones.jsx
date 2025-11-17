@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
+import CardResumen from './CardResumen';
 import HistorialFiltrado from './HistorialFiltrado';
 import { getCryptoPrices } from '../utils/CoinGeckoApi';
 import quantumInvest from '../images/quantum_invest_256x256.png';
@@ -215,63 +216,17 @@ function Inversiones() {
 
   return (
     <main className="wrapper">
-      {/* Quantum + Mensaje */}
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '20px', 
-        marginBottom: '32px',
-        background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
-        padding: '20px',
-        borderRadius: '20px',
-        border: '1px solid rgba(255,255,255,.08)'
-      }}>
-        <img src={quantumInvest} alt="Quantum" style={{ width: '80px', height: '80px' }} />
-        <p style={{ fontSize: '18px', fontWeight: '600', margin: 0 }}>
-          Diversificar es multiplicar posibilidades 🌍✨
-        </p>
-      </div>
-
-      {/* Resumen + Botón Agregar */}
-      <div style={{ maxWidth: '800px', margin: '0 auto 32px' }}>
-        <div className="card" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '20px'
-        }}>
-          <div>
-            <h3 style={{ marginBottom: '8px' }}>Total Inversiones</h3>
-            <p style={{ fontSize: '36px', fontWeight: '800', color: '#8B5CF6', margin: 0 }}>
-              €{totalInversiones.toFixed(2)}
-            </p>
-            <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {cantidadInversiones} {cantidadInversiones === 1 ? 'inversión' : 'inversiones'} {totalFiltrado !== null ? 'en este período' : 'registradas'}
-            </p>
-          </div>
-          <button
-            onClick={() => setMostrarFormulario(!mostrarFormulario)}
-            style={{
-              padding: '14px 28px',
-              borderRadius: '12px',
-              border: 'none',
-              background: mostrarFormulario 
-                ? 'rgba(139, 92, 246, 0.2)' 
-                : 'linear-gradient(180deg, #A78BFA 0%, #8B5CF6 100%)',
-              color: mostrarFormulario ? '#8B5CF6' : '#FFFFFF',
-              fontSize: '16px',
-              fontWeight: '800',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              transition: 'all 0.2s'
-            }}
-          >
-            {mostrarFormulario ? '✕ Cancelar' : '+ Agregar Inversión'}
-          </button>
-        </div>
-      </div>
-
+      <CardResumen 
+        tipo="inversiones"
+        total={totalInversiones}
+        cantidad={cantidadInversiones}
+        mensaje="Diversificar es multiplicar posibilidades 🌍✨"
+        mostrarFormulario={mostrarFormulario}
+        onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
+        esPeriodoFiltrado={totalFiltrado !== null}
+        imagenQuantum={quantumInvest}
+      />
+      
       <h1 style={{ textAlign: 'center', marginBottom: '40px' }}>Precios en Tiempo Real</h1>
 
       {/* Formulario (condicional) */}

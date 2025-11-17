@@ -1,4 +1,4 @@
-import quantumHalf from '../images/quantum_half_fade_256x256.png';
+import quantumHalfDefault from '../images/quantum_half_fade_256x256.png';
 
 function CardResumen({ 
   tipo, 
@@ -7,7 +7,8 @@ function CardResumen({
   mensaje, 
   mostrarFormulario, 
   onToggleFormulario,
-  esPeriodoFiltrado = false
+  esPeriodoFiltrado = false,
+  imagenQuantum = quantumHalfDefault
 }) {
   
   // Configuración según el tipo
@@ -67,7 +68,7 @@ function CardResumen({
           position: 'relative'
         }}>
           <img 
-            src={quantumHalf} 
+            src={imagenQuantum} 
             alt="Quantum" 
             style={{ 
               width: '80px', 

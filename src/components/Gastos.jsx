@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
 import CardResumen from './CardResumen';
 import HistorialFiltrado from './HistorialFiltrado';
-import quantumHalf from '../images/quantum_half_fade_256x256.png';
+
 
 function Gastos() {
   const [gastos, setGastos] = useState([]);
