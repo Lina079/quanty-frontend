@@ -2,7 +2,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ModalEditarNombre from './ModalEditarNombre';
 import editIcon from '../../images/lapiz_edit_name.png';
-import logo from '../../images/quanty-logo.png';
+import logo from '../../images/quanty-logo-gold.png';
 
 function Header() {
   const navigate = useNavigate();
