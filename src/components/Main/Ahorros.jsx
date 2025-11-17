@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import ModalConfirmacion from './ModalConfirmacion';
-import CardResumen from './CardResumen';
-import HistorialFiltrado from './HistorialFiltrado';
+import ModalConfirmacion from './components/ModalConfirmacion';
+import CardResumen from './components/CardResumen';
+import HistorialFiltrado from './components/HistorialFiltrado';
 
 
 function Ahorros() {

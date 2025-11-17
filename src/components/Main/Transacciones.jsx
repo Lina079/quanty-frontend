@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import quantumHalf from '../images/quantum_half_fade_256x256.png';
+import quantumHalf from '../../images/quantum_half_fade_256x256.png';
 
 function Transacciones() {
   const navigate = useNavigate();

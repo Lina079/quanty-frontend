@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import Dashboard from './components/Dashboard';
-import Inversiones from './components/Inversiones';
-import Transacciones from './components/Transacciones';
-import Gastos from './components/Gastos';
-import Ingresos from './components/Ingresos';
-import Ahorros from './components/Ahorros';
+import Inversiones from './components/Main/Inversiones';
+import Transacciones from './components/Main/Transacciones';
+import Gastos from './components/Main/Gastos';
+import Ingresos from './components/Main/Ingresos';
+import Ahorros from './components/Main/Ahorros';
 import './App.css';
 
 function AppContent() {

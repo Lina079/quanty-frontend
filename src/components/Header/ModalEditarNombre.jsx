@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import editIcon from '../images/lapiz_edit_name.png';
+import editIcon from '../../images/lapiz_edit_name.png';
 
 function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
   const [nombre, setNombre] = useState(nombreActual);

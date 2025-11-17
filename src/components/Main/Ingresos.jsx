@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import ModalConfirmacion from './ModalConfirmacion';
-import CardResumen from './CardResumen';
-import HistorialFiltrado from './HistorialFiltrado';
+import ModalConfirmacion from './components/ModalConfirmacion';
+import CardResumen from './components/CardResumen';
+import HistorialFiltrado from './components/HistorialFiltrado';
 
 
-function Gastos() {
-  const [gastos, setGastos] = useState([]);
+function Ingresos() {
+  const [ingresos, setIngresos] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [gastoAEliminar, setGastoAEliminar] = useState(null);
+  const [ingresoAEliminar, setIngresoAEliminar] = useState(null);
   const [totalFiltrado, setTotalFiltrado] = useState(null);
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
 
@@ -24,32 +24,26 @@ function Gastos() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'compra', label: '🏠 Alquiler' },
-    { value: 'compra', label: '🏠 Hipoteca' },
-    { value: 'alquiler', label: '🛒 La compra' },
-    { value: 'suministros', label: '💡 Suministros' },
-    { value: 'transporte', label: '🚗 Transporte' },
-    { value: 'Tarjeta de credito', label: '💳 Tarjeta de credito'},
-    { value: 'gimnasio', label: '💪 Gimnasio' },
-    { value: 'salud', label: '🏥 Salud' },
-    { value: 'viajes', label: '✈️ Viajes' },
-    { value: 'ocio', label: '🎉 Ocio' },
+    { value: 'sueldo', label: '💼 Sueldo' },
+    { value: 'freelance', label: '💻 Freelance' },
+    { value: 'comisiones', label: '💰 Comisiones' },
+    { value: 'dividendos', label: '📈 Dividendos' },
     { value: 'otro', label: '📝 Otro' }
   ];
 
   // Estado para categorías dinámicas
   const [categorias, setCategorias] = useState(categoriasBase);
 
-  const cargarGastos = () => {
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    const gastosOrdenados = gastosGuardados.sort((a, b) => 
+  const cargarIngresos = () => {
+    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
+    const ingresosOrdenados = ingresosGuardados.sort((a, b) => 
       new Date(b.fecha) - new Date(a.fecha)
     );
-    setGastos(gastosOrdenados);
+    setIngresos(ingresosOrdenados);
   };
 
   useEffect(() => {
-    cargarGastos();
+    cargarIngresos();
   }, []);
 
   const handleSubmit = (e) => {
@@ -60,16 +54,16 @@ function Gastos() {
       return;
     }
 
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    const nuevoGasto = {
+    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
+    const nuevoIngreso = {
       id: Date.now(),
       ...formData,
-      tipo: 'gasto',
+      tipo: 'ingreso',
       monto: parseFloat(formData.monto)
     };
 
-    gastosGuardados.push(nuevoGasto);
-    localStorage.setItem('gastos', JSON.stringify(gastosGuardados));
+    ingresosGuardados.push(nuevoIngreso);
+    localStorage.setItem('ingresos', JSON.stringify(ingresosGuardados));
     
     // Reset form
     setFormData({
@@ -79,20 +73,20 @@ function Gastos() {
       fecha: new Date().toISOString().split('T')[0]
     });
     setMostrarFormulario(false);
-    cargarGastos();
+    cargarIngresos();
   };
 
-  const abrirModalEliminar = (gasto) => {
-    setGastoAEliminar(gasto);
+  const abrirModalEliminar = (ingreso) => {
+    setIngresoAEliminar(ingreso);
     setModalOpen(true);
   };
 
   const confirmarEliminar = () => {
-    const gastosActualizados = gastos.filter(g => g.id !== gastoAEliminar.id);
-    localStorage.setItem('gastos', JSON.stringify(gastosActualizados));
-    setGastos(gastosActualizados);
+    const ingresosActualizados = ingresos.filter(i => i.id !== ingresoAEliminar.id);
+    localStorage.setItem('ingresos', JSON.stringify(ingresosActualizados));
+    setIngresos(ingresosActualizados);
     setModalOpen(false);
-    setGastoAEliminar(null);
+    setIngresoAEliminar(null);
   };
 
   const handleAddCustomCategory = () => {
@@ -102,7 +96,7 @@ function Gastos() {
         value: customCategory.toLowerCase().replace(/\s+/g, '-'),
         label: `✨ ${customCategory}`
       };
-      setCategorias([...categoriasBase, nuevaCategoria]);
+      setCategorias([...categorias, nuevaCategoria]);
       
       // Seleccionar la nueva categoría
       setFormData({ ...formData, categoria: customCategory });
@@ -111,32 +105,46 @@ function Gastos() {
     }
   };
 
-  const totalGastos = totalFiltrado !== null ? totalFiltrado : gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
-  const cantidadGastos = cantidadFiltrada !== null ? cantidadFiltrada : gastos.length;
+  const getCategoriaEmoji = (categoria) => {
+    const emojis = {
+      'sueldo': '💼',
+      'freelance': '💻',
+      'comisiones': '💰',
+      'dividendos': '📈',
+      'otro': '📝'
+    };
+    return emojis[categoria] || '💵';
+  };
+
+  const totalIngresos = totalFiltrado !== null 
+  ? totalFiltrado 
+  : ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
+  const cantidadIngresos = cantidadFiltrada !== null ? cantidadFiltrada : ingresos.length;
+
 
   return (
     <main className="wrapper">
-      <h1 style={{ textAlign: 'center' }}>Gestión de Gastos</h1>
+      <h1 style={{ textAlign: 'center' }}>Gestión de Ingresos</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
-        Controla tus gastos de manera efectiva
+        Registra tus fuentes de ingreso
       </p>
 
-      <CardResumen 
-        tipo="gastos"
-        total={totalGastos}
-        cantidad={cantidadGastos}
-        mensaje="✨ Registra tu movimiento, pequeño impulso = gran cambio."
-        mostrarFormulario={mostrarFormulario}
-        onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
-        esPeriodoFiltrado={totalFiltrado !== null}
-      />
+  <CardResumen 
+    tipo="ingresos"
+    total={totalIngresos}
+    cantidad={cantidadIngresos}
+    mensaje="💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!"
+    mostrarFormulario={mostrarFormulario}
+    onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
+    esPeriodoFiltrado={totalFiltrado !== null}
+  />
 
       {/* Formulario (condicional) */}
       {mostrarFormulario && (
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
             <div className="card">
-              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Gasto</h3>
+              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Ingreso</h3>
 
               {/* Categoría */}
               <div style={{ marginBottom: '20px' }}>
@@ -176,7 +184,7 @@ function Gastos() {
                 <div style={{ 
                   marginBottom: '20px', 
                   padding: '16px',
-                  background: 'rgba(56, 225, 255, 0.1)',
+                  background: 'rgba(74, 222, 128, 0.1)',
                   borderRadius: '12px'
                 }}>
                   <div style={{ display: 'flex', gap: '8px' }}>
@@ -202,7 +210,7 @@ function Gastos() {
                       style={{
                         padding: '10px 20px',
                         borderRadius: '8px',
-                        background: 'var(--cyan-accent)',
+                        background: '#4ADE80',
                         color: '#00222F',
                         border: 'none',
                         fontWeight: '700',
@@ -294,7 +302,7 @@ function Gastos() {
                   padding: '14px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%)',
+                  background: 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
                   color: '#00222F',
                   fontSize: '16px',
                   fontWeight: '800',
@@ -302,7 +310,7 @@ function Gastos() {
                   fontFamily: 'inherit'
                 }}
               >
-                💾 Guardar Gasto
+                💾 Guardar Ingreso
               </button>
             </div>
           </form>
@@ -311,9 +319,9 @@ function Gastos() {
 
       {/* Historial con gráfica */}
       <HistorialFiltrado 
-        type="expense" 
+        type="income" 
         onDelete={abrirModalEliminar}
-        data={gastos}
+        data={ingresos}
         onTotalChange={(total, cantidad) => {
           setTotalFiltrado(total);
           setCantidadFiltrada(cantidad);
@@ -324,10 +332,10 @@ function Gastos() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmarEliminar}
-        mensaje="Este gasto se eliminará permanentemente."
+        mensaje="Este ingreso se eliminará permanentemente."
       />
     </main>
   );
 }
 
-export default Gastos;
+export default Ingresos;

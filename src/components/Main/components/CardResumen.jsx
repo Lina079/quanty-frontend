@@ -1,4 +1,4 @@
-import quantumHalfDefault from '../images/quantum_half_fade_256x256.png';
+import quantumHalfDefault from '../../../images/quantum_half_fade_256x256.png';
 
 function CardResumen({ 
   tipo, 

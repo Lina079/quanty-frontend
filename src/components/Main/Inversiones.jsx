@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import ModalConfirmacion from './ModalConfirmacion';
-import CardResumen from './CardResumen';
-import HistorialFiltrado from './HistorialFiltrado';
-import { getCryptoPrices } from '../utils/CoinGeckoApi';
-import quantumInvest from '../images/quantum_invest_256x256.png';
-import { SP500_PRICE, SP500_CHANGE_PERCENT, ERROR_MESSAGES } from '../utils/constants';
+import ModalConfirmacion from './components/ModalConfirmacion';
+import CardResumen from './components/CardResumen';
+import HistorialFiltrado from './components/HistorialFiltrado';
+import { getCryptoPrices } from '../../utils/CoinGeckoApi';
+import quantumInvest from '../../images/quantum_invest_256x256.png';
+import { SP500_PRICE, SP500_CHANGE_PERCENT, ERROR_MESSAGES } from '../../utils/constants';
 
 function Inversiones() {
   const [prices, setPrices] = useState(null);
