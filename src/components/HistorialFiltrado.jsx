@@ -445,7 +445,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
                         </p>
                       )}
                       <p style={{ 
-                        fontSize: '14px', 
+                        fontSize: '18px', 
                         color: 'var(--text-secondary)', 
                         margin: 0 
                       }}>
