@@ -1,22 +1,23 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ModalEditarNombre from './ModalEditarNombre';
 import editIcon from '../../images/lapiz_edit_name.png';
+import logo from '../../images/quanty-logo.png';
 
 function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalNombreOpen, setModalNombreOpen] = useState(false);
   const [userName, setUserName] = useState("Marí Carmen");
 
-   
   // Cargar nombre desde localStorage al montar
-useEffect(() => {
-  const nombreGuardado = localStorage.getItem('userName');
-  if (nombreGuardado) {
-    setUserName(nombreGuardado);
-  }
-}, []);
+  useEffect(() => {
+    const nombreGuardado = localStorage.getItem('userName');
+    if (nombreGuardado) {
+      setUserName(nombreGuardado);
+    }
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -31,14 +32,31 @@ useEffect(() => {
   };
 
   const handleGuardarNombre = (nuevoNombre) => {
-  setUserName(nuevoNombre);
-  localStorage.setItem('userName', nuevoNombre);
-  setModalNombreOpen(false);
-  
-  // Disparar evento para actualizar otros componentes
-  window.dispatchEvent(new Event('userNameChanged'));
-
+    setUserName(nuevoNombre);
+    localStorage.setItem('userName', nuevoNombre);
+    setModalNombreOpen(false);
+    
+    // Disparar evento para actualizar otros componentes
+    window.dispatchEvent(new Event('userNameChanged'));
   };
+
+  const handleCerrarSesion = () => {
+    // Por ahora solo limpia localStorage y recarga
+    // Cuando tengas backend, aquí llamarás a tu API de logout
+    localStorage.clear();
+    window.location.reload();
+  };
+
+  // Helper para saber si un link está activo
+  const isActive = (path) => location.pathname === path;
+
+  const navLinks = [
+    { path: '/', label: 'Inicio' },
+    { path: '/ingresos', label: 'Ingresos' },
+    { path: '/gastos', label: 'Gastos' },
+    { path: '/ahorros', label: 'Ahorros' },
+    { path: '/inversiones', label: 'Inversiones' }
+  ];
 
   return (
     <>
@@ -47,29 +65,44 @@ useEffect(() => {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px clamp(16px, 4vw, 40px)',
-        maxWidth: '1080px',
+        maxWidth: '1200px',
         margin: '0 auto',
         position: 'relative'
       }}>
-        {/* Logo - CLICKEABLE */}
-        <h2 
+        {/* Logo + Texto QUANTY - CLICKEABLE */}
+        <div 
           onClick={() => {
             navigate('/');
             closeMenu();
           }}
           style={{ 
-            fontSize: '24px', 
+            display: 'flex',
+            alignItems: 'center',
+            gap: '9px',
+            cursor: 'pointer'
+          }}
+        >
+          <img 
+            src={logo} 
+            alt="Quanty Logo" 
+            style={{ 
+              width: '32px', 
+              height: '32px',
+              filter: 'drop-shadow(0 2px 8px rgba(56, 225, 255, 0.3))'
+            }} 
+          />
+          <h2 style={{ 
+            fontSize: '20px', 
             fontWeight: '800',
             background: 'linear-gradient(135deg, #38E1FF 0%, #2BE3FF 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            margin: 0,
-            cursor: 'pointer'
+            margin: 0
           }}>
-          QUANTY
-        </h2>
+            QUANTY
+          </h2>
+        </div>
 
-        {/* Botón Hamburguesa - Solo móvil */}
         {/* Botón Hamburguesa - Solo móvil */}
         <button
           type="button"
@@ -89,21 +122,35 @@ useEffect(() => {
           className="desktop-nav"
           style={{ 
             display: 'flex', 
-            gap: '24px', 
+            gap: '16px', 
             alignItems: 'center' 
           }}
         >
-          <Link 
-            to="/" 
-            style={{
-              color: 'var(--text-primary)',
-              textDecoration: 'none',
-              fontWeight: '600',
-              transition: 'color 0.2s'
-            }}
-          >
-            Inicio
-          </Link>
+          {navLinks.map(link => (
+            <Link 
+              key={link.path}
+              to={link.path}
+              style={{
+                color: isActive(link.path) ? 'var(--cyan-accent)' : 'var(--text-primary)',
+                textDecoration: 'none',
+                fontWeight: isActive(link.path) ? '700' : '600',
+                transition: 'color 0.2s',
+                position: 'relative',
+                paddingBottom: '4px',
+                borderBottom: isActive(link.path) ? '2px solid var(--cyan-accent)' : '2px solid transparent'
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
+          
+          {/* Separador */}
+          <div style={{ 
+            width: '1px', 
+            height: '24px', 
+            background: 'rgba(255,255,255,0.2)',
+            margin: '0 8px'
+          }} />
           
           {/* Nombre clickeable con lápiz */}
           <span 
@@ -111,15 +158,13 @@ useEffect(() => {
             style={{
               color: 'var(--cyan-accent)',
               fontWeight: '700',
-              marginLeft: '16px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
               padding: '6px 10px',
               borderRadius: '8px',
-              transition: 'all 0.2s ease',
-              position: 'relative'
+              transition: 'all 0.2s ease'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(56, 225, 255, 0.1)';
@@ -131,11 +176,38 @@ useEffect(() => {
             }}
           >
             {userName}
-            <img src={editIcon} alt="Editar" style={{ width: '22px', height: '22px', opacity: 0.8 }} />
+            <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px', opacity: 0.8 }} />
           </span>
+
+          {/* Botón Cerrar Sesión */}
+          <button
+            onClick={handleCerrarSesion}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '8px',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'rgba(239, 68, 68, 0.1)',
+              color: '#EF4444',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+              e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+            }}
+          >
+            Cerrar sesión
+          </button>
         </nav>
 
-        {/* Navegación Mobile - Menú desplegable */}
+        {/* Navegación Mobile - Overlay */}
         {menuOpen && (
           <div 
             className="mobile-menu-overlay"
@@ -153,6 +225,7 @@ useEffect(() => {
           />
         )}
 
+        {/* Navegación Mobile - Menú desplegable */}
         <nav 
           className="mobile-nav"
           style={{
@@ -172,21 +245,24 @@ useEffect(() => {
             transition: 'right 0.3s ease'
           }}
         >
-          <Link 
-            to="/" 
-            onClick={closeMenu}
-            style={{
-              color: 'var(--text-primary)',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '18px',
-              padding: '12px 0',
-              borderBottom: '1px solid rgba(255,255,255,0.1)',
-              transition: 'color 0.2s'
-            }}
-          >
-            Inicio
-          </Link>
+          {navLinks.map(link => (
+            <Link 
+              key={link.path}
+              to={link.path}
+              onClick={closeMenu}
+              style={{
+                color: isActive(link.path) ? 'var(--cyan-accent)' : 'var(--text-primary)',
+                textDecoration: 'none',
+                fontWeight: isActive(link.path) ? '700' : '600',
+                fontSize: '18px',
+                padding: '12px 0',
+                borderBottom: '1px solid rgba(255,255,255,0.1)',
+                transition: 'color 0.2s'
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
           
           {/* Nombre clickeable en móvil */}
           <div 
@@ -216,6 +292,28 @@ useEffect(() => {
               <img src={editIcon} alt="Editar" style={{ width: '16px', height: '16px', opacity: 0.8 }} />
             </p>
           </div>
+
+          {/* Botón Cerrar Sesión en móvil */}
+          <button
+            onClick={() => {
+              closeMenu();
+              handleCerrarSesion();
+            }}
+            style={{
+              marginTop: 'auto',
+              padding: '12px',
+              borderRadius: '8px',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'rgba(239, 68, 68, 0.1)',
+              color: '#EF4444',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              fontFamily: 'inherit'
+            }}
+          >
+            Cerrar sesión
+          </button>
         </nav>
       </header>
 

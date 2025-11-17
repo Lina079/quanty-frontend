@@ -45,7 +45,7 @@
    RESPONSIVE
    ======================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   /* Mostrar hamburguesa en móvil */
   .header__burger {
     display: flex !important;
