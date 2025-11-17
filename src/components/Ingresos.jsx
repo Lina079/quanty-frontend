@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import ModalConfirmacion from './ModalConfirmacion';
+import CardResumen from './CardResumen';
 import HistorialFiltrado from './HistorialFiltrado';
-import quantumHalf from '../images/quantum_half_fade_256x256.png';
+
 
 function Ingresos() {
   const [ingresos, setIngresos] = useState([]);
@@ -128,81 +129,15 @@ function Ingresos() {
         Registra tus fuentes de ingreso
       </p>
 
-      {/* Quantum con mensaje */}
-      <div style={{ 
-        position: 'relative',
-        maxWidth: '800px',
-        margin: '0 auto 32px'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '20px', 
-          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
-          padding: '20px 24px',
-          borderRadius: '20px',
-          border: '1px solid rgba(255,255,255,.08)',
-          position: 'relative'
-        }}>
-          <img 
-            src={quantumHalf} 
-            alt="Quantum" 
-            style={{ 
-              width: '80px', 
-              height: '80px',
-              flexShrink: 0
-            }} 
-          />
-          <p style={{ 
-            fontSize: '18px', 
-            fontWeight: '600', 
-            margin: 0,
-            lineHeight: '1.4'
-          }}>
-            💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!
-          </p>
-        </div>
-      </div>
-
-      {/* Resumen + Botón Agregar */}
-      <div style={{ maxWidth: '800px', margin: '0 auto 32px' }}>
-        <div className="card" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '20px'
-        }}>
-          <div>
-            <h3 style={{ marginBottom: '8px' }}>Total Ingresos</h3>
-            <p style={{ fontSize: '36px', fontWeight: '800', color: '#4ADE80', margin: 0 }}>
-              €{totalIngresos.toFixed(2)}
-            </p>
-            <p style={{ color: 'var(--text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-              {cantidadIngresos} {cantidadIngresos === 1 ? 'ingreso' : 'ingresos'} {totalFiltrado !== null ? 'en este período' : 'registrados'}
-            </p>
-          </div>
-          <button
-            onClick={() => setMostrarFormulario(!mostrarFormulario)}
-            style={{
-              padding: '14px 28px',
-              borderRadius: '12px',
-              border: 'none',
-              background: mostrarFormulario 
-                ? 'rgba(74, 222, 128, 0.2)' 
-                : 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
-              color: mostrarFormulario ? '#4ADE80' : '#00222F',
-              fontSize: '16px',
-              fontWeight: '800',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-              transition: 'all 0.2s'
-            }}
-          >
-            {mostrarFormulario ? '✕ Cancelar' : '+ Agregar Ingreso'}
-          </button>
-        </div>
-      </div>
+  <CardResumen 
+    tipo="ingresos"
+    total={totalIngresos}
+    cantidad={cantidadIngresos}
+    mensaje="💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!"
+    mostrarFormulario={mostrarFormulario}
+    onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
+    esPeriodoFiltrado={totalFiltrado !== null}
+  />
 
       {/* Formulario (condicional) */}
       {mostrarFormulario && (
