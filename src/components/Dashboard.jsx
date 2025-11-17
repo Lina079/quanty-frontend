@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import quantumImg from '../images/Quantum-allBody.png';
+import quantumImg from '../images/quantum_half_fade_256x256.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
 import iconoAhorro from '../images/ahorro_caja_fuerte_256x256.png';
@@ -64,19 +64,37 @@ useEffect(() => {
   };
 
   return (
-    <main className="wrapper">
-      {/* Robot Quantum */}
-      <div className="quantum">
-        <img src={quantumImg} alt="Quantum - Tu asistente financiero" />
-      </div>
+  <main className="wrapper">
+    {/* Quantum + Mensaje (Layout horizontal) */}
+  <div className="dashboard-welcome" style={{ 
+  display: 'flex',
+  alignItems: 'center',
+  gap: '32px',
+  maxWidth: '760px',
+  margin: '0 auto 32px auto'
+  }}>
+  {/* Quantum a la izquierda */}
+  <div style={{ 
+    flexShrink: 0,
+    width: '150px'
+    }}>
+    <img 
+      src={quantumImg} 
+      alt="Quantum - Tu asistente financiero"
+      style={{ width: '100%', height: 'auto' }}
+    />
+  </div>
 
-      {/* Mensaje de bienvenida */}
-      <h1 style={{ textAlign: 'center', margin: '0 0 8px' }}>
-        Bienvenid@ a Quanty, {userName}
-      </h1>
-      <p className="subtitle" style={{ textAlign: 'center', maxWidth: '600px', margin: '0 auto 16px' }}>
-        Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel cuántico! ✨
-      </p>
+    {/* Textos a la derecha */}
+  <div style={{ flex: 1 }}>
+    <h1 style={{ margin: '0 0 12px', fontSize: '32px' }}>
+      Bienvenid@ a Quanty, {userName}
+    </h1>
+    <p className="subtitle" style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}>
+      Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel cuántico! ✨
+    </p>
+  </div>
+  </div>
 
       {/* Botón FAB - Centrado después del subtítulo */}
       <button 

@@ -143,3 +143,16 @@ h3 {
     font-size: 24px !important;
   }
 }
+
+/* Dashboard welcome responsive */
+@media (max-width: 768px) {
+  .dashboard-welcome {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 24px !important;
+  }
+  
+  .dashboard-welcome h1 {
+    font-size: 24px !important;
+  }
+}
