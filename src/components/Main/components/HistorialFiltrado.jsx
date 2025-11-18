@@ -242,6 +242,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
               <div style={{ 
                 marginTop: '16px',
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: '12px'
@@ -254,7 +255,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
                   style={{
-                    padding: '8px 16px',
+                    padding: '10px 16px',
                     borderRadius: '10px',
                     border: `2px solid ${currentConfig.color}`,
                     background: 'rgba(14,49,71,.5)',
@@ -262,7 +263,9 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
                     fontSize: '15px',
                     fontWeight: '600',
                     fontFamily: 'inherit',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    width: '100%',
+                    maxWidth: '280px'
                   }}
                 />
               </div>
@@ -417,69 +420,83 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
           <div>
             {filteredTransactions.length > 0 ? (
               filteredTransactions.map(transaction => (
-                <div key={transaction.id} className="card" style={{ marginBottom: '12px' }}>
-                  <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: '50px 1fr auto auto',
-                    gap: '16px',
-                    alignItems: 'center'
-                  }}>
-                    <div style={{ fontSize: '28px', textAlign: 'center' }}>
-                      {getCategoriaEmoji(transaction.categoria)}
-                    </div>
-                    <div>
-                      <h3 style={{ 
-                        marginBottom: '4px', 
-                        textTransform: 'capitalize', 
-                        fontSize: '18px' 
-                      }}>
-                        {transaction.categoria}
-                      </h3>
-                      {transaction.descripcion && (
-                        <p style={{ 
-                          fontSize: '14px', 
-                          color: 'var(--text-secondary)', 
-                          margin: '0 0 4px' 
-                        }}>
-                          {transaction.descripcion}
-                        </p>
-                      )}
-                      <p style={{ 
-                        fontSize: '18px', 
-                        color: 'var(--text-secondary)', 
-                        margin: 0 
-                      }}>
-                        {new Date(transaction.fecha).toLocaleDateString('es-ES')}
-                      </p>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <p style={{ 
-                        fontSize: '22px', 
-                        fontWeight: '800', 
-                        color: currentConfig.color, 
-                        margin: 0 
-                      }}>
-                        €{transaction.monto.toFixed(2)}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => onDelete(transaction)}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        border: '1px solid rgba(239, 68, 68, 0.3)',
-                        background: 'rgba(239, 68, 68, 0.1)',
-                        color: '#EF4444',
-                        fontSize: '13px',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        fontFamily: 'inherit'
-                      }}
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
+                <div key={transaction.id} className="card transaction-card" style={{ marginBottom: '12px' }}>
+  <div style={{ 
+    display: 'flex',
+    gap: '12px',
+    alignItems: 'center',
+    flexWrap: 'wrap'
+  }}>
+    <div style={{ 
+      fontSize: '28px', 
+      textAlign: 'center',
+      width: '48px',
+      height: '48px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0
+    }}>
+      {getCategoriaEmoji(transaction.categoria)}
+    </div>
+    <div style={{ flex: '1', minWidth: '150px' }}>
+      <h3 style={{ 
+        marginBottom: '4px', 
+        textTransform: 'capitalize', 
+        fontSize: '18px' 
+      }}>
+        {transaction.categoria}
+      </h3>
+      {transaction.descripcion && (
+        <p style={{ 
+          fontSize: '14px', 
+          color: 'var(--text-secondary)', 
+          margin: '0 0 4px' 
+        }}>
+          {transaction.descripcion}
+        </p>
+      )}
+      <p style={{ 
+        fontSize: '14px', 
+        color: 'var(--text-secondary)', 
+        margin: 0 
+      }}>
+        {new Date(transaction.fecha).toLocaleDateString('es-ES')}
+      </p>
+    </div>
+    <div style={{ textAlign: 'right', marginLeft: 'auto' }}>
+      <p style={{ 
+        fontSize: '22px', 
+        fontWeight: '800', 
+        color: currentConfig.color, 
+        margin: 0 
+      }}>
+        €{transaction.monto.toFixed(2)}
+      </p>
+    </div>
+    <button
+      onClick={() => onDelete(transaction)}
+      style={{
+        padding: '10px',
+        borderRadius: '8px',
+        border: '1px solid rgba(239, 68, 68, 0.3)',
+        background: 'rgba(239, 68, 68, 0.1)',
+        color: '#EF4444',
+        fontSize: '20px',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        width: '44px',
+        height: '44px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0
+      }}
+      >
+              🗑️
+        </button>
+          </div>
+        </div>
               ))
             ) : (
               <div className="card" style={{ textAlign: 'center', padding: '40px 20px' }}>
