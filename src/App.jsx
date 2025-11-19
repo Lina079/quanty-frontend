@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Dashboard from './components/Dashboard';
@@ -29,28 +30,66 @@ function AppContent() {
   };
 }, [navigate]);
 
-  return (
-    <>
-      <Header />
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/inversiones" element={<Inversiones />} />
-        <Route path="/transacciones" element={<Transacciones />} />
-        <Route path="/gastos" element={<Gastos />} />
-        <Route path="/ingresos" element={<Ingresos />} />
-        <Route path="/ahorros" element={<Ahorros />} />
-      </Routes>
-      <Footer />
-    </>
-  );
+ return (
+    <Routes>
+      {/* Rutas públicas (sin Header/Footer) */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      
+      {/* Rutas protegidas (con Header/Footer) */}
+      <Route path="/dashboard" element={
+        <>
+          <Header />
+          <Dashboard />
+          <Footer />
+        </>
+      } />
+      <Route path="/inversiones" element={
+        <>
+          <Header />
+          <Inversiones />
+          <Footer />
+        </>
+      } />
+      <Route path="/transacciones" element={
+        <>
+          <Header />
+          <Transacciones />
+          <Footer />
+        </>
+      } />
+      <Route path="/gastos" element={
+        <>
+          <Header />
+          <Gastos />
+          <Footer />
+        </>
+      } />
+      <Route path="/ingresos" element={
+        <>
+          <Header />
+          <Ingresos />
+          <Footer />
+        </>
+      } />
+      <Route path="/ahorros" element={
+        <>
+          <Header />
+          <Ahorros />
+          <Footer />
+        </>
+      } />
+    </Routes>
+  ); 
 }
 
 function App () {
   return (
     <BrowserRouter>
+    <CurrentUserProvider>
     <AppContent />
+    </CurrentUserProvider> 
     </BrowserRouter>
   );
 }
