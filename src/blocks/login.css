@@ -1,0 +1,351 @@
+/* ========================================
+   LOGIN - ESTILOS COMPLETOS
+   ======================================== */
+
+/* Página completa: ocupa toda la pantalla, fondo oscuro, centrado */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #001F2F 0%, #00222F 100%);
+  padding: 20px;
+}
+
+/* Contenedor principal: ancho máximo, padding */
+.login-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 20px 24px;
+}
+
+/* ========== HEADER: LOGO + QUANTY ========== */
+
+/* Contenedor del logo y título QUANTY (horizontal) */
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Logo dorado (imagen) */
+.login-header-logo {
+  height: 50px;
+  width: auto;
+}
+
+/* Título "QUANTY" al lado del logo */
+.login-header-title {
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--cyan-accent);
+  margin: 0;
+  letter-spacing: 2px;
+}
+/* ========== SALUDO ========== */
+
+/* Subtítulo: "Bienvenid@ de nuevo" */
+.login-subtitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0 0 24px 0;
+}
+
+/* ========== LAYOUT PRINCIPAL: QUANTUM Y FORMULARIO ========== */
+
+/* Contenedor principal: Quantum a la izquierda, Formulario a la derecha */
+.login-main-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+/* Lado de Quantum (secundario, más pequeño) */
+.login-quantum-side {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Lado del formulario (protagonista, más grande) */
+.login-form-side {
+  flex: 0 1 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ========== QUANTUM Y TIP ========== */
+
+/* Bocadillo con el tip financiero */
+.login-tip-bubble {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(56, 225, 255, 0.15) 0%, rgba(56, 225, 255, 0.08) 100%);
+  border: 2px solid var(--cyan-accent);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+.login-tip-bubble p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Personaje Quantum */
+.login-quantum-character {
+  width: 120px;
+  height: 120px;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Animación flotante de Quantum */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ========== FORMULARIO ========== */
+
+/* Contenedor del formulario */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Grupo de cada campo (label + input + error) */
+.login-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Labels de los campos */
+.login-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Inputs (email y password) */
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(14, 49, 71, 0.5);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+/* Input cuando está enfocado (usuario hace click) */
+.login-input:focus {
+  outline: none;
+  border-color: var(--cyan-accent);
+  background: rgba(14, 49, 71, 0.7);
+}
+
+/* Placeholder (texto de ejemplo) */
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Input con error (borde rojo) */
+.login-input-error {
+  border-color: #EF4444;
+}
+
+/* Mensaje de error debajo del input */
+.login-error-message {
+  font-size: 13px;
+  color: #EF4444;
+  font-weight: 500;
+}
+
+/* ========== ERROR DEL SERVIDOR ========== */
+
+/* Caja de error cuando las credenciales son incorrectas */
+.login-server-error {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  color: #EF4444;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ========== BOTÓN ENTRAR ========== */
+
+/* Botón principal */
+.login-button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(180deg, #38E1FF 0%, #12B4D6 100%);
+  color: #00222F;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+/* Botón cuando pasas el mouse encima (solo si NO está deshabilitado) */
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(56, 225, 255, 0.4);
+}
+
+/* Botón deshabilitado (campos inválidos o enviando datos) */
+.login-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========== LINKS DE NAVEGACIÓN ========== */
+
+/* Contenedor de los links */
+.login-links {
+  text-align: center;
+}
+
+.login-links p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 12px 0;
+}
+
+/* Links clickeables (Regístrate, Recuperar cuenta) */
+.login-link {
+  color: var(--cyan-accent);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+/* Link cuando pasas el mouse encima */
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* TABLET (pantallas entre 768px y 1024px) */
+@media (max-width: 1024px) {
+  /* Header más pequeño */
+  .login-header-title {
+    font-size: 40px;
+  }
+  
+  .login-header-logo {
+    height: 50px;
+  }
+  
+  /* Saludo más pequeño */
+  .login-subtitle {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+  
+  /* Quantum más pequeño */
+  .login-quantum-side {
+    flex: 0 0 280px;
+  }
+  
+  .login-quantum-character {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* MÓVIL (pantallas menores a 768px) */
+@media (max-width: 768px) {
+  /* Layout cambia a VERTICAL (Quantum arriba, Formulario abajo) */
+  .login-main-layout {
+    flex-direction: column;
+    gap: 32px;
+  }
+  
+  /* Quantum ocupa todo el ancho */
+  .login-quantum-side {
+    flex: none;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  /* Formulario ocupa todo el ancho */
+  .login-form-side {
+    width: 100%;
+  }
+  
+  /* Header más pequeño */
+  .login-header-title {
+    font-size: 32px;
+  }
+  
+  .login-header-logo {
+    height: 40px;
+  }
+  
+  /* Saludo más pequeño */
+  .login-subtitle {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+  
+  /* Quantum más pequeño */
+  .login-quantum-character {
+    width: 80px;
+    height: 80px;
+  }
+  
+  /* Tip con texto más pequeño */
+  .login-tip-bubble p {
+    font-size: 13px;
+  }
+}
+
+/* MÓVIL PEQUEÑO (menor a 480px) */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 24px 16px;
+  }
+  
+  .login-header-title {
+    font-size: 28px;
+  }
+  
+  .login-subtitle {
+    font-size: 18px;
+  }
+  
+  .login-button {
+    font-size: 16px;
+    padding: 14px;
+  }
+}
