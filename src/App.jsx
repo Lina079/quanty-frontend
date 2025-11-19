@@ -9,6 +9,7 @@ import Gastos from './components/Main/Gastos';
 import Ingresos from './components/Main/Ingresos';
 import Ahorros from './components/Main/Ahorros';
 import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 import './App.css';
 
 function AppContent() {
@@ -32,8 +33,9 @@ function AppContent() {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/inversiones" element={<Inversiones />} />
         <Route path="/transacciones" element={<Transacciones />} />
         <Route path="/gastos" element={<Gastos />} />
