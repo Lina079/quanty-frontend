@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { useSettings } from '../contexts/SettingsContext';
 import quantumImg from '../images/quantum_half_fade_256x256.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
@@ -11,6 +12,7 @@ import iconoInversion from '../images/inversion_planta_256x256.png';
 function Dashboard() {
   const navigate = useNavigate();
   const { currentUser } = useContext(CurrentUserContext);
+  const { formatCurrency } = useSettings();
   const [periodo, setPeriodo] = useState('mes'); // 'mes' o 'año'
   
   // Función para filtrar transacciones por período
@@ -180,7 +182,7 @@ const financialData = {
       </div>
         <h3>Ingreso</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
-            €{financialData.ingresos.monto.toFixed(2)}
+            {formatCurrency(financialData.ingresos.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
             👉 Click para gestionar
@@ -198,7 +200,7 @@ const financialData = {
           </div>
           <h3>Inversión</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: '#8B5CF6', marginTop: '12px' }}>
-              €{financialData.inversion.monto.toFixed(2)}
+              {formatCurrency(financialData.inversion.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
             👉 Click para gestionar
@@ -216,7 +218,7 @@ const financialData = {
           </div>
           <h3>Gastos</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
-            €{financialData.gastos.monto.toFixed(2)}
+            {formatCurrency(financialData.gastos.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
             👉 Click para gestionar
@@ -234,7 +236,7 @@ const financialData = {
           </div>
           <h3>Ahorro</h3>
           <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
-            €{financialData.ahorro.monto.toFixed(2)}
+            {formatCurrency(financialData.ahorro.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
             👉 Click para gestionar

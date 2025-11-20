@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-route
 import { useEffect } from 'react';
 import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { SettingsProvider } from './contexts/SettingsContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Dashboard from './components/Dashboard';
@@ -89,11 +90,13 @@ function AppContent() {
 function App () {
   return (
     <BrowserRouter>
+    <SettingsProvider>
     <CurrentUserProvider>
     <ToastProvider>
       <AppContent />
     </ToastProvider>
-    </CurrentUserProvider> 
+    </CurrentUserProvider>
+    </SettingsProvider>
     </BrowserRouter>
   );
 }

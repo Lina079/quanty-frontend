@@ -1,0 +1,213 @@
+/* ================================================================
+   USER SETTINGS - PÁGINA DE CONFIGURACIÓN
+   Estilos para el componente UserSettings.jsx
+   Incluye: layout principal, secciones, opciones de moneda y tema
+================================================================ */
+
+/* ===== CONTENEDOR PRINCIPAL DE LA PÁGINA ===== */
+.user-settings-page {
+  min-height: calc(100vh - 80px); /* Resta altura del header */
+  padding: 2rem 1rem;
+  background-color: var(--bg-1);
+}
+
+.user-settings-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.5rem;
+  background-color: var(--bg-2);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ===== TÍTULOS PRINCIPALES ===== */
+.user-settings-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.user-settings-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* ===== SECCIONES (MONEDA Y TEMA) ===== */
+.settings-section {
+  margin-bottom: 3rem;
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
+.settings-section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.settings-section-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* ===== GRID DE OPCIONES DE MONEDA ===== */
+.currency-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* ===== BOTÓN DE OPCIÓN DE MONEDA ===== */
+.currency-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  background-color: var(--bg-1);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.currency-option:hover {
+  border-color: var(--cyan-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 225, 255, 0.2);
+}
+
+/* Estado activo de la moneda seleccionada */
+.currency-option.active {
+  background-color: rgba(56, 225, 255, 0.1);
+  border-color: var(--cyan-accent);
+  box-shadow: 0 0 20px rgba(56, 225, 255, 0.3);
+}
+
+/* ===== ELEMENTOS DENTRO DEL BOTÓN DE MONEDA ===== */
+.currency-symbol {
+  font-size: 2rem;
+  color: var(--cyan-accent);
+}
+
+.currency-code {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.currency-name {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Checkmark para moneda activa */
+.currency-check {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 1.25rem;
+  color: var(--cyan-accent);
+  animation: checkFadeIn 0.3s ease;
+}
+
+/* ===== CONTENEDOR DE OPCIONES DE TEMA ===== */
+.theme-options {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ===== BOTÓN DE OPCIÓN DE TEMA ===== */
+.theme-option {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  background-color: var(--bg-1);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-option:hover {
+  border-color: var(--cyan-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 225, 255, 0.2);
+}
+
+/* Estado activo del tema seleccionado */
+.theme-option.active {
+  background-color: rgba(56, 225, 255, 0.1);
+  border-color: var(--cyan-accent);
+  box-shadow: 0 0 20px rgba(56, 225, 255, 0.3);
+}
+
+/* ===== ELEMENTOS DENTRO DEL BOTÓN DE TEMA ===== */
+.theme-icon {
+  font-size: 2.5rem;
+}
+
+.theme-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Checkmark para tema activo */
+.theme-check {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.25rem;
+  color: var(--cyan-accent);
+  animation: checkFadeIn 0.3s ease;
+}
+
+/* ===== ANIMACIÓN DEL CHECKMARK ===== */
+@keyframes checkFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== RESPONSIVE - MÓVIL ===== */
+@media (max-width: 768px) {
+  .user-settings-page {
+    padding: 1rem;
+  }
+
+  .user-settings-container {
+    padding: 1.5rem;
+  }
+
+  .user-settings-title {
+    font-size: 1.5rem;
+  }
+
+  .currency-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-options {
+    flex-direction: column;
+  }
+}
