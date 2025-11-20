@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { CurrentUserProvider } from './contexts/CurrentUserContext';
+import { ToastProvider } from './contexts/ToastContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Dashboard from './components/Dashboard';
@@ -88,7 +89,9 @@ function App () {
   return (
     <BrowserRouter>
     <CurrentUserProvider>
-    <AppContent />
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
     </CurrentUserProvider> 
     </BrowserRouter>
   );

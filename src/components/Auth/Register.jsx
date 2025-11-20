@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../../contexts/ToastContext';
 import './../../blocks/login.css';
 import quantumFull from '../../images/Quantum-allBody.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
 
 function Register() {
   const navigate = useNavigate();
+  const { showToast } = useToast;
 
   // ========== ESTADOS DEL FORMULARIO ==========
   // Estados para los valores de los campos
@@ -225,8 +227,12 @@ function Register() {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Simular registro exitoso
-      alert(`Registro exitoso! Bienvenid@ ${name}`);
-      navigate('/login');
+      showToast(`¡Registro exitoso, ${name}! Ahora inicia sesión.`, 'success');
+
+      // Esperar un momento antes de navegar
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
       
     } catch (error) {
       console.error('Error en registro:', error);
@@ -320,7 +326,7 @@ function Register() {
                   className={`login-input ${passwordError ? 'login-input-error' : ''}`}
                   value={password}
                   onChange={handlePasswordChange}
-                  placeholder="Mínimo 8 caracteres alfanuméricos"
+                  placeholder="Mín. 8 caracteres alfanuméricos"
                   disabled={isLoading}
                 />
                 {passwordError && (

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../../contexts/ToastContext';
 import './../../blocks/login.css';
 import quantumHalf from '../../images/Quantum-allBody.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
 
 function Login() {
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
 // ========== ESTADOS DEL FORMULARIO ==========
   // Estos estados guardan lo que el usuario escribe
@@ -156,8 +158,12 @@ function Login() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Simular login exitoso
-      alert('Login exitoso (simulado)');
-      navigate('/dashboard');
+      showToast('¡Inicio de sesión exito!', 'success');
+
+      //Esperar un momento antes de navegar (para que se vea el toast)
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
       
     } catch (error) {
       console.error('Error en login:', error);
@@ -231,7 +237,7 @@ function Login() {
               className={`login-input ${passwordError ? 'login-input-error' : ''}`}
               value={password}
               onChange={handlePasswordChange}
-              placeholder="Mínimo 8 caracteres alfanuméricos"
+              placeholder="Mín. 8 caracteres alfanuméricos"
               disabled={isLoading}
             />
             {/* Mostrar error de contraseña si existe */}

@@ -1,0 +1,120 @@
+/* ========================================
+   TOAST - NOTIFICACIONES PERSONALIZADAS
+   ======================================== */
+
+/* Contenedor del toast (posición fija arriba centro) */
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  min-width: 320px;
+  max-width: 500px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: toast-slide-in 0.3s ease-out;
+}
+
+/* Animación de entrada */
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Contenido interno */
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Icono */
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* Mensaje */
+.toast-message {
+  flex: 1;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ========== TIPOS DE TOAST ========== */
+
+/* Success (verde) */
+.toast-success {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%);
+  border: 2px solid #10B981;
+}
+
+.toast-success .toast-icon {
+  background: #10B981;
+  color: #001F2F;
+}
+
+.toast-success .toast-message {
+  color: #10B981;
+}
+
+/* Error (rojo) */
+.toast-error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
+  border: 2px solid #EF4444;
+}
+
+.toast-error .toast-icon {
+  background: #EF4444;
+  color: #001F2F;
+}
+
+.toast-error .toast-message {
+  color: #EF4444;
+}
+
+/* Info (cyan) */
+.toast-info {
+  background: linear-gradient(135deg, rgba(56, 225, 255, 0.15) 0%, rgba(56, 225, 255, 0.08) 100%);
+  border: 2px solid var(--cyan-accent);
+}
+
+.toast-info .toast-icon {
+  background: var(--cyan-accent);
+  color: #001F2F;
+}
+
+.toast-info .toast-message {
+  color: var(--cyan-accent);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 600px) {
+  .toast {
+    min-width: 280px;
+    max-width: calc(100vw - 32px);
+    top: 16px;
+  }
+  
+  .toast-message {
+    font-size: 14px;
+  }
+}
