@@ -12,6 +12,7 @@ import Ingresos from './components/Main/Ingresos';
 import Ahorros from './components/Main/Ahorros';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function AppContent() {
@@ -40,46 +41,46 @@ function AppContent() {
       
       {/* Rutas protegidas (con Header/Footer) */}
       <Route path="/dashboard" element={
-        <>
+        <ProtectedRoute>
           <Header />
           <Dashboard />
           <Footer />
-        </>
+        </ProtectedRoute>
       } />
       <Route path="/inversiones" element={
-        <>
+        <ProtectedRoute>
           <Header />
           <Inversiones />
           <Footer />
-        </>
+        </ProtectedRoute>
       } />
       <Route path="/transacciones" element={
-        <>
+        <ProtectedRoute>
           <Header />
           <Transacciones />
           <Footer />
-        </>
+        </ProtectedRoute>
       } />
       <Route path="/gastos" element={
-        <>
+        <ProtectedRoute>
           <Header />
           <Gastos />
           <Footer />
-        </>
+        </ProtectedRoute>
       } />
       <Route path="/ingresos" element={
-        <>
+        <ProtectedRoute>
           <Header />
           <Ingresos />
           <Footer />
-        </>
+        </ProtectedRoute>
       } />
       <Route path="/ahorros" element={
-        <>
+        <ProtectedRoute>
           <Header />
           <Ahorros />
           <Footer />
-        </>
+        </ProtectedRoute>
       } />
     </Routes>
   ); 

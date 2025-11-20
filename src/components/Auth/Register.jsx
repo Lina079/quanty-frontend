@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../contexts/ToastContext';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumFull from '../../images/Quantum-allBody.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
 
 function Register() {
   const navigate = useNavigate();
-  const { showToast } = useToast;
+  const { showToast } = useToast();
+  const { login } = useContext(CurrentUserContext);
 
   // ========== ESTADOS DEL FORMULARIO ==========
   // Estados para los valores de los campos
@@ -225,7 +228,7 @@ function Register() {
       
       // Simular delay de red (1.5 segundos)
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Simular registro exitoso
       showToast(`¡Registro exitoso, ${name}! Ahora inicia sesión.`, 'success');
 

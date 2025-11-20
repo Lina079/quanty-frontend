@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../contexts/ToastContext';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumHalf from '../../images/Quantum-allBody.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
@@ -8,6 +10,7 @@ import logoQuanty from '../../images/quanty-logo-gold.png';
 function Login() {
     const navigate = useNavigate();
     const { showToast } = useToast();
+    const { login } = useContext(CurrentUserContext);
 
 // ========== ESTADOS DEL FORMULARIO ==========
   // Estos estados guardan lo que el usuario escribe
@@ -156,13 +159,21 @@ function Login() {
       
       // Simular delay de red (1 segundo)
       await new Promise(resolve => setTimeout(resolve, 1000));
+
+      //Simular datos del usuario y token
+      const userData = {
+        name: 'Usuario Demo',
+        email: email,
+        id: '123'
+      };
+      const token = 'fake-jwt-token-12345';
       
       // Simular login exitoso
       showToast('¡Inicio de sesión exito!', 'success');
 
       //Esperar un momento antes de navegar (para que se vea el toast)
       setTimeout(() => {
-        navigate('/dashboard');
+        login(userData, token);
       }, 1000);
       
     } catch (error) {
