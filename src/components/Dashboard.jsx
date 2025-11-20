@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import quantumImg from '../images/quantum_half_fade_256x256.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
@@ -8,32 +10,9 @@ import iconoInversion from '../images/inversion_planta_256x256.png';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("Marí Carmen");
+  const { currentUser } = useContext(CurrentUserContext);
   const [periodo, setPeriodo] = useState('mes'); // 'mes' o 'año'
   
-  // Cargar nombre desde localStorage y escuchar cambios
-useEffect(() => {
-  const nombreGuardado = localStorage.getItem('userName');
-  if (nombreGuardado) {
-    setUserName(nombreGuardado);
-  }
-
-  // Escuchar cambios de nombre desde otros componentes
-  const handleUserNameChange = () => {
-    const nuevoNombre = localStorage.getItem('userName');
-    if (nuevoNombre) {
-      setUserName(nuevoNombre);
-    }
-  };
-
-  window.addEventListener('userNameChanged', handleUserNameChange);
-
-  // Cleanup al desmontar componente
-  return () => {
-    window.removeEventListener('userNameChanged', handleUserNameChange);
-  };
-}, []);
-
   // Función para filtrar transacciones por período
   const filtrarPorPeriodo = (transacciones) => {
   const ahora = new Date();
@@ -119,7 +98,7 @@ const financialData = {
     {/* Textos a la derecha */}
   <div style={{ flex: 1 }}>
     <h1 style={{ margin: '0 0 12px', fontSize: '28px' }}>
-      Bienvenid@ a Quanty, {userName}
+      Bienvenid@ a Quanty, {currentUser?.name || 'Usuario'}
     </h1>
     <p className="subtitle" style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}>
       Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel cuántico! ✨

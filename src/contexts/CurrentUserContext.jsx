@@ -24,6 +24,9 @@ export function CurrentUserProvider({ children }) {
   const login = (userData, token) => {
     // Guardar token en localStorage (persiste aunque cierres el navegador)
     localStorage.setItem('jwt', token);
+
+    //Guardar userData en localStorage también
+    localStorage.setItem('userData', JSON.stringify(userData));
     
     // Guardar usuario en el estado
     setCurrentUser(userData);
@@ -38,6 +41,9 @@ export function CurrentUserProvider({ children }) {
   const logout = () => {
     // Borrar token del localStorage
     localStorage.removeItem('jwt');
+
+    //Borrar userData del localStorag
+    localStorage.removeItem('userData');
     
     // Borrar usuario del estado
     setCurrentUser(null);
@@ -67,21 +73,24 @@ export function CurrentUserProvider({ children }) {
       
       // ===== SIMULACIÓN TEMPORAL (borrar cuando conectemos backend) =====
       // Simular que el token es válido
-      setCurrentUser({
-        name: 'Usuario Demo',
-        email: 'demo@quanty.com',
-        id: '123'
-      });
-      
+      const userData = localStorage.getItem('userData');
+
+      if (userData) {
+        setCurrentUser(JSON.parse(userData));
+      } else {
+        //si no hay userData, el token no sirve
+        localStorage.removeItem('jwt');
+      }
+
     } catch (error) {
-      // Token inválido o expirado → borrar
       console.error('Token inválido:', error);
       localStorage.removeItem('jwt');
+      localStorage.removeItem('userData');
     } finally {
-      // Terminar verificación
       setIsCheckingToken(false);
     }
   };
+
   // Verificar token cuando se carga la app
   useEffect(() => {
     checkToken();

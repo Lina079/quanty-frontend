@@ -1,5 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ModalEditarNombre from './ModalEditarNombre';
 import editIcon from '../../images/lapiz_edit_name.png';
 import logo from '../../images/quanty-logo-gold.png';
@@ -7,18 +9,11 @@ import logo from '../../images/quanty-logo-gold.png';
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { currentUser, logout } = useContext(CurrentUserContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalNombreOpen, setModalNombreOpen] = useState(false);
-  const [userName, setUserName] = useState("Marí Carmen");
-
-  // Cargar nombre desde localStorage al montar
-  useEffect(() => {
-    const nombreGuardado = localStorage.getItem('userName');
-    if (nombreGuardado) {
-      setUserName(nombreGuardado);
-    }
-  }, []);
-
+  
+  
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -32,19 +27,22 @@ function Header() {
   };
 
   const handleGuardarNombre = (nuevoNombre) => {
-    setUserName(nuevoNombre);
-    localStorage.setItem('userName', nuevoNombre);
-    setModalNombreOpen(false);
+    // TODO: Cuando conectemos backend, actualizar nombre en el servidor
+    // const updatedUser = { ...currentUser, name: nuevoNombre };
+    // await MainApi.updateUser(updatedUser);
     
-    // Disparar evento para actualizar otros componentes
-    window.dispatchEvent(new Event('userNameChanged'));
+    // Por ahora, actualizar solo en localStorage
+    const updatedUserData = { ...currentUser, name: nuevoNombre };
+    localStorage.setItem('userData', JSON.stringify(updatedUserData));
+    
+    // Recargar para que el contexto cargue el nombre actualizado
+    window.location.reload();
+    
+    setModalNombreOpen(false);
   };
 
   const handleCerrarSesion = () => {
-    // Por ahora solo limpia localStorage y recarga
-    // Cuando tengas backend, aquí llamarás a tu API de logout
-    localStorage.clear();
-    window.location.reload();
+    logout();
   };
 
   // Helper para saber si un link está activo
@@ -175,7 +173,7 @@ function Header() {
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            {userName}
+            {currentUser?.name || 'Usuario'}
             <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px', opacity: 0.8 }} />
           </span>
 
@@ -270,7 +268,8 @@ function Header() {
             style={{
               padding: '16px 0',
               borderBottom: '1px solid rgba(255,255,255,0.1)',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              textAlign: 'center',
             }}
           >
             <span style={{
@@ -286,9 +285,10 @@ function Header() {
               margin: '8px 0 0',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: '8px'
             }}>
-              {userName}
+              {currentUser?.name || 'Usuario'}
               <img src={editIcon} alt="Editar" style={{ width: '16px', height: '16px', opacity: 0.8 }} />
             </p>
           </div>
@@ -322,7 +322,7 @@ function Header() {
         isOpen={modalNombreOpen}
         onClose={() => setModalNombreOpen(false)}
         onSave={handleGuardarNombre}
-        nombreActual={userName}
+        nombreActual={currentUser?.name || 'Usuario'}
       />
     </>
   );

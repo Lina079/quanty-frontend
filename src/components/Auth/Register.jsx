@@ -230,12 +230,12 @@ function Register() {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Simular registro exitoso
-      showToast(`¡Registro exitoso, ${name}! Ahora inicia sesión.`, 'success');
+      showToast(`¡Bienvenid@, ${name}!`, 'success');
 
       // Esperar un momento antes de navegar
       setTimeout(() => {
-        navigate('/login');
-      }, 1500);
+        login(userData, token);
+      }, 1000);
       
     } catch (error) {
       console.error('Error en registro:', error);

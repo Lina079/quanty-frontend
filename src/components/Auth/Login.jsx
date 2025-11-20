@@ -161,8 +161,14 @@ function Login() {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       //Simular datos del usuario y token
+      //Extraer nombre del email (antes del @ y capatalizar primera letra)
+      const emailName = email.split('@')[0];
+      const userName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+
+
+      //Simular datos del usuario y token
       const userData = {
-        name: 'Usuario Demo',
+        name: userName,
         email: email,
         id: '123'
       };
