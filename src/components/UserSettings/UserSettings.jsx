@@ -1,10 +1,12 @@
 import { useSettings } from '../../contexts/SettingsContext';
+import { useToast } from '../../contexts/ToastContext';
 import { useNavigate } from 'react-router-dom';
 import './../../blocks/userSettings.css';
 
 function UserSettings() {
   const navigate = useNavigate();
   const { currency, theme, changeCurrency, changeTheme } = useSettings();
+  const { showToast } = useToast();
 
   // Opciones de moneda disponibles
   const currencies = [
@@ -31,7 +33,7 @@ function UserSettings() {
   };
 
   return (
-    <main div className="user-settings-page">
+    <main className="user-settings-page">
       <div className="user-settings-container">
         
         {/* Título */}

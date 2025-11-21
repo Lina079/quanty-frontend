@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 import quantumHalf from '../../images/quantum_half_fade_256x256.png';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
@@ -11,6 +12,7 @@ const fechaActual = new Date();
 const [mesSeleccionado, setMesSeleccionado] = useState (fechaActual.getMonth());
 const [añoSeleccionado, setAñoSeleccionado] = useState(fechaActual.getFullYear());
 const [tipoVista, setTipoVista] = useState('mes');
+const { formatCurrency } = useSettings();
 
 //función para filtrar transacciones por mes y año específicos
 const filtrarPorPeriodo = (transacciones) => {
@@ -294,7 +296,7 @@ const calcularDatosGrafica = () => {
         >
           <h3>💸 Gastos Totales</h3>
           <p style={{ fontSize: '36px', fontWeight: '800', color: '#EF4444', marginTop: '16px' }}>
-            €{totales.gastos.toFixed(2)}
+            {formatCurrency(totales.gastos)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
             👉 Ver detalle
@@ -309,7 +311,7 @@ const calcularDatosGrafica = () => {
         >
           <h3>💰 Ingresos Totales</h3>
           <p style={{ fontSize: '36px', fontWeight: '800', color: '#4ADE80', marginTop: '16px' }}>
-            €{totales.ingresos.toFixed(2)}
+            {formatCurrency(totales.ingresos)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
             👉 Ver detalle
@@ -324,7 +326,7 @@ const calcularDatosGrafica = () => {
         >
           <h3>🏦 Ahorro Total</h3>
           <p style={{ fontSize: '36px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '16px' }}>
-            €{totales.ahorro.toFixed(2)}
+            {formatCurrency(totales.ahorro)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
             👉 Ver detalle
@@ -339,7 +341,7 @@ const calcularDatosGrafica = () => {
         >
           <h3>📈 Inversión Total</h3>
           <p style={{ fontSize: '36px', fontWeight: '800', color: '#FFD700', marginTop: '16px' }}>
-            €{totales.inversion.toFixed(2)}
+            {formatCurrency(totales.inversion)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
             👉 Ver portfolio
@@ -395,7 +397,7 @@ const calcularDatosGrafica = () => {
           color: 'var(--cyan-accent)',
           fontWeight: '600'
           }}
-          formatter={(value) => `€${value.toFixed(2)}`}
+          formatter={(value) => formatCurrency(value)}
         />
       </PieChart>
     </ResponsiveContainer>
@@ -436,7 +438,7 @@ const calcularDatosGrafica = () => {
               fontWeight: '800',
               color: item.color
             }}>
-              €{item.value.toFixed(2)}
+              {formatCurrency(item.value)}
             </div>
             <div style={{ 
               fontSize: '18px',

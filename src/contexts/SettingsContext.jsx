@@ -50,8 +50,7 @@ export function SettingsProvider({ children }) {
   }, [currency, theme]);
 
   /**
-   * Cambia la moneda
-   * @param {string} newCurrency - Nueva moneda (EUR, USD, COP, etc.)
+   * Cambia la moneda @param {string} newCurrency - Nueva moneda (EUR, USD, COP, etc.)
    */
   const changeCurrency = (newCurrency) => {
     setCurrency(newCurrency);
@@ -91,6 +90,21 @@ export function SettingsProvider({ children }) {
     return `${symbol}${amount.toFixed(2)}`;
   };
 
+  /**
+  * Devuelve solo el símbolo de la moneda actual @returns {string} - Símbolo de moneda (€, $, £, ¥)
+  */
+    const getCurrencySymbol = () => {
+    const symbols = {
+    EUR: '€',
+    USD: '$',
+    COP: '$',
+    MXN: '$',
+    GBP: '£',
+    JPY: '¥'
+    };
+    return symbols[currency] || currency;
+  };
+
   // Aplicar tema al montar
   useEffect(() => {
     changeTheme(theme);
@@ -104,7 +118,8 @@ export function SettingsProvider({ children }) {
         theme,
         changeCurrency,
         changeTheme,
-        formatCurrency
+        formatCurrency,
+        getCurrencySymbol
       }}
     >
       {children}

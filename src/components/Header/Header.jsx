@@ -49,7 +49,7 @@ function Header() {
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-    { path: '/', label: 'Inicio' },
+    { path: '/dashboard', label: 'Inicio' },
     { path: '/ingresos', label: 'Ingresos' },
     { path: '/gastos', label: 'Gastos' },
     { path: '/ahorros', label: 'Ahorros' },
@@ -142,6 +142,24 @@ function Header() {
             </Link>
           ))}
           
+          {/* Botón Settings */}
+          <Link 
+            to="/settings"
+            style={{
+            color: isActive('/settings') ? 'var(--cyan-accent)' : 'var(--text-primary)',
+            textDecoration: 'none',
+            fontWeight: isActive('/settings') ? '700' : '600',
+            transition: 'color 0.2s',
+            position: 'relative',
+            paddingBottom: '4px',
+            borderBottom: isActive('/settings') ? '2px solid var(--cyan-accent)' : '2px solid transparent',
+            fontSize: '20px'
+          }}
+          title="Configuración"
+          >
+            ⚙️
+          </Link>
+
           {/* Separador */}
           <div style={{ 
             width: '1px', 
@@ -261,6 +279,23 @@ function Header() {
               {link.label}
             </Link>
           ))}
+
+          {/* Settings en móvil */}
+            <Link 
+              to="/settings"
+              onClick={closeMenu}
+              style={{
+              color: isActive('/settings') ? 'var(--cyan-accent)' : 'var(--text-primary)',
+              textDecoration: 'none',
+              fontWeight: isActive('/settings') ? '700' : '600',
+              fontSize: '18px',
+              padding: '12px 0',
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              transition: 'color 0.2s',
+            }}
+            >
+            ⚙️ Configuración
+            </Link>
           
           {/* Nombre clickeable en móvil */}
           <div 

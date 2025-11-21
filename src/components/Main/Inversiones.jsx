@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
@@ -17,6 +18,7 @@ function Inversiones() {
   const [inversionesFiltradas, setInversionesFiltradas] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { formatCurrency, getCurrencySymbol, currency } = useSettings();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -89,22 +91,22 @@ function Inversiones() {
   };
 
   useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        setLoading(true);
-        const data = await getCryptoPrices();
-        setPrices(data);
-        setError(null);
-      } catch (err) {
-        setError(ERROR_MESSAGES.FETCH_PRICES);
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchPrices = async () => {
+    try {
+      setLoading(true);
+      const data = await getCryptoPrices(currency); // Pasar moneda del usuario
+      setPrices(data);
+      setError(null);
+    } catch (err) {
+      setError(ERROR_MESSAGES.FETCH_PRICES);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPrices();
-  }, []);
+  fetchPrices();
+  }, [currency]); // Recargar cuando cambie la moneda
 
   useEffect(() => {
     cargarInversiones();
@@ -225,6 +227,7 @@ function Inversiones() {
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
         imagenQuantum={quantumInvest}
+        formatCurrency={formatCurrency}
       />
       
       <h1 style={{ textAlign: 'center', marginBottom: '40px' }}>Precios en Tiempo Real</h1>
@@ -293,7 +296,7 @@ function Inversiones() {
               {/* Precio de Compra */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Precio de Compra (€) *
+                  Precio de Compra ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -422,13 +425,13 @@ function Inversiones() {
                   <div>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>Total invertido:</p>
                     <p style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>
-                      €{totalInversiones.toFixed(2)}
+                      {formatCurrency(totalInversiones)}
                     </p>
                   </div>
                   <div>
                     <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>Valor actual:</p>
                     <p style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>
-                      €{totalValorActual.toFixed(2)}
+                      {formatCurrency(totalValorActual)}
                     </p>
                   </div>
                   <div>
@@ -439,7 +442,7 @@ function Inversiones() {
                       color: totalGanancia >= 0 ? '#4ADE80' : '#EF4444',
                       margin: 0
                     }}>
-                      {totalGanancia >= 0 ? '+' : ''}€{totalGanancia.toFixed(2)}
+                      {totalGanancia >= 0 ? '+' : ''}{formatCurrency(Math.abs(totalGanancia))}
                     </p>
                     <p style={{ 
                       fontSize: '16px', 
@@ -490,7 +493,7 @@ function Inversiones() {
                     <span style={{ fontWeight: '700' }}>{asset.name}</span>
                   </div>
                   <div style={{ fontWeight: '600', color: 'var(--cyan-accent)' }}>
-                    €{asset.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {formatCurrency(asset.price)}
                   </div>
                   <div style={{ 
                     color: asset.change >= 0 ? '#4ADE80' : '#EF4444',
@@ -511,7 +514,7 @@ function Inversiones() {
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: 'var(--text-secondary)' }}>Precio actual:</span>
                       <span style={{ fontWeight: '600', color: 'var(--cyan-accent)' }}>
-                        €{asset.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {formatCurrency(asset.price)}
                       </span>
                     </div>
                     
@@ -537,6 +540,7 @@ function Inversiones() {
             onDelete={abrirModalEliminar}
             data={inversiones}
             onTotalChange={handleTotalChange}
+            formatCurrency={formatCurrency}
           />
 
           {/* Disclaimer de CoinGecko */}

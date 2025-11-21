@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
+function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency }) {
   const [filterType, setFilterType] = useState('month'); // 'day', 'week', 'month', 'year'
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const now = new Date();
@@ -292,7 +292,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
                   color: currentConfig.color, 
                   margin: 0 
                 }}>
-                  €{chartData.reduce((sum, item) => sum + item.total, 0).toFixed(2)}
+                  {formatCurrency(chartData.reduce((sum, item) => sum + item.total, 0))}
                 </p>
               </div>
 
@@ -338,7 +338,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
                     formatter={(value, name, props) => {
                       const total = chartData.reduce((sum, item) => sum + item.total, 0);
                       const percent = ((value / total) * 100).toFixed(1);
-                      return [`€${value.toFixed(2)} (${percent}%)`, name];
+                      return [`${formatCurrency(value)} (${percent}%)`, name];
                     }}
                   />
                 </PieChart>
@@ -391,7 +391,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
                             fontSize: '18px',
                             color: color
                           }}>
-                            €{item.total.toFixed(2)}
+                            {formatCurrency(item.total)}
                           </div>
                           <div style={{ 
                             fontSize: '13px', 
@@ -471,7 +471,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange }) {
         color: currentConfig.color, 
         margin: 0 
       }}>
-        €{transaction.monto.toFixed(2)}
+        {formatCurrency(transaction.monto)}
       </p>
     </div>
     <button

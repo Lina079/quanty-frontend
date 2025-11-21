@@ -8,7 +8,8 @@ function CardResumen({
   mostrarFormulario, 
   onToggleFormulario,
   esPeriodoFiltrado = false,
-  imagenQuantum = quantumHalfDefault
+  imagenQuantum = quantumHalfDefault,
+  formatCurrency
 }) {
   
   // Configuración según el tipo
@@ -106,7 +107,7 @@ function CardResumen({
               color: currentConfig.color, 
               margin: 0 
             }}>
-              €{total.toFixed(2)}
+              {formatCurrency(total)}
             </p>
             <p style={{ 
               color: 'var(--text-secondary)', 

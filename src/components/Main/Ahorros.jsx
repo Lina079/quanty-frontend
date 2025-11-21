@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
@@ -11,6 +12,7 @@ function Ahorros() {
   const [ahorroAEliminar, setAhorroAEliminar] = useState(null);
   const [totalFiltrado, setTotalFiltrado] = useState(null);
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
+  const { formatCurrency, getCurrencySymbol } = useSettings();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -136,6 +138,7 @@ function Ahorros() {
         mostrarFormulario={mostrarFormulario}
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
+        formatCurrency={formatCurrency}
       />
 
       {/* Formulario (condicional) */}
@@ -225,7 +228,7 @@ function Ahorros() {
               {/* Monto */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Monto (€) *
+                  Monto ({getCurrencySymbol()})  *
                 </label>
                 <input
                   type="number"
@@ -325,6 +328,7 @@ function Ahorros() {
           setTotalFiltrado(total);
           setCantidadFiltrada(cantidad);
         }}
+        formatCurrency={formatCurrency}
       />
 
       <ModalConfirmacion

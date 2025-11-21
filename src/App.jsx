@@ -14,6 +14,7 @@ import Ahorros from './components/Main/Ahorros';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import UserSettings from './components/UserSettings/UserSettings';
 import './App.css';
 
 function AppContent() {
@@ -36,7 +37,7 @@ function AppContent() {
  return (
     <Routes>
       {/* Rutas públicas (sin Header/Footer) */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       
@@ -80,6 +81,13 @@ function AppContent() {
         <ProtectedRoute>
           <Header />
           <Ahorros />
+          <Footer />
+        </ProtectedRoute>
+      } />
+      <Route path="/settings" element={
+        <ProtectedRoute>
+          <Header />
+          <UserSettings />
           <Footer />
         </ProtectedRoute>
       } />
