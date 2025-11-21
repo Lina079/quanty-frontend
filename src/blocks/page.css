@@ -11,6 +11,26 @@
   --card-bg-end: rgba(11, 36, 54, 0.85);
 }
 
+/* Variables CSS - Tema Claro */
+[data-theme="light"] {
+  --bg-1: #A8D4D6;
+  --bg-2: #E8F4F5;
+  --star-1: rgba(255, 255, 255, 0.4);
+  --star-2: rgba(255, 255, 255, 0.3);
+  --cyan-accent: #00A3C4;
+  --text-primary: #1E3A5F;
+  --text-secondary: #64748B;
+  --card-bg-start: rgba(255, 255, 255, 0.95);
+  --card-bg-end: rgba(255, 255, 255, 0.92);
+
+  /* Nuevas variables para cards */
+  --white: rgba(232, 244, 245, 0.6);
+  --card-border: rgba(168, 212, 214, 0.3);
+  --shadow-soft: 0 4px 16px rgba(30, 58, 95, 0.08);
+  --shadow-hard: 0 2px 8px rgba(30, 58, 95, 0.12);
+  --radius-xl: 20px;
+}
+
 /* Reset básico */
 * {
   margin: 0;
@@ -36,6 +56,14 @@ body {
   background-attachment: fixed;
   margin: 0;
   overflow-x: hidden;
+}
+
+/* Body en Modo Claro - con neblina central */
+[data-theme="light"] body {
+  background:
+    radial-gradient(1200px 400px at 50% 52%, rgba(255,255,255,.85), rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  background-attachment: fixed;
 }
 
 /* Wrapper principal */

@@ -152,6 +152,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
               flexWrap: 'wrap'
             }}>
               <button
+                className='filter-btn'
                 onClick={() => setFilterType('day')}
                 style={{
                   padding: '10px 24px',
@@ -173,6 +174,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                 📅 Por Día
               </button>
               <button
+                className='filter-btn'
                 onClick={() => setFilterType('week')}
                 style={{
                   padding: '10px 24px',
@@ -194,6 +196,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                 📅 Por Semana
               </button>
               <button
+                className='filter-btn'
                 onClick={() => setFilterType('month')}
                 style={{
                   padding: '10px 24px',
@@ -215,6 +218,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                 📆 Por Mes
               </button>
               <button
+                className='filter-btn'
                 onClick={() => setFilterType('year')}
                 style={{
                   padding: '10px 24px',
@@ -251,6 +255,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                   Seleccionar mes:
                 </label>
                 <input
+                  className="month-selector"
                   type="month"
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
@@ -318,6 +323,7 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                     })}
                   </Pie>
                   <Tooltip 
+                    wrapperClassName="chart-tooltip"
                     contentStyle={{
                       background: 'linear-gradient(160deg, rgba(14,49,71,.98) 0%, rgba(11,36,54,.98) 100%)',
                       border: '2px solid #2BE3FF',

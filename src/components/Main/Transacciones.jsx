@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
 import quantumHalf from '../../images/quantum_half_fade_256x256.png';
+import quantumHalfLight from '../../images/theme-light-images/quantum-halfbody2-light.png';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 function Transacciones() {
@@ -12,7 +13,7 @@ const fechaActual = new Date();
 const [mesSeleccionado, setMesSeleccionado] = useState (fechaActual.getMonth());
 const [añoSeleccionado, setAñoSeleccionado] = useState(fechaActual.getFullYear());
 const [tipoVista, setTipoVista] = useState('mes');
-const { formatCurrency } = useSettings();
+const { formatCurrency, theme } = useSettings();
 
 //función para filtrar transacciones por mes y año específicos
 const filtrarPorPeriodo = (transacciones) => {
@@ -107,7 +108,7 @@ const calcularDatosGrafica = () => {
         maxWidth: '800px',
         margin: '0 auto 40px'
       }}>
-        <div style={{ 
+        <div className="quantum-message-box" style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: '20px', 
@@ -118,7 +119,7 @@ const calcularDatosGrafica = () => {
           position: 'relative'
         }}>
           <img 
-            src={quantumHalf} 
+            src={theme === 'light' ? quantumHalfLight : quantumHalf}
             alt="Quantum" 
             style={{ 
               width: '80px', 
@@ -138,7 +139,7 @@ const calcularDatosGrafica = () => {
       </div>
 
     {/* Selector de período - Mes y Año */}
-    <div className="periodo-selector" style={{
+    <div className="periodo-selector quantum-message-box" style={{
     maxWidth: '800px',
     margin: '0 auto 40px',
     padding: '24px',
@@ -157,6 +158,7 @@ const calcularDatosGrafica = () => {
   marginBottom: '24px'
 }}>
   <button
+    className="periodo-btn"
     onClick={() => setTipoVista('mes')}
     style={{
       padding: '10px 24px',
@@ -178,6 +180,7 @@ const calcularDatosGrafica = () => {
     📅 Mes específico
   </button>  
   <button
+    className="periodo-btn"
     onClick={() => setTipoVista('año')}
     style={{
       padding: '10px 24px',
@@ -218,7 +221,7 @@ const calcularDatosGrafica = () => {
         Mes:
       </label>
       <select
-        className="selector-mes"
+        className="selector-mes month-selector"
         value={mesSeleccionado}
         onChange={(e) => setMesSeleccionado(parseInt(e.target.value))}
         style={{
@@ -252,7 +255,7 @@ const calcularDatosGrafica = () => {
 
     {/* Selector de Año */}
     <div>
-      <label style={{ 
+      <label className="month-selector" style={{ 
         display: 'block', 
         marginBottom: '8px', 
         fontWeight: '600',
@@ -262,7 +265,7 @@ const calcularDatosGrafica = () => {
         Año:
       </label>
       <select
-        className="selector-año"
+        className="selector-año month-selector"
         value={añoSeleccionado}
         onChange={(e) => setAñoSeleccionado(parseInt(e.target.value))}
         style={{
@@ -350,7 +353,7 @@ const calcularDatosGrafica = () => {
       </div>
         {/* Gráfica Dona - Distribución de Ingresos */}
 {datosGrafica.length > 0 && (
-  <div className="grafica-dona-container" style={{
+  <div className="grafica-dona-container quantum-message-box" style={{
     maxWidth: '800px',
     margin: '40px auto 0',
     padding: '32px 24px',
@@ -411,6 +414,7 @@ const calcularDatosGrafica = () => {
       {datosGrafica.map((item, index) => (
         <div 
           key={index}
+          className="distribution-item"
           style={{
             display: 'flex',
             justifyContent: 'space-between',

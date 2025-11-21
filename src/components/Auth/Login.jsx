@@ -192,7 +192,7 @@ function Login() {
 
   // ========== RENDER DEL COMPONENTE ==========
   return (
-    <div className="login-page">
+    <div className="login-page" data-theme="dark">
       <div className="login-container">
         
         {/* Logo de Quanty */}

@@ -2,8 +2,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { useSettings } from '../../contexts/SettingsContext';
 import ModalEditarNombre from './ModalEditarNombre';
 import editIcon from '../../images/lapiz_edit_name.png';
+import editIconLight from '../../images/theme-light-images/quanty_edit_pencil_light.png';
 import logo from '../../images/quanty-logo-gold.png';
 
 function Header() {
@@ -12,6 +14,7 @@ function Header() {
   const { currentUser, logout } = useContext(CurrentUserContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalNombreOpen, setModalNombreOpen] = useState(false);
+  const { theme } = useSettings();
   
   
   const toggleMenu = () => {
@@ -90,14 +93,19 @@ function Header() {
             }} 
           />
           <h2 style={{ 
-            fontSize: '20px', 
-            fontWeight: '800',
-            background: 'linear-gradient(135deg, #38E1FF 0%, #2BE3FF 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            margin: 0
-          }}>
-            QUANTY
+              fontSize: '20px', 
+              fontWeight: '800',
+              ...(theme === 'light' 
+              ? { color: '#1E3A5F' }
+              : {
+                  background: 'linear-gradient(135deg, #38E1FF 0%, #2BE3FF 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }
+              ),
+              margin: 0
+            }}>
+              QUANTY
           </h2>
         </div>
 
@@ -192,7 +200,11 @@ function Header() {
             }}
           >
             {currentUser?.name || 'Usuario'}
-            <img src={editIcon} alt="Editar" style={{ width: '18px', height: '18px', opacity: 0.8 }} />
+            <img 
+              src={theme === 'light' ? editIconLight : editIcon} 
+              alt="Editar" 
+              style={{ width: '18px', height: '18px', opacity: 0.8 }} 
+            />
           </span>
 
           {/* Botón Cerrar Sesión */}
@@ -324,12 +336,17 @@ function Header() {
               gap: '8px'
             }}>
               {currentUser?.name || 'Usuario'}
-              <img src={editIcon} alt="Editar" style={{ width: '16px', height: '16px', opacity: 0.8 }} />
+              <img 
+                src={theme === 'light' ? editIconLight : editIcon} 
+                alt="Editar" 
+                style={{ width: '16px', height: '16px', opacity: 0.8 }} 
+              />
             </p>
           </div>
 
           {/* Botón Cerrar Sesión en móvil */}
           <button
+            className="btn-logout"
             onClick={() => {
               closeMenu();
               handleCerrarSesion();

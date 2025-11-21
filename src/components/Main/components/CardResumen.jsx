@@ -1,4 +1,7 @@
+import { useSettings } from '../../../contexts/SettingsContext';
 import quantumHalfDefault from '../../../images/quantum_half_fade_256x256.png';
+import quantumHalfLight from '../../../images/theme-light-images/quantum-halfbody2-light.png';
+import quantumInvestLight from '../../../images/theme-light-images/quantum-investment-light.png';
 
 function CardResumen({ 
   tipo, 
@@ -50,6 +53,20 @@ function CardResumen({
 
   const currentConfig = config[tipo];
 
+  const { theme } = useSettings();
+
+  // Determinar qué imagen usar según tema
+  const getQuantumImage = () => {
+  if (theme === 'light') {
+    // Retornar imagen del prop si existe, sino la por defecto
+    if (tipo === 'inversiones'){
+    return quantumInvestLight;
+  }
+  return quantumHalfLight;
+  }
+  return imagenQuantum;
+  };
+
   return (
     <>
       {/* Quantum con mensaje */}
@@ -58,7 +75,7 @@ function CardResumen({
         maxWidth: '800px',
         margin: '0 auto 32px'
       }}>
-        <div style={{ 
+        <div className="quantum-message-box" style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: '20px', 
@@ -69,7 +86,7 @@ function CardResumen({
           position: 'relative'
         }}>
           <img 
-            src={imagenQuantum} 
+            src={getQuantumImage()} 
             alt="Quantum" 
             style={{ 
               width: '80px', 

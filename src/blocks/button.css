@@ -25,6 +25,18 @@
   transform: translateY(1px) scale(0.99);
 }
 
+/* ===== BOTONES DE FILTRO EN MODO CLARO ===== */
+[data-theme="light"] .filter-btn {
+  background: rgba(200, 232, 234, 0.4) !important;
+  border: 1px solid rgba(168, 212, 214, 0.3) !important;
+}
+
+/* ===== INPUT DE MES EN MODO CLARO ===== */
+[data-theme="light"] .month-selector {
+  background: rgba(200, 232, 234, 0.4) !important;
+  color: var(--text-primary) !important;
+}
+
 /* ========================================
    RESPONSIVE
    ======================================== */
@@ -50,4 +62,45 @@
     padding: 10px 20px !important;
     font-size: 14px !important;
   }
+}
+
+/* ===== FAB EN MODO CLARO ===== */
+[data-theme="light"] .fab {
+  background: rgba(200, 232, 234, 0.6);
+  color: #1E3A5F;
+  border: 1px solid rgba(168, 212, 214, 0.4);
+  box-shadow: 0 8px 20px rgba(30, 58, 95, 0.15);
+}
+
+[data-theme="light"] .fab:hover {
+  background: rgba(200, 232, 234, 0.8);
+  box-shadow: 0 10px 24px rgba(30, 58, 95, 0.2);
+}
+
+/* ===== BOTONES DE PERÍODO EN MODO CLARO ===== */
+[data-theme="light"] .periodo-btn {
+  background: rgba(200, 232, 234, 0.4) !important;
+  border: 1px solid rgba(168, 212, 214, 0.3) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .periodo-btn:hover {
+  background: rgba(200, 232, 234, 0.6) !important;
+}
+
+/* Botón activo de período en modo claro */
+[data-theme="light"] .periodo-btn[style*="rgba(56, 225, 255, 0.2)"] {
+  background: rgba(0, 163, 196, 0.15) !important;
+  border: 2px solid var(--cyan-accent) !important;
+}
+
+/* ===== BOTÓN CERRAR SESIÓN EN MODO CLARO ===== */
+[data-theme="light"] .btn-logout {
+  background: rgba(239, 68, 68, 0.08) !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+[data-theme="light"] .btn-logout:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
 }

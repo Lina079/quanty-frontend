@@ -2,7 +2,7 @@ function ModalConfirmacion({ isOpen, onClose, onConfirm, mensaje }) {
   if (!isOpen) return null;
 
   return (
-    <div style={{
+    <div className="modal-overlay" style={{
       position: 'fixed',
       top: 0,
       left: 0,

@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useSettings } from '../contexts/SettingsContext';
 import quantumImg from '../images/quantum_half_fade_256x256.png';
+import quantumImgLight from '../images/theme-light-images/quantum-halfbody2-light.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
 import iconoAhorro from '../images/ahorro_caja_fuerte_256x256.png';
@@ -12,7 +13,7 @@ import iconoInversion from '../images/inversion_planta_256x256.png';
 function Dashboard() {
   const navigate = useNavigate();
   const { currentUser } = useContext(CurrentUserContext);
-  const { formatCurrency } = useSettings();
+  const { formatCurrency, theme } = useSettings();
   const [periodo, setPeriodo] = useState('mes'); // 'mes' o 'año'
   
   // Función para filtrar transacciones por período
@@ -91,7 +92,7 @@ const financialData = {
     width: '100px'
     }}>
     <img 
-      src={quantumImg} 
+      src={theme === 'light' ? quantumImgLight : quantumImg} 
       alt="Quantum - Tu asistente financiero"
       style={{ width: '100%', height: 'auto' }}
     />
@@ -116,6 +117,7 @@ const financialData = {
   marginBottom: '16px'
   }}>
   <button
+    className="periodo-btn"
     onClick={() => setPeriodo('mes')}
     style={{
       padding: '10px 24px',
@@ -138,6 +140,7 @@ const financialData = {
   </button>
   
   <button
+    className="periodo-btn"
     onClick={() => setPeriodo('año')}
     style={{
       padding: '10px 24px',

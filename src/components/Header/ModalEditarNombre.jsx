@@ -63,7 +63,8 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
   };
 
   return (
-    <div 
+    <div
+      className="modal-overlay" 
       style={{
         position: 'fixed',
         top: 0,
