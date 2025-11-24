@@ -309,5 +309,6 @@ Este proyecto es parte de un bootcamp educativo. El código está disponible con
 
 ---
 
-**Versión:** 1.0.0 (Etapa 1 - Frontend)  
+**Versión:** 1.0.0 (Etapa 1 - Frontend)
+**Proyecto presentado para revisión** Etapa 1 - Frontend  
 **Última actualización:** Noviembre 2025
