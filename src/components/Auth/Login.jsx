@@ -5,13 +5,16 @@ import { useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumHalf from '../../images/Quantum-allBody.png';
+import quantumHalfLight from '../../images/theme-light-images/quantum-fullbody-theme-light.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
 import * as MainApi from '../../utils/MainApi';
+import { useSettings } from '../../contexts/SettingsContext';
 
 function Login() {
     const navigate = useNavigate();
     const { showToast } = useToast();
     const { login } = useContext(CurrentUserContext);
+    const { theme } = useSettings();
 
 // ========== ESTADOS DEL FORMULARIO ==========
   // Estos estados guardan lo que el usuario escribe
@@ -174,7 +177,7 @@ function Login() {
 
   // ========== RENDER DEL COMPONENTE ==========
   return (
-    <div className="login-page" data-theme="dark">
+    <div className="login-page" data-theme={theme}>
       <div className="login-container">
         
         {/* Logo de Quanty */}
@@ -195,7 +198,7 @@ function Login() {
               <p>{tipActual}</p>
             </div>
             <img 
-              src={quantumHalf} 
+              src={theme === 'light' ? quantumHalfLight : quantumHalf} 
               alt="Quantum" 
               className="login-quantum-character"
             />

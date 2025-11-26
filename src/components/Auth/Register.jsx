@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../contexts/ToastContext';
 import { useContext } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumFull from '../../images/Quantum-allBody.png';
+import quantumHalfLight from '../../images/theme-light-images/quantum-fullbody-theme-light.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
 import * as MainApi from '../../utils/MainApi';
 
@@ -12,6 +14,7 @@ function Register() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { login } = useContext(CurrentUserContext);
+  const { theme } = useSettings();
 
   // ========== ESTADOS DEL FORMULARIO ==========
   // Estados para los valores de los campos
@@ -266,7 +269,7 @@ function Register() {
               <p>{tipActual}</p>
             </div>
             <img 
-              src={quantumFull} 
+              src={theme === 'light' ? quantumHalfLight : quantumFull} 
               alt="Quantum" 
               className="login-quantum-character"
             />
