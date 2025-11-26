@@ -1,18 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useTransactions } from '../../contexts/TransactionsContext';
+import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
 
-
 function Gastos() {
-  const [gastos, setGastos] = useState([]);
+  const { gastos, createTransaction, deleteTransaction, isLoading } = useTransactions();
+  const { showToast } = useToast();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [gastoAEliminar, setGastoAEliminar] = useState(null);
   const [totalFiltrado, setTotalFiltrado] = useState(null);
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol } = useSettings();
+
+  // Obtener gastos del contexto
+  const gastosData = gastos();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -26,12 +32,12 @@ function Gastos() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'compra', label: '🏠 Alquiler' },
-    { value: 'compra', label: '🏠 Hipoteca' },
-    { value: 'alquiler', label: '🛒 La compra' },
+    { value: 'alquiler', label: '🏠 Alquiler' },
+    { value: 'hipoteca', label: '🏠 Hipoteca' },
+    { value: 'compra', label: '🛒 La compra' },
     { value: 'suministros', label: '💡 Suministros' },
     { value: 'transporte', label: '🚗 Transporte' },
-    { value: 'Tarjeta de credito', label: '💳 Tarjeta de credito'},
+    { value: 'tarjeta-credito', label: '💳 Tarjeta de crédito' },
     { value: 'gimnasio', label: '💪 Gimnasio' },
     { value: 'salud', label: '🏥 Salud' },
     { value: 'viajes', label: '✈️ Viajes' },
@@ -39,49 +45,43 @@ function Gastos() {
     { value: 'otro', label: '📝 Otro' }
   ];
 
-  // Estado para categorías dinámicas
   const [categorias, setCategorias] = useState(categoriasBase);
 
-  const cargarGastos = () => {
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    const gastosOrdenados = gastosGuardados.sort((a, b) => 
-      new Date(b.fecha) - new Date(a.fecha)
-    );
-    setGastos(gastosOrdenados);
-  };
-
-  useEffect(() => {
-    cargarGastos();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.categoria || !formData.monto) {
-      alert('Por favor completa los campos obligatorios');
+      showToast('Por favor completa los campos obligatorios', 'error');
       return;
     }
 
-    const gastosGuardados = JSON.parse(localStorage.getItem('gastos') || '[]');
-    const nuevoGasto = {
-      id: Date.now(),
-      ...formData,
-      tipo: 'gasto',
-      monto: parseFloat(formData.monto)
-    };
+    setIsSubmitting(true);
 
-    gastosGuardados.push(nuevoGasto);
-    localStorage.setItem('gastos', JSON.stringify(gastosGuardados));
-    
-    // Reset form
-    setFormData({
-      categoria: '',
-      monto: '',
-      descripcion: '',
-      fecha: new Date().toISOString().split('T')[0]
-    });
-    setMostrarFormulario(false);
-    cargarGastos();
+    try {
+      await createTransaction({
+        tipo: 'gasto',
+        categoria: formData.categoria,
+        monto: parseFloat(formData.monto),
+        descripcion: formData.descripcion,
+        fecha: formData.fecha
+      });
+
+      showToast('Gasto guardado correctamente', 'success');
+      
+      // Reset form
+      setFormData({
+        categoria: '',
+        monto: '',
+        descripcion: '',
+        fecha: new Date().toISOString().split('T')[0]
+      });
+      setMostrarFormulario(false);
+    } catch (error) {
+      console.error('Error al guardar gasto:', error);
+      showToast(error || 'Error al guardar el gasto', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const abrirModalEliminar = (gasto) => {
@@ -89,32 +89,59 @@ function Gastos() {
     setModalOpen(true);
   };
 
-  const confirmarEliminar = () => {
-    const gastosActualizados = gastos.filter(g => g.id !== gastoAEliminar.id);
-    localStorage.setItem('gastos', JSON.stringify(gastosActualizados));
-    setGastos(gastosActualizados);
-    setModalOpen(false);
-    setGastoAEliminar(null);
+  const confirmarEliminar = async () => {
+    try {
+      await deleteTransaction(gastoAEliminar._id);
+      showToast('Gasto eliminado correctamente', 'success');
+    } catch (error) {
+      console.error('Error al eliminar gasto:', error);
+      showToast(error || 'Error al eliminar el gasto', 'error');
+    } finally {
+      setModalOpen(false);
+      setGastoAEliminar(null);
+    }
   };
 
   const handleAddCustomCategory = () => {
     if (customCategory.trim()) {
-      // Agregar la nueva categoría a la lista
       const nuevaCategoria = {
         value: customCategory.toLowerCase().replace(/\s+/g, '-'),
         label: `✨ ${customCategory}`
       };
       setCategorias([...categoriasBase, nuevaCategoria]);
-      
-      // Seleccionar la nueva categoría
       setFormData({ ...formData, categoria: customCategory });
       setShowCustomCategory(false);
       setCustomCategory('');
     }
   };
 
-  const totalGastos = totalFiltrado !== null ? totalFiltrado : gastos.reduce((sum, gasto) => sum + gasto.monto, 0);
-  const cantidadGastos = cantidadFiltrada !== null ? cantidadFiltrada : gastos.length;
+  const totalGastos = totalFiltrado !== null 
+    ? totalFiltrado 
+    : gastosData.reduce((sum, gasto) => sum + gasto.monto, 0);
+  const cantidadGastos = cantidadFiltrada !== null 
+    ? cantidadFiltrada 
+    : gastosData.length;
+
+  if (isLoading) {
+    return (
+      <main className="wrapper">
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div style={{ 
+            width: '60px', 
+            height: '60px', 
+            border: '4px solid rgba(56, 225, 255, 0.2)',
+            borderTop: '4px solid var(--cyan-accent)',
+            borderRadius: '50%',
+            margin: '0 auto',
+            animation: 'spin 1s linear infinite'
+          }}></div>
+          <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
+            Cargando gastos...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="wrapper">
@@ -134,7 +161,7 @@ function Gastos() {
         formatCurrency={formatCurrency}
       />
 
-      {/* Formulario (condicional) */}
+      {/* Formulario */}
       {mostrarFormulario && (
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
@@ -166,6 +193,7 @@ function Gastos() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Selecciona una categoría</option>
                   {categorias.map(cat => (
@@ -242,6 +270,7 @@ function Gastos() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -265,6 +294,7 @@ function Gastos() {
                     fontSize: '16px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -287,25 +317,29 @@ function Gastos() {
                     fontSize: '22px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 style={{
                   width: '100%',
                   padding: '14px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%)',
+                  background: isSubmitting 
+                    ? 'rgba(43, 227, 255, 0.5)' 
+                    : 'linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%)',
                   color: '#00222F',
                   fontSize: '16px',
                   fontWeight: '800',
-                  cursor: 'pointer',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   fontFamily: 'inherit'
                 }}
               >
-                💾 Guardar Gasto
+                {isSubmitting ? 'Guardando...' : '💾 Guardar Gasto'}
               </button>
             </div>
           </form>
@@ -316,7 +350,7 @@ function Gastos() {
       <HistorialFiltrado 
         type="expense" 
         onDelete={abrirModalEliminar}
-        data={gastos}
+        data={gastosData}
         onTotalChange={(total, cantidad) => {
           setTotalFiltrado(total);
           setCantidadFiltrada(cantidad);

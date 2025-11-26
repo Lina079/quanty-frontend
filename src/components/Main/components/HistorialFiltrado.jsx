@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency }) {
-  const [filterType, setFilterType] = useState('month'); // 'day', 'week', 'month', 'year'
+function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCurrency }) {
+  const [filterType, setFilterType] = useState('month');
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   });
-  const [allTransactions, setAllTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [chartData, setChartData] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   // Detectar cambios de tamaño de pantalla
@@ -17,7 +14,6 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -25,25 +21,21 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
   // Configuración según el tipo
   const config = {
     expense: {
-      storageKey: 'gastos',
       color: '#EF4444',
       emoji: '💸',
       label: 'Gastos'
     },
     income: {
-      storageKey: 'ingresos',
       color: '#10B981',
       emoji: '💰',
       label: 'Ingresos'
     },
     saving: {
-      storageKey: 'ahorros',
       color: '#F59E0B',
       emoji: '🏦',
       label: 'Ahorros'
     },
     investment: {
-      storageKey: 'inversiones',
       color: '#8B5CF6',
       emoji: '📈',
       label: 'Inversiones'
@@ -52,24 +44,18 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
 
   const currentConfig = config[type];
 
-  // Cargar todas las transacciones cuando cambia data
-  useEffect(() => {
-    if (data) {
-      const sorted = [...data].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-      setAllTransactions(sorted);
-    }
+  // Ordenar transacciones por fecha (más recientes primero)
+  const allTransactions = useMemo(() => {
+    return [...data].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
   }, [data]);
 
-  // Filtrar transacciones cuando cambia el filtro o las transacciones
-  useEffect(() => {
-    if (allTransactions.length === 0) {
-      setFilteredTransactions([]);
-      setChartData([]);
-      return;
-    }
+  // Filtrar transacciones según el filtro seleccionado
+  const filteredTransactions = useMemo(() => {
+    if (allTransactions.length === 0) return [];
 
     const now = new Date();
-    const filtered = allTransactions.filter(transaction => {
+    
+    return allTransactions.filter(transaction => {
       const date = new Date(transaction.fecha);
 
       if (filterType === 'day') {
@@ -86,18 +72,18 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
         return date >= startOfWeek && date <= endOfWeek;
       } else if (filterType === 'month') {
         const [year, month] = selectedMonth.split('-').map(Number);
-        return date.getMonth() === month - 1 && 
-               date.getFullYear() === year;
+        return date.getMonth() === month - 1 && date.getFullYear() === year;
       } else if (filterType === 'year') {
         return date.getFullYear() === now.getFullYear();
       }
       return false;
     });
+  }, [allTransactions, filterType, selectedMonth]);
 
-    setFilteredTransactions(filtered);
-
+  // Calcular datos del gráfico
+  const chartData = useMemo(() => {
     const grouped = {};
-    filtered.forEach(transaction => {
+    filteredTransactions.forEach(transaction => {
       const categoria = transaction.categoria;
       if (!grouped[categoria]) {
         grouped[categoria] = 0;
@@ -105,19 +91,19 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
       grouped[categoria] += transaction.monto;
     });
 
-    const chartArray = Object.entries(grouped).map(([name, total]) => ({
+    return Object.entries(grouped).map(([name, total]) => ({
       name,
       total: parseFloat(total.toFixed(2))
     }));
+  }, [filteredTransactions]);
 
-    setChartData(chartArray);
-
-    // Notificar al componente padre el total filtrado y las transacciones filtradas
-    const totalFiltered = filtered.reduce((sum, t) => sum + t.monto, 0);
+  // Notificar al padre cuando cambian los totales filtrados
+  useEffect(() => {
+    const totalFiltered = filteredTransactions.reduce((sum, t) => sum + t.monto, 0);
     if (onTotalChange) {
-      onTotalChange(totalFiltered, filtered.length, filtered); // AGREGAMOS: filtered
+      onTotalChange(totalFiltered, filteredTransactions.length, filteredTransactions);
     }
-  }, [allTransactions, filterType, selectedMonth, onTotalChange]);
+  }, [filteredTransactions, onTotalChange]);
 
   const getCategoriaEmoji = (categoria) => {
     const emojis = {
@@ -125,10 +111,16 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
       'transporte': '🚗', 'gimnasio': '💪', 'salud': '🏥',
       'viajes': '✈️', 'ocio': '🎉', 'otro': '📝',
       'salario': '💼', 'freelance': '💻', 'inversiones': '📊',
-      'regalo': '🎁', 'venta': '🏷️'
+      'regalo': '🎁', 'venta': '🏷️', 'hipoteca': '🏠',
+      'tarjeta-credito': '💳'
     };
     return emojis[categoria] || currentConfig.emoji;
   };
+
+  const colors = [
+    '#EF4444', '#F59E0B', '#10B981', '#3B82F6', 
+    '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'
+  ];
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -151,94 +143,39 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
               justifyContent: 'center',
               flexWrap: 'wrap'
             }}>
-              <button
-                className='filter-btn'
-                onClick={() => setFilterType('day')}
-                style={{
-                  padding: '10px 24px',
-                  borderRadius: '10px',
-                  border: filterType === 'day' 
-                    ? `2px solid ${currentConfig.color}` 
-                    : '1px solid rgba(255,255,255,.2)',
-                  background: filterType === 'day' 
-                    ? `${currentConfig.color}20` 
-                    : 'rgba(14,49,71,.5)',
-                  color: filterType === 'day' ? currentConfig.color : 'var(--text-primary)',
-                  fontSize: '15px',
-                  fontWeight: filterType === 'day' ? '700' : '500',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s'
-                }}
-              >
-                📅 Por Día
-              </button>
-              <button
-                className='filter-btn'
-                onClick={() => setFilterType('week')}
-                style={{
-                  padding: '10px 24px',
-                  borderRadius: '10px',
-                  border: filterType === 'week' 
-                    ? `2px solid ${currentConfig.color}` 
-                    : '1px solid rgba(255,255,255,.2)',
-                  background: filterType === 'week' 
-                    ? `${currentConfig.color}20` 
-                    : 'rgba(14,49,71,.5)',
-                  color: filterType === 'week' ? currentConfig.color : 'var(--text-primary)',
-                  fontSize: '15px',
-                  fontWeight: filterType === 'week' ? '700' : '500',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s'
-                }}
-              >
-                📅 Por Semana
-              </button>
-              <button
-                className='filter-btn'
-                onClick={() => setFilterType('month')}
-                style={{
-                  padding: '10px 24px',
-                  borderRadius: '10px',
-                  border: filterType === 'month' 
-                    ? `2px solid ${currentConfig.color}` 
-                    : '1px solid rgba(255,255,255,.2)',
-                  background: filterType === 'month' 
-                    ? `${currentConfig.color}20` 
-                    : 'rgba(14,49,71,.5)',
-                  color: filterType === 'month' ? currentConfig.color : 'var(--text-primary)',
-                  fontSize: '15px',
-                  fontWeight: filterType === 'month' ? '700' : '500',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s'
-                }}
-              >
-                📆 Por Mes
-              </button>
-              <button
-                className='filter-btn'
-                onClick={() => setFilterType('year')}
-                style={{
-                  padding: '10px 24px',
-                  borderRadius: '10px',
-                  border: filterType === 'year' 
-                    ? `2px solid ${currentConfig.color}` 
-                    : '1px solid rgba(255,255,255,.2)',
-                  background: filterType === 'year' 
-                    ? `${currentConfig.color}20` 
-                    : 'rgba(14,49,71,.5)',
-                  color: filterType === 'year' ? currentConfig.color : 'var(--text-primary)',
-                  fontSize: '15px',
-                  fontWeight: filterType === 'year' ? '700' : '500',
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s'
-                }}
-              >
-                📊 Por Año
-              </button>
+              {['day', 'week', 'month', 'year'].map((filter) => {
+                const labels = {
+                  day: '📅 Por Día',
+                  week: '📅 Por Semana',
+                  month: '📆 Por Mes',
+                  year: '📊 Por Año'
+                };
+                return (
+                  <button
+                    key={filter}
+                    className='filter-btn'
+                    onClick={() => setFilterType(filter)}
+                    style={{
+                      padding: '10px 24px',
+                      borderRadius: '10px',
+                      border: filterType === filter 
+                        ? `2px solid ${currentConfig.color}` 
+                        : '1px solid rgba(255,255,255,.2)',
+                      background: filterType === filter 
+                        ? `${currentConfig.color}20` 
+                        : 'rgba(14,49,71,.5)',
+                      color: filterType === filter ? currentConfig.color : 'var(--text-primary)',
+                      fontSize: '15px',
+                      fontWeight: filterType === filter ? '700' : '500',
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {labels[filter]}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Selector de mes */}
@@ -314,13 +251,9 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                     label={!isMobile ? ({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%` : false}
                     labelLine={false}
                   >
-                    {chartData.map((entry, index) => {
-                      const colors = [
-                        '#EF4444', '#F59E0B', '#10B981', '#3B82F6', 
-                        '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'
-                      ];
-                      return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
-                    })}
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                    ))}
                   </Pie>
                   <Tooltip 
                     wrapperClassName="chart-tooltip"
@@ -341,10 +274,10 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
                       fontWeight: '600',
                       marginBottom: '4px'
                     }}
-                    formatter={(value, name, props) => {
+                    formatter={(value) => {
                       const total = chartData.reduce((sum, item) => sum + item.total, 0);
                       const percent = ((value / total) * 100).toFixed(1);
-                      return [`${formatCurrency(value)} (${percent}%)`, name];
+                      return [`${formatCurrency(value)} (${percent}%)`];
                     }}
                   />
                 </PieChart>
@@ -353,10 +286,6 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
               {isMobile && (
                 <div style={{ marginTop: '24px' }}>
                   {chartData.map((item, index) => {
-                    const colors = [
-                      '#EF4444', '#F59E0B', '#10B981', '#3B82F6', 
-                      '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'
-                    ];
                     const color = colors[index % colors.length];
                     const total = chartData.reduce((sum, i) => sum + i.total, 0);
                     const percent = ((item.total / total) * 100).toFixed(1);
@@ -426,83 +355,83 @@ function HistorialFiltrado({ type, onDelete, data, onTotalChange, formatCurrency
           <div>
             {filteredTransactions.length > 0 ? (
               filteredTransactions.map(transaction => (
-                <div key={transaction.id} className="card transaction-card" style={{ marginBottom: '12px' }}>
-  <div style={{ 
-    display: 'flex',
-    gap: '12px',
-    alignItems: 'center',
-    flexWrap: 'wrap'
-  }}>
-    <div style={{ 
-      fontSize: '28px', 
-      textAlign: 'center',
-      width: '48px',
-      height: '48px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexShrink: 0
-    }}>
-      {getCategoriaEmoji(transaction.categoria)}
-    </div>
-    <div style={{ flex: '1', minWidth: '150px' }}>
-      <h3 style={{ 
-        marginBottom: '4px', 
-        textTransform: 'capitalize', 
-        fontSize: '18px' 
-      }}>
-        {transaction.categoria}
-      </h3>
-      {transaction.descripcion && (
-        <p style={{ 
-          fontSize: '14px', 
-          color: 'var(--text-secondary)', 
-          margin: '0 0 4px' 
-        }}>
-          {transaction.descripcion}
-        </p>
-      )}
-      <p style={{ 
-        fontSize: '14px', 
-        color: 'var(--text-secondary)', 
-        margin: 0 
-      }}>
-        {new Date(transaction.fecha).toLocaleDateString('es-ES')}
-      </p>
-    </div>
-    <div style={{ textAlign: 'right', marginLeft: 'auto' }}>
-      <p style={{ 
-        fontSize: '22px', 
-        fontWeight: '800', 
-        color: currentConfig.color, 
-        margin: 0 
-      }}>
-        {formatCurrency(transaction.monto)}
-      </p>
-    </div>
-    <button
-      onClick={() => onDelete(transaction)}
-      style={{
-        padding: '10px',
-        borderRadius: '8px',
-        border: '1px solid rgba(239, 68, 68, 0.3)',
-        background: 'rgba(239, 68, 68, 0.1)',
-        color: '#EF4444',
-        fontSize: '20px',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-        width: '44px',
-        height: '44px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0
-      }}
-      >
-              🗑️
-        </button>
-          </div>
-        </div>
+                <div key={transaction._id} className="card transaction-card" style={{ marginBottom: '12px' }}>
+                  <div style={{ 
+                    display: 'flex',
+                    gap: '12px',
+                    alignItems: 'center',
+                    flexWrap: 'wrap'
+                  }}>
+                    <div style={{ 
+                      fontSize: '28px', 
+                      textAlign: 'center',
+                      width: '48px',
+                      height: '48px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      {getCategoriaEmoji(transaction.categoria)}
+                    </div>
+                    <div style={{ flex: '1', minWidth: '150px' }}>
+                      <h3 style={{ 
+                        marginBottom: '4px', 
+                        textTransform: 'capitalize', 
+                        fontSize: '18px' 
+                      }}>
+                        {transaction.categoria}
+                      </h3>
+                      {transaction.descripcion && (
+                        <p style={{ 
+                          fontSize: '14px', 
+                          color: 'var(--text-secondary)', 
+                          margin: '0 0 4px' 
+                        }}>
+                          {transaction.descripcion}
+                        </p>
+                      )}
+                      <p style={{ 
+                        fontSize: '14px', 
+                        color: 'var(--text-secondary)', 
+                        margin: 0 
+                      }}>
+                        {new Date(transaction.fecha).toLocaleDateString('es-ES')}
+                      </p>
+                    </div>
+                    <div style={{ textAlign: 'right', marginLeft: 'auto' }}>
+                      <p style={{ 
+                        fontSize: '22px', 
+                        fontWeight: '800', 
+                        color: currentConfig.color, 
+                        margin: 0 
+                      }}>
+                        {formatCurrency(transaction.monto)}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => onDelete(transaction)}
+                      style={{
+                        padding: '10px',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        color: '#EF4444',
+                        fontSize: '20px',
+                        cursor: 'pointer',
+                        fontFamily: 'inherit',
+                        width: '44px',
+                        height: '44px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
               ))
             ) : (
               <div className="card" style={{ textAlign: 'center', padding: '40px 20px' }}>

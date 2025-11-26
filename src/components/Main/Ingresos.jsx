@@ -1,19 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useTransactions } from '../../contexts/TransactionsContext';
+import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
 
-
-
 function Ingresos() {
-  const [ingresos, setIngresos] = useState([]);
+  const { ingresos, createTransaction, deleteTransaction, isLoading } = useTransactions();
+  const { showToast } = useToast();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [ingresoAEliminar, setIngresoAEliminar] = useState(null);
   const [totalFiltrado, setTotalFiltrado] = useState(null);
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol } = useSettings();
+
+  // Obtener ingresos del contexto
+  const ingresosData = ingresos();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -34,49 +39,43 @@ function Ingresos() {
     { value: 'otro', label: '📝 Otro' }
   ];
 
-  // Estado para categorías dinámicas
   const [categorias, setCategorias] = useState(categoriasBase);
 
-  const cargarIngresos = () => {
-    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
-    const ingresosOrdenados = ingresosGuardados.sort((a, b) => 
-      new Date(b.fecha) - new Date(a.fecha)
-    );
-    setIngresos(ingresosOrdenados);
-  };
-
-  useEffect(() => {
-    cargarIngresos();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.categoria || !formData.monto) {
-      alert('Por favor completa los campos obligatorios');
+      showToast('Por favor completa los campos obligatorios', 'error');
       return;
     }
 
-    const ingresosGuardados = JSON.parse(localStorage.getItem('ingresos') || '[]');
-    const nuevoIngreso = {
-      id: Date.now(),
-      ...formData,
-      tipo: 'ingreso',
-      monto: parseFloat(formData.monto)
-    };
+    setIsSubmitting(true);
 
-    ingresosGuardados.push(nuevoIngreso);
-    localStorage.setItem('ingresos', JSON.stringify(ingresosGuardados));
-    
-    // Reset form
-    setFormData({
-      categoria: '',
-      monto: '',
-      descripcion: '',
-      fecha: new Date().toISOString().split('T')[0]
-    });
-    setMostrarFormulario(false);
-    cargarIngresos();
+    try {
+      await createTransaction({
+        tipo: 'ingreso',
+        categoria: formData.categoria,
+        monto: parseFloat(formData.monto),
+        descripcion: formData.descripcion,
+        fecha: formData.fecha
+      });
+
+      showToast('Ingreso guardado correctamente', 'success');
+      
+      // Reset form
+      setFormData({
+        categoria: '',
+        monto: '',
+        descripcion: '',
+        fecha: new Date().toISOString().split('T')[0]
+      });
+      setMostrarFormulario(false);
+    } catch (error) {
+      console.error('Error al guardar ingreso:', error);
+      showToast(error || 'Error al guardar el ingreso', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const abrirModalEliminar = (ingreso) => {
@@ -84,46 +83,59 @@ function Ingresos() {
     setModalOpen(true);
   };
 
-  const confirmarEliminar = () => {
-    const ingresosActualizados = ingresos.filter(i => i.id !== ingresoAEliminar.id);
-    localStorage.setItem('ingresos', JSON.stringify(ingresosActualizados));
-    setIngresos(ingresosActualizados);
-    setModalOpen(false);
-    setIngresoAEliminar(null);
+  const confirmarEliminar = async () => {
+    try {
+      await deleteTransaction(ingresoAEliminar._id);
+      showToast('Ingreso eliminado correctamente', 'success');
+    } catch (error) {
+      console.error('Error al eliminar ingreso:', error);
+      showToast(error || 'Error al eliminar el ingreso', 'error');
+    } finally {
+      setModalOpen(false);
+      setIngresoAEliminar(null);
+    }
   };
 
   const handleAddCustomCategory = () => {
     if (customCategory.trim()) {
-      // Agregar la nueva categoría a la lista
       const nuevaCategoria = {
         value: customCategory.toLowerCase().replace(/\s+/g, '-'),
         label: `✨ ${customCategory}`
       };
-      setCategorias([...categorias, nuevaCategoria]);
-      
-      // Seleccionar la nueva categoría
+      setCategorias([...categoriasBase, nuevaCategoria]);
       setFormData({ ...formData, categoria: customCategory });
       setShowCustomCategory(false);
       setCustomCategory('');
     }
   };
 
-  const getCategoriaEmoji = (categoria) => {
-    const emojis = {
-      'sueldo': '💼',
-      'freelance': '💻',
-      'comisiones': '💰',
-      'dividendos': '📈',
-      'otro': '📝'
-    };
-    return emojis[categoria] || '💵';
-  };
-
   const totalIngresos = totalFiltrado !== null 
-  ? totalFiltrado 
-  : ingresos.reduce((sum, ingreso) => sum + ingreso.monto, 0);
-  const cantidadIngresos = cantidadFiltrada !== null ? cantidadFiltrada : ingresos.length;
+    ? totalFiltrado 
+    : ingresosData.reduce((sum, ingreso) => sum + ingreso.monto, 0);
+  const cantidadIngresos = cantidadFiltrada !== null 
+    ? cantidadFiltrada 
+    : ingresosData.length;
 
+  if (isLoading) {
+    return (
+      <main className="wrapper">
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div style={{ 
+            width: '60px', 
+            height: '60px', 
+            border: '4px solid rgba(74, 222, 128, 0.2)',
+            borderTop: '4px solid #4ADE80',
+            borderRadius: '50%',
+            margin: '0 auto',
+            animation: 'spin 1s linear infinite'
+          }}></div>
+          <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
+            Cargando ingresos...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="wrapper">
@@ -132,18 +144,18 @@ function Ingresos() {
         Registra tus fuentes de ingreso
       </p>
 
-  <CardResumen 
-    tipo="ingresos"
-    total={totalIngresos}
-    cantidad={cantidadIngresos}
-    mensaje="💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!"
-    mostrarFormulario={mostrarFormulario}
-    onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
-    esPeriodoFiltrado={totalFiltrado !== null}
-    formatCurrency={formatCurrency}
-  />
+      <CardResumen 
+        tipo="ingresos"
+        total={totalIngresos}
+        cantidad={cantidadIngresos}
+        mensaje="💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!"
+        mostrarFormulario={mostrarFormulario}
+        onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
+        esPeriodoFiltrado={totalFiltrado !== null}
+        formatCurrency={formatCurrency}
+      />
 
-      {/* Formulario (condicional) */}
+      {/* Formulario */}
       {mostrarFormulario && (
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
@@ -175,6 +187,7 @@ function Ingresos() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Selecciona una categoría</option>
                   {categorias.map(cat => (
@@ -230,7 +243,7 @@ function Ingresos() {
               {/* Monto */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Monto ({getCurrencySymbol()})  *
+                  Monto ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -251,6 +264,7 @@ function Ingresos() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -274,6 +288,7 @@ function Ingresos() {
                     fontSize: '16px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -296,25 +311,29 @@ function Ingresos() {
                     fontSize: '22px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 style={{
                   width: '100%',
                   padding: '14px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
+                  background: isSubmitting 
+                    ? 'rgba(74, 222, 128, 0.5)' 
+                    : 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
                   color: '#00222F',
                   fontSize: '16px',
                   fontWeight: '800',
-                  cursor: 'pointer',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   fontFamily: 'inherit'
                 }}
               >
-                💾 Guardar Ingreso
+                {isSubmitting ? 'Guardando...' : '💾 Guardar Ingreso'}
               </button>
             </div>
           </form>
@@ -325,7 +344,7 @@ function Ingresos() {
       <HistorialFiltrado 
         type="income" 
         onDelete={abrirModalEliminar}
-        data={ingresos}
+        data={ingresosData}
         onTotalChange={(total, cantidad) => {
           setTotalFiltrado(total);
           setCantidadFiltrada(cantidad);

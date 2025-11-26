@@ -6,6 +6,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumFull from '../../images/Quantum-allBody.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
+import * as MainApi from '../../utils/MainApi';
 
 function Register() {
   const navigate = useNavigate();
@@ -210,36 +211,33 @@ function Register() {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Verificar validez antes de enviar
+
     if (!isFormValid()) return;
-    
+
     setIsLoading(true);
     setServerError('');
-    
+
     try {
-      // TODO: Aquí conectaremos con el backend más adelante
-      // const response = await MainApi.signup(email, password, name);
-      // localStorage.setItem('jwt', response.token);
-      // navigate('/dashboard');
-      
-      // ===== SIMULACIÓN TEMPORAL (borrar cuando conectemos backend) =====
-      console.log('Intentando registro con:', { email, password, name });
-      
-      // Simular delay de red (1.5 segundos)
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      //Registrar usuario en el backend
+      await MainApi.signup(email, password, name);
 
-      // Simular registro exitoso
-      showToast(`¡Bienvenid@, ${name}!`, 'success');
+      //Hacer login automático después del registro
+      const response = await MainApi.signin(email, password);
 
-      // Esperar un momento antes de navegar
+      //Guardar token en localStorage
+      localStorage.setItem('jwt', response.token);
+
+      //Obtoner datos del usuario
+      const userData = await MainApi.getCurrentUser(response.token);
+
+      showToast(`Bienvenid@, ${name}!`, 'success');
+
       setTimeout(() => {
-        login(userData, token);
+        login(userData, response.token);
       }, 1000);
-      
     } catch (error) {
-      console.error('Error en registro:', error);
-      setServerError('Este email ya está registrado. Intenta con otro.');
+      console.error ('Error en registro:', error);
+      setServerError(error || 'Este mail ya esta registrado. Intenta de nuevo, con otro.');
     } finally {
       setIsLoading(false);
     }

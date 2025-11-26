@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useTransactions } from '../../contexts/TransactionsContext';
+import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
@@ -8,17 +10,24 @@ import quantumInvest from '../../images/quantum_invest_256x256.png';
 import { SP500_PRICE, SP500_CHANGE_PERCENT, ERROR_MESSAGES } from '../../utils/constants';
 
 function Inversiones() {
+  const { inversiones, createTransaction, deleteTransaction, isLoading } = useTransactions();
+  const { showToast } = useToast();
   const [prices, setPrices] = useState(null);
-  const [inversiones, setInversiones] = useState([]);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [inversionAEliminar, setInversionAEliminar] = useState(null);
   const [totalFiltrado, setTotalFiltrado] = useState(null);
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
-  const [inversionesFiltradas, setInversionesFiltradas] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingPrices, setLoadingPrices] = useState(true);
   const [error, setError] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol, currency } = useSettings();
+
+  // Usar ref para evitar loop infinito
+  const inversionesFiltradasRef = useRef([]);
+
+  // Obtener inversiones del contexto
+  const inversionesData = inversiones();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -29,52 +38,48 @@ function Inversiones() {
     fecha: new Date().toISOString().split('T')[0]
   });
 
-  const cargarInversiones = () => {
-    const inversionesGuardadas = JSON.parse(localStorage.getItem('inversiones') || '[]');
-    const inversionesOrdenadas = inversionesGuardadas.sort((a, b) => 
-      new Date(b.fecha) - new Date(a.fecha)
-    );
-    setInversiones(inversionesOrdenadas);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.activo || !formData.cantidad || !formData.precioCompra) {
-      alert('Por favor completa los campos obligatorios');
+      showToast('Por favor completa los campos obligatorios', 'error');
       return;
     }
 
-    // Calcular monto invertido = cantidad × precio de compra
-    const cantidad = parseFloat(formData.cantidad);
-    const precioCompra = parseFloat(formData.precioCompra);
-    const monto = cantidad * precioCompra;
+    setIsSubmitting(true);
 
-    const inversionesGuardadas = JSON.parse(localStorage.getItem('inversiones') || '[]');
-    const nuevaInversion = {
-      id: Date.now(),
-      activo: formData.activo,
-      categoria: formData.activo,
-      tipo: 'inversion',
-      cantidad: cantidad,
-      precioCompra: precioCompra,
-      monto: monto,
-      descripcion: formData.descripcion,
-      fecha: formData.fecha
-    };
+    try {
+      const cantidad = parseFloat(formData.cantidad);
+      const precioCompra = parseFloat(formData.precioCompra);
+      const monto = cantidad * precioCompra;
 
-    inversionesGuardadas.push(nuevaInversion);
-    localStorage.setItem('inversiones', JSON.stringify(inversionesGuardadas));
-    
-    setFormData({
-      activo: '',
-      cantidad: '',
-      precioCompra: '',
-      descripcion: '',
-      fecha: new Date().toISOString().split('T')[0]
-    });
-    setMostrarFormulario(false);
-    cargarInversiones();
+      await createTransaction({
+        tipo: 'inversion',
+        categoria: formData.activo,
+        monto: monto,
+        descripcion: formData.descripcion,
+        fecha: formData.fecha,
+        activo: formData.activo,
+        cantidad: cantidad,
+        precioCompra: precioCompra
+      });
+
+      showToast('Inversión guardada correctamente', 'success');
+      
+      setFormData({
+        activo: '',
+        cantidad: '',
+        precioCompra: '',
+        descripcion: '',
+        fecha: new Date().toISOString().split('T')[0]
+      });
+      setMostrarFormulario(false);
+    } catch (error) {
+      console.error('Error al guardar inversión:', error);
+      showToast(error || 'Error al guardar la inversión', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const abrirModalEliminar = (inversion) => {
@@ -82,35 +87,36 @@ function Inversiones() {
     setModalOpen(true);
   };
 
-  const confirmarEliminar = () => {
-    const inversionesActualizadas = inversiones.filter(i => i.id !== inversionAEliminar.id);
-    localStorage.setItem('inversiones', JSON.stringify(inversionesActualizadas));
-    setInversiones(inversionesActualizadas);
-    setModalOpen(false);
-    setInversionAEliminar(null);
-  };
-
-  useEffect(() => {
-  const fetchPrices = async () => {
+  const confirmarEliminar = async () => {
     try {
-      setLoading(true);
-      const data = await getCryptoPrices(currency); // Pasar moneda del usuario
-      setPrices(data);
-      setError(null);
-    } catch (err) {
-      setError(ERROR_MESSAGES.FETCH_PRICES);
-      console.error(err);
+      await deleteTransaction(inversionAEliminar._id);
+      showToast('Inversión eliminada correctamente', 'success');
+    } catch (error) {
+      console.error('Error al eliminar inversión:', error);
+      showToast(error || 'Error al eliminar la inversión', 'error');
     } finally {
-      setLoading(false);
+      setModalOpen(false);
+      setInversionAEliminar(null);
     }
   };
 
-  fetchPrices();
-  }, [currency]); // Recargar cuando cambie la moneda
-
   useEffect(() => {
-    cargarInversiones();
-  }, []);
+    const fetchPrices = async () => {
+      try {
+        setLoadingPrices(true);
+        const data = await getCryptoPrices(currency);
+        setPrices(data);
+        setError(null);
+      } catch (err) {
+        setError(ERROR_MESSAGES.FETCH_PRICES);
+        console.error(err);
+      } finally {
+        setLoadingPrices(false);
+      }
+    };
+
+    fetchPrices();
+  }, [currency]);
 
   const getMarketData = () => {
     if (!prices) return null;
@@ -151,20 +157,20 @@ function Inversiones() {
 
   const totalInversiones = totalFiltrado !== null 
     ? totalFiltrado 
-    : inversiones.reduce((sum, inv) => sum + inv.monto, 0);
+    : inversionesData.reduce((sum, inv) => sum + inv.monto, 0);
   const cantidadInversiones = cantidadFiltrada !== null 
     ? cantidadFiltrada 
-    : inversiones.length;
+    : inversionesData.length;
 
-  // Calcular rendimiento de todas las inversiones (memorizado para evitar loops)
+  // Calcular rendimiento usando el ref
   const inversionesConRendimiento = useMemo(() => {
-    // Usar inversiones filtradas si existen, si no, usar todas
-    const inversionesParaCalcular = inversionesFiltradas !== null ? inversionesFiltradas : inversiones;
+    const inversionesParaCalcular = inversionesFiltradasRef.current.length > 0 
+      ? inversionesFiltradasRef.current 
+      : inversionesData;
     
     if (!prices || inversionesParaCalcular.length === 0) return [];
     
     return inversionesParaCalcular.map(inversion => {
-      // Si la inversión no tiene precioCompra o cantidad, no podemos calcular rendimiento
       if (!inversion.precioCompra || !inversion.cantidad) {
         return {
           ...inversion,
@@ -177,19 +183,18 @@ function Inversiones() {
       }
 
       let precioActual = 0;
+      const activo = inversion.activo || inversion.categoria;
       
-      // Obtener precio actual según el activo
-      if (inversion.activo === 'bitcoin') {
+      if (activo === 'bitcoin') {
         precioActual = prices.bitcoin.price;
-      } else if (inversion.activo === 'ethereum') {
+      } else if (activo === 'ethereum') {
         precioActual = prices.ethereum.price;
-      } else if (inversion.activo === 'oro') {
+      } else if (activo === 'oro') {
         precioActual = prices.gold.price;
-      } else if (inversion.activo === 'sp500') {
+      } else if (activo === 'sp500') {
         precioActual = SP500_PRICE;
       }
 
-      // Calcular valores
       const valorActual = inversion.cantidad * precioActual;
       const ganancia = valorActual - inversion.monto;
       const porcentajeGanancia = inversion.monto > 0 ? (ganancia / inversion.monto) * 100 : 0;
@@ -202,19 +207,40 @@ function Inversiones() {
         porcentajeGanancia
       };
     });
-  }, [prices, inversiones, inversionesFiltradas]);
+  }, [prices, inversionesData]);
 
-  // Callback memorizado para evitar re-renders innecesarios
+  // Callback que no causa re-renders
   const handleTotalChange = useCallback((total, cantidad, filtradas) => {
     setTotalFiltrado(total);
     setCantidadFiltrada(cantidad);
-    setInversionesFiltradas(filtradas);
+    inversionesFiltradasRef.current = filtradas || [];
   }, []);
 
   // Calcular totales de rendimiento
   const totalValorActual = inversionesConRendimiento.reduce((sum, inv) => sum + inv.valorActual, 0);
   const totalGanancia = totalValorActual - totalInversiones;
   const porcentajeTotalGanancia = totalInversiones > 0 ? (totalGanancia / totalInversiones) * 100 : 0;
+
+  if (isLoading) {
+    return (
+      <main className="wrapper">
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div style={{ 
+            width: '60px', 
+            height: '60px', 
+            border: '4px solid rgba(139, 92, 246, 0.2)',
+            borderTop: '4px solid #8B5CF6',
+            borderRadius: '50%',
+            margin: '0 auto',
+            animation: 'spin 1s linear infinite'
+          }}></div>
+          <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
+            Cargando inversiones...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="wrapper">
@@ -232,7 +258,7 @@ function Inversiones() {
       
       <h1 style={{ textAlign: 'center', marginBottom: '40px' }}>Precios en Tiempo Real</h1>
 
-      {/* Formulario (condicional) */}
+      {/* Formulario */}
       {mostrarFormulario && (
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
@@ -258,6 +284,7 @@ function Inversiones() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Selecciona un activo</option>
                   <option value="bitcoin">₿ Bitcoin</option>
@@ -290,6 +317,7 @@ function Inversiones() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -317,6 +345,7 @@ function Inversiones() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -340,6 +369,7 @@ function Inversiones() {
                     fontSize: '16px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -362,32 +392,36 @@ function Inversiones() {
                     fontSize: '16px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 style={{
                   width: '100%',
                   padding: '14px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'linear-gradient(180deg, #A78BFA 0%, #8B5CF6 100%)',
+                  background: isSubmitting 
+                    ? 'rgba(139, 92, 246, 0.5)' 
+                    : 'linear-gradient(180deg, #A78BFA 0%, #8B5CF6 100%)',
                   color: '#FFFFFF',
                   fontSize: '16px',
                   fontWeight: '800',
-                  cursor: 'pointer',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   fontFamily: 'inherit'
                 }}
               >
-                💾 Guardar Inversión
+                {isSubmitting ? 'Guardando...' : '💾 Guardar Inversión'}
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {loading && (
+      {loadingPrices && (
         <div style={{ textAlign: 'center', padding: '60px 0' }}>
           <div style={{ 
             width: '60px', 
@@ -410,7 +444,7 @@ function Inversiones() {
         </div>
       )}
 
-      {marketData && !loading && (
+      {marketData && !loadingPrices && (
         <>
           {/* Resumen de Rendimiento */}
           {inversionesConRendimiento.length > 0 && (
@@ -538,7 +572,7 @@ function Inversiones() {
           <HistorialFiltrado 
             type="investment" 
             onDelete={abrirModalEliminar}
-            data={inversiones}
+            data={inversionesData}
             onTotalChange={handleTotalChange}
             formatCurrency={formatCurrency}
           />

@@ -1,18 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useTransactions } from '../../contexts/TransactionsContext';
+import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
 
-
 function Ahorros() {
-  const [ahorros, setAhorros] = useState([]);
+  const { ahorros, createTransaction, deleteTransaction, isLoading } = useTransactions();
+  const { showToast } = useToast();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [ahorroAEliminar, setAhorroAEliminar] = useState(null);
   const [totalFiltrado, setTotalFiltrado] = useState(null);
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol } = useSettings();
+
+  // Obtener ahorros del contexto
+  const ahorrosData = ahorros();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -34,49 +40,43 @@ function Ahorros() {
     { value: 'otro', label: '📝 Otro' }
   ];
 
-  // Estado para categorías dinámicas
   const [categorias, setCategorias] = useState(categoriasBase);
 
-  const cargarAhorros = () => {
-    const ahorrosGuardados = JSON.parse(localStorage.getItem('ahorros') || '[]');
-    const ahorrosOrdenados = ahorrosGuardados.sort((a, b) => 
-      new Date(b.fecha) - new Date(a.fecha)
-    );
-    setAhorros(ahorrosOrdenados);
-  };
-
-  useEffect(() => {
-    cargarAhorros();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!formData.categoria || !formData.monto) {
-      alert('Por favor completa los campos obligatorios');
+      showToast('Por favor completa los campos obligatorios', 'error');
       return;
     }
 
-    const ahorrosGuardados = JSON.parse(localStorage.getItem('ahorros') || '[]');
-    const nuevoAhorro = {
-      id: Date.now(),
-      ...formData,
-      tipo: 'ahorro',
-      monto: parseFloat(formData.monto)
-    };
+    setIsSubmitting(true);
 
-    ahorrosGuardados.push(nuevoAhorro);
-    localStorage.setItem('ahorros', JSON.stringify(ahorrosGuardados));
-    
-    // Reset form
-    setFormData({
-      categoria: '',
-      monto: '',
-      descripcion: '',
-      fecha: new Date().toISOString().split('T')[0]
-    });
-    setMostrarFormulario(false);
-    cargarAhorros();
+    try {
+      await createTransaction({
+        tipo: 'ahorro',
+        categoria: formData.categoria,
+        monto: parseFloat(formData.monto),
+        descripcion: formData.descripcion,
+        fecha: formData.fecha
+      });
+
+      showToast('Ahorro guardado correctamente', 'success');
+      
+      // Reset form
+      setFormData({
+        categoria: '',
+        monto: '',
+        descripcion: '',
+        fecha: new Date().toISOString().split('T')[0]
+      });
+      setMostrarFormulario(false);
+    } catch (error) {
+      console.error('Error al guardar ahorro:', error);
+      showToast(error || 'Error al guardar el ahorro', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const abrirModalEliminar = (ahorro) => {
@@ -84,44 +84,59 @@ function Ahorros() {
     setModalOpen(true);
   };
 
-  const confirmarEliminar = () => {
-    const ahorrosActualizados = ahorros.filter(a => a.id !== ahorroAEliminar.id);
-    localStorage.setItem('ahorros', JSON.stringify(ahorrosActualizados));
-    setAhorros(ahorrosActualizados);
-    setModalOpen(false);
-    setAhorroAEliminar(null);
+  const confirmarEliminar = async () => {
+    try {
+      await deleteTransaction(ahorroAEliminar._id);
+      showToast('Ahorro eliminado correctamente', 'success');
+    } catch (error) {
+      console.error('Error al eliminar ahorro:', error);
+      showToast(error || 'Error al eliminar el ahorro', 'error');
+    } finally {
+      setModalOpen(false);
+      setAhorroAEliminar(null);
+    }
   };
 
   const handleAddCustomCategory = () => {
     if (customCategory.trim()) {
-      // Agregar la nueva categoría a la lista
       const nuevaCategoria = {
         value: customCategory.toLowerCase().replace(/\s+/g, '-'),
         label: `✨ ${customCategory}`
       };
       setCategorias([...categoriasBase, nuevaCategoria]);
-      
-      // Seleccionar la nueva categoría
       setFormData({ ...formData, categoria: customCategory });
       setShowCustomCategory(false);
       setCustomCategory('');
     }
   };
 
-  const getCategoriaEmoji = (categoria) => {
-    const emojis = {
-      'tranquilidad': '🛡️',
-      'invertir': '📈',
-      'viajar': '✈️',
-      'casa': '🏠',
-      'carro': '🚗',
-      'otro': '📝'
-    };
-    return emojis[categoria] || '💰';
-  };
+  const totalAhorros = totalFiltrado !== null 
+    ? totalFiltrado 
+    : ahorrosData.reduce((sum, ahorro) => sum + ahorro.monto, 0);
+  const cantidadAhorros = cantidadFiltrada !== null 
+    ? cantidadFiltrada 
+    : ahorrosData.length;
 
-  const totalAhorros = totalFiltrado !== null ? totalFiltrado : ahorros.reduce((sum, ahorro) => sum + ahorro.monto, 0);
-  const cantidadAhorros = cantidadFiltrada !== null ? cantidadFiltrada : ahorros.length;
+  if (isLoading) {
+    return (
+      <main className="wrapper">
+        <div style={{ textAlign: 'center', padding: '60px 0' }}>
+          <div style={{ 
+            width: '60px', 
+            height: '60px', 
+            border: '4px solid rgba(245, 158, 11, 0.2)',
+            borderTop: '4px solid #F59E0B',
+            borderRadius: '50%',
+            margin: '0 auto',
+            animation: 'spin 1s linear infinite'
+          }}></div>
+          <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
+            Cargando ahorros...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="wrapper">
@@ -134,14 +149,14 @@ function Ahorros() {
         tipo="ahorros"
         total={totalAhorros}
         cantidad={cantidadAhorros}
-        mensaje="💎 Ahorrar es plantar semillas para tu futuro. ¡Cada euro cuenta!"
+        mensaje="💎 Ahorrar es plantar semillas para tu futuro. ¡Todo cuenta!"
         mostrarFormulario={mostrarFormulario}
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
         formatCurrency={formatCurrency}
       />
 
-      {/* Formulario (condicional) */}
+      {/* Formulario */}
       {mostrarFormulario && (
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
@@ -173,6 +188,7 @@ function Ahorros() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 >
                   <option value="">Selecciona una categoría</option>
                   {categorias.map(cat => (
@@ -186,7 +202,7 @@ function Ahorros() {
                 <div style={{ 
                   marginBottom: '20px', 
                   padding: '16px',
-                  background: 'rgba(56, 225, 255, 0.1)',
+                  background: 'rgba(245, 158, 11, 0.1)',
                   borderRadius: '12px'
                 }}>
                   <div style={{ display: 'flex', gap: '8px' }}>
@@ -212,7 +228,7 @@ function Ahorros() {
                       style={{
                         padding: '10px 20px',
                         borderRadius: '8px',
-                        background: 'var(--cyan-accent)',
+                        background: '#F59E0B',
                         color: '#00222F',
                         border: 'none',
                         fontWeight: '700',
@@ -228,7 +244,7 @@ function Ahorros() {
               {/* Monto */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Monto ({getCurrencySymbol()})  *
+                  Monto ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -249,6 +265,7 @@ function Ahorros() {
                     fontFamily: 'inherit'
                   }}
                   required
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -272,6 +289,7 @@ function Ahorros() {
                     fontSize: '16px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -294,25 +312,29 @@ function Ahorros() {
                     fontSize: '16px',
                     fontFamily: 'inherit'
                   }}
+                  disabled={isSubmitting}
                 />
               </div>
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 style={{
                   width: '100%',
                   padding: '14px',
                   borderRadius: '12px',
                   border: 'none',
-                  background: 'linear-gradient(180deg, #38E1FF 0%, #12B4D6 100%)',
+                  background: isSubmitting 
+                    ? 'rgba(245, 158, 11, 0.5)' 
+                    : 'linear-gradient(180deg, #F59E0B 0%, #D97706 100%)',
                   color: '#00222F',
                   fontSize: '16px',
                   fontWeight: '800',
-                  cursor: 'pointer',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
                   fontFamily: 'inherit'
                 }}
               >
-                💾 Guardar Ahorro
+                {isSubmitting ? 'Guardando...' : '💾 Guardar Ahorro'}
               </button>
             </div>
           </form>
@@ -323,7 +345,7 @@ function Ahorros() {
       <HistorialFiltrado 
         type="saving" 
         onDelete={abrirModalEliminar}
-        data={ahorros}
+        data={ahorrosData}
         onTotalChange={(total, cantidad) => {
           setTotalFiltrado(total);
           setCantidadFiltrada(cantidad);
@@ -337,7 +359,6 @@ function Ahorros() {
         onConfirm={confirmarEliminar}
         mensaje="Este ahorro se eliminará permanentemente."
       />
-
     </main>
   );
 }

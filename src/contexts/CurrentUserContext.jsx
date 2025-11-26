@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as MainApi from '../utils/MainApi';
 
 // Crear el contexto
 export const CurrentUserContext = createContext();
@@ -57,31 +58,20 @@ export function CurrentUserProvider({ children }) {
    * Si hay token válido, carga los datos del usuario
    */
   const checkToken = async () => {
-    // Buscar token en localStorage
     const token = localStorage.getItem('jwt');
-    
+
     if (!token) {
-      // No hay token → no hay sesión
       setIsCheckingToken(false);
       return;
     }
 
     try {
-      // TODO: Cuando conectemos backend, verificar token con el servidor
-      // const response = await MainApi.checkToken(token);
-      // setCurrentUser(response.user);
-      
-      // ===== SIMULACIÓN TEMPORAL (borrar cuando conectemos backend) =====
-      // Simular que el token es válido
-      const userData = localStorage.getItem('userData');
+      // Verificar token con el backend real
+      const userData = await MainApi.checkToken(token);
+      setCurrentUser(userData);
 
-      if (userData) {
-        setCurrentUser(JSON.parse(userData));
-      } else {
-        //si no hay userData, el token no sirve
-        localStorage.removeItem('jwt');
-      }
-
+      // Actualizar userData en localStorage
+      localStorage.setItem('userData', JSON.stringify(userData));
     } catch (error) {
       console.error('Token inválido:', error);
       localStorage.removeItem('jwt');

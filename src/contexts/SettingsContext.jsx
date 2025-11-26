@@ -20,26 +20,32 @@ const DEFAULT_SETTINGS = {
 
 // Componente Provider
 export function SettingsProvider({ children }) {
-  // Estados para moneda y tema
-  const [currency, setCurrency] = useState(DEFAULT_SETTINGS.currency);
-  const [theme, setTheme] = useState(DEFAULT_SETTINGS.theme);
-
-  /**
-   * Cargar settings desde localStorage al montar el componente
-   */
-  useEffect(() => {
+  // Inicializar estados leyendo de localStorage INMEDIATAMENTE
+  const [currency, setCurrency] = useState(() => {
     const savedSettings = localStorage.getItem('userSettings');
-    
     if (savedSettings) {
       try {
         const parsed = JSON.parse(savedSettings);
-        setCurrency(parsed.currency || DEFAULT_SETTINGS.currency);
-        setTheme(parsed.theme || DEFAULT_SETTINGS.theme);
-      } catch (error) {
-        console.error('Error cargando settings:', error);
+        return parsed.currency || DEFAULT_SETTINGS.currency;
+      } catch {
+        return DEFAULT_SETTINGS.currency;
       }
     }
-  }, []);
+    return DEFAULT_SETTINGS.currency;
+  });
+
+  const [theme, setTheme] = useState(() => {
+    const savedSettings = localStorage.getItem('userSettings');
+    if (savedSettings) {
+      try {
+        const parsed = JSON.parse(savedSettings);
+        return parsed.theme || DEFAULT_SETTINGS.theme;
+      } catch {
+        return DEFAULT_SETTINGS.theme;
+      }
+    }
+    return DEFAULT_SETTINGS.theme;
+  });
 
   /**
    * Guardar settings en localStorage cada vez que cambien
@@ -50,7 +56,14 @@ export function SettingsProvider({ children }) {
   }, [currency, theme]);
 
   /**
-   * Cambia la moneda @param {string} newCurrency - Nueva moneda (EUR, USD, COP, etc.)
+   * Aplicar tema al documento cada vez que cambie
+   */
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  /**
+   * Cambia la moneda
    */
   const changeCurrency = (newCurrency) => {
     setCurrency(newCurrency);
@@ -58,23 +71,13 @@ export function SettingsProvider({ children }) {
 
   /**
    * Cambia el tema
-   * @param {string} newTheme - Nuevo tema (dark, light)
    */
   const changeTheme = (newTheme) => {
     setTheme(newTheme);
-    
-    // Aplicar tema al documento
-    if (newTheme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
   };
 
   /**
    * Formatea un número con la moneda actual
-   * @param {number} amount - Cantidad a formatear
-   * @returns {string} - Cantidad formateada con símbolo de moneda
    */
   const formatCurrency = (amount) => {
     const symbols = {
@@ -91,26 +94,20 @@ export function SettingsProvider({ children }) {
   };
 
   /**
-  * Devuelve solo el símbolo de la moneda actual @returns {string} - Símbolo de moneda (€, $, £, ¥)
-  */
-    const getCurrencySymbol = () => {
+   * Devuelve solo el símbolo de la moneda actual
+   */
+  const getCurrencySymbol = () => {
     const symbols = {
-    EUR: '€',
-    USD: '$',
-    COP: '$',
-    MXN: '$',
-    GBP: '£',
-    JPY: '¥'
+      EUR: '€',
+      USD: '$',
+      COP: '$',
+      MXN: '$',
+      GBP: '£',
+      JPY: '¥'
     };
     return symbols[currency] || currency;
   };
 
-  // Aplicar tema al montar
-  useEffect(() => {
-    changeTheme(theme);
-  }, []);
-
-  // Proveer el contexto a los componentes hijos
   return (
     <SettingsContext.Provider
       value={{

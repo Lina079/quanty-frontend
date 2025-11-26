@@ -6,6 +6,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumHalf from '../../images/Quantum-allBody.png';
 import logoQuanty from '../../images/quanty-logo-gold.png';
+import * as MainApi from '../../utils/MainApi';
 
 function Login() {
     const navigate = useNavigate();
@@ -149,42 +150,23 @@ function Login() {
     setServerError('');
     
     try {
-      // TODO: Aquí conectaremos con el backend más adelante
-      // const response = await MainApi.signin(email, password);
-      // localStorage.setItem('jwt', response.token);
-      // navigate('/dashboard');
+     //llamar al backend real
+      const response = await MainApi.signin(email, password);
+
+      //Guardar token en localStorage
+      localStorage.setItem('jwt', response.token);
+
+      const userData = await MainApi.getCurrentUser(response.token);
+
+      showToast('¡Inicio de sesión exitoso!', 'success');
       
-      // ===== SIMULACIÓN TEMPORAL (borrar cuando conectemos backend) =====
-      console.log('Intentando login con:', { email, password });
-      
-      // Simular delay de red (1 segundo)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      //Simular datos del usuario y token
-      //Extraer nombre del email (antes del @ y capatalizar primera letra)
-      const emailName = email.split('@')[0];
-      const userName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
-
-
-      //Simular datos del usuario y token
-      const userData = {
-        name: userName,
-        email: email,
-        id: '123'
-      };
-      const token = 'fake-jwt-token-12345';
-      
-      // Simular login exitoso
-      showToast('¡Inicio de sesión exito!', 'success');
-
-      //Esperar un momento antes de navegar (para que se vea el toast)
       setTimeout(() => {
-        login(userData, token);
+        login(userData, response.token);
       }, 1000);
-      
-    } catch (error) {
+
+    } catch(error) {
       console.error('Error en login:', error);
-      setServerError('Credenciales incorrectas. Por favor, intenta de nuevo.');
+      setServerError(error || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
     } finally {
       setIsLoading(false);
     }
