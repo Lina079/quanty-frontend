@@ -1,99 +1,138 @@
 # Quanty - Aplicación de Finanzas Personales 💰
 
-Aplicación web educativa de gestión financiera personal basada en el método japonés Kakeibo, con asistente virtual "Quantum" y visualización de inversiones en tiempo real.
+Aplicación web full-stack de gestión financiera personal basada en el método japonés Kakeibo, con asistente virtual "Quantum", autenticación segura y visualización de inversiones en tiempo real.
 
 ---
 
 ## 🔗 Enlaces del Proyecto
 
-- **Aplicación:** [https://quanty-frontend.vercel.app](https://quanty-frontend.vercel.app)
-- **Repositorio Frontend:** [https://github.com/Lina079/quanty-frontend](https://github.com/Lina079/quanty-frontend)
+| Recurso | URL |
+|---------|-----|
+| **Aplicación** | [https://myquanty.com](https://myquanty.com) |
+| **API Backend** | [https://api.myquanty.com](https://api.myquanty.com) |
+| **Repositorio Frontend** | [https://github.com/Lina079/quanty-frontend](https://github.com/Lina079/quanty-frontend) |
+| **Repositorio Backend** | [https://github.com/Lina079/quanty-backend](https://github.com/Lina079/quanty-backend) |
 
 ---
 
 ## 📸 Capturas de Pantalla
 
+### Autenticación
+| Login (Tema Claro) | Registro (Tema Oscuro) |
+|:------------------:|:----------------------:|
+| ![Login](./src/images/ImageReadme/Login-Light.png) | ![Register](./src/images/ImageReadme/Register-dark.png) |
+
 ### Dashboard Principal
-![Dashboard](./src/images/ImageReadme/Quanty-dashboard.png)
+| Tema Oscuro | Tema Claro |
+|:-----------:|:----------:|
+| ![Dashboard Dark](./src/images/ImageReadme/Dashboard-dark.png) | ![Dashboard Light](./src/images/ImageReadme/Dashboard-Light.png) |
+
+### Panorama Financiero
+![Panorama Financiero](./src/images/ImageReadme/Panorama-financiero.png)
+
+### Análisis por Categoría
+![Análisis Financiero](./src/images/ImageReadme/Análisis-financiero.png)
 
 ### Gestión de Inversiones
-![Inversiones Desktop](./src/images/ImageReadme/Quanty-inversones.png)
-![Inversiones Responsive](./src/images/ImageReadme/Quanty-investment-responsive.png)
+![Inversiones](./src/images/ImageReadme/Investment-Light.png)
 
-### Personalización de Usuario
-![Editar Perfil](./src/images/ImageReadme/Quanty-edit-profile.png)
+### Configuración de Usuario
+| Selección de Moneda | Selección de Tema |
+|:-------------------:|:-----------------:|
+| ![Moneda](./src/images/ImageReadme/Settings-currency.png) | ![Tema](./src/images/ImageReadme/Settings-theme.png) |
 
 ### Diseño Responsive
-![Responsive](./src/images/ImageReadme/Quanty-responsive.png)
+![Responsive](./src/images/ImageReadme/Responsive.png)
 
 ---
 
 ## 📋 Descripción
 
-**Quanty** es una aplicación de educación financiera que ayuda a los usuarios a gestionar sus finanzas personales mediante el sistema de "4 cajas":
+**Quanty** es una aplicación full-stack de educación financiera que ayuda a los usuarios a gestionar sus finanzas personales mediante el sistema de "4 cajas":
 
-✅ **Ingresos** - Registro de entradas de dinero  
-✅ **Gastos** - Control de egresos por categoría  
-✅ **Ahorro** - Reserva de tranquilidad y metas  
-✅ **Inversión** - Seguimiento de activos con precios en tiempo real  
+| Caja | Descripción |
+|------|-------------|
+| 💰 **Ingresos** | Registro de entradas de dinero |
+| 💸 **Gastos** | Control de egresos por categoría |
+| 🏦 **Ahorro** | Reserva de tranquilidad y metas |
+| 📈 **Inversión** | Seguimiento de activos con precios en tiempo real |
 
-La app incluye a **Quantum**, un asistente financiero que acompaña al usuario con mensajes contextuales de educación financiera.
+La app incluye a **Quantum**, un asistente financiero virtual que acompaña al usuario con mensajes contextuales de educación financiera.
 
 ---
 
 ## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
-- **React 18** - Framework principal
-- **Vite** - Build tool y dev server
-- **React Router v6** - Enrutamiento SPA
-- **Recharts** - Gráficos interactivos
-- **CSS Modules** - Estilos organizados con metodología BEM
+| Tecnología | Uso |
+|------------|-----|
+| React 18 | Framework principal |
+| Vite | Build tool y dev server |
+| React Router v6 | Enrutamiento SPA |
+| Recharts | Gráficos interactivos |
+| CSS Modules | Estilos con metodología BEM |
 
-### API Third-Party
-- **CoinGecko API** - Precios en tiempo real de criptomonedas
-  - Endpoint: `https://api.coingecko.com/api/v3`
-  - Activos: Bitcoin, Ethereum, Oro (PAX Gold)
-  - Sin autenticación requerida
+### Backend
+| Tecnología | Uso |
+|------------|-----|
+| Node.js | Runtime |
+| Express | Framework web |
+| MongoDB Atlas | Base de datos |
+| Mongoose | ODM |
+| JWT | Autenticación |
+| bcrypt | Encriptación de contraseñas |
 
-### Deploy
-- **Vercel** - Hosting y CI/CD automático
+### APIs Externas
+| API | Uso |
+|-----|-----|
+| CoinGecko | Precios de criptomonedas en tiempo real |
+
+### Infraestructura
+| Servicio | Uso |
+|----------|-----|
+| Google Cloud Run | Hosting del backend |
+| Vercel | Hosting del frontend |
+| Cloudflare | DNS y certificados SSL |
 
 ---
 
 ## ✨ Funcionalidades Principales
 
-### Sistema de 4 Cajas
-- Dashboard con resumen visual de todas las categorías
-- Iconos personalizados para cada sección
-- Navegación intuitiva entre módulos
+### 🔐 Autenticación Segura
+- Registro con validación de datos
+- Login con JWT
+- Rutas protegidas
+- Persistencia de sesión
 
-### Gestión de Transacciones
-- Agregar ingresos, gastos, ahorros e inversiones
-- Categorías predefinidas y personalizables
-- Persistencia en `localStorage`
+### 📊 Sistema de 4 Cajas
+- Dashboard con resumen visual
+- Filtrado por mes o año
+- Gráficas de distribución (dona)
+- Historial de transacciones
 
-### Inversiones en Tiempo Real
-- Integración con CoinGecko API para precios actuales
-- Tabla con 5 columnas: Activo, Precio Actual, Invertido, Valor, Variación
-- Gráfica de barras con rendimiento por activo
-- Diseño responsive con vista mobile optimizada
+### 💱 Multi-Moneda
+- Euro (€)
+- Dólar estadounidense ($)
+- Peso colombiano ($)
+- Peso mexicano ($)
+- Libra esterlina (£)
+- Yen japonés (¥)
 
-### Personalización
-- Modal para editar nombre de usuario
-- Validación de formularios
-- Nombre persistente entre sesiones
+### 🎨 Temas Visuales
+- Modo oscuro (por defecto)
+- Modo claro
+- Persistencia de preferencia
 
-### Quantum - Asistente Financiero
+### 📈 Inversiones en Tiempo Real
+- Precios actualizados via CoinGecko API
+- Bitcoin, Ethereum, Oro (PAX Gold)
+- Cálculo de variación 24h
+- Vista responsive optimizada
+
+### 🤖 Quantum - Asistente Financiero
 - Mensajes educativos contextuales
-- Frases motivacionales sobre finanzas
-- Imagen personalizada del bot
-
-### Diseño Responsive
-- Mobile-first approach
-- Menú hamburguesa animado (3 barras → X)
-- Adaptación completa desde 320px hasta desktop
-- Gráficos y tablas optimizados para móvil
+- Imágenes adaptadas al tema
+- Acompañamiento en cada sección
 
 ---
 
@@ -101,38 +140,37 @@ La app incluye a **Quantum**, un asistente financiero que acompaña al usuario c
 ```
 quanty-frontend/
 ├── src/
-│   ├── blocks/              # CSS modular por componente
-│   │   ├── button.css
-│   │   ├── card.css
-│   │   ├── footer.css
-│   │   ├── header.css
-│   │   ├── investments.css
-│   │   ├── page.css
-│   │   ├── popup.css
-│   │   └── quantum.css
-│   ├── components/          # Componentes React
-│   │   ├── Dashboard.jsx
-│   │   ├── Header.jsx
-│   │   ├── Footer.jsx
-│   │   ├── Gastos.jsx
-│   │   ├── Ingresos.jsx
-│   │   ├── Ahorros.jsx
-│   │   ├── Inversiones.jsx
-│   │   ├── Transacciones.jsx
-│   │   ├── ModalEditarNombre.jsx
-│   │   └── Popup.jsx
-│   ├── images/              # Assets e imágenes
-│   │   └── ImageReadme/     # Screenshots para README
-│   ├── utils/               # Utilidades y APIs
-│   │   ├── CoinGeckoApi.js
-│   │   └── constants.js
-│   ├── vendor/              # Recursos externos
-│   │   └── fonts.css
-│   ├── index.css            # CSS principal (imports)
-│   ├── App.jsx              # Componente raíz
-│   └── main.jsx             # Entry point
-├── public/                  # Recursos públicos
-├── vercel.json              # Configuración Vercel
+│   ├── components/
+│   │   ├── Auth/                    # Login y Register
+│   │   ├── Dashboard.jsx            # Página principal
+│   │   ├── Footer/
+│   │   ├── Header/
+│   │   ├── Main/
+│   │   │   ├── Ahorros.jsx
+│   │   │   ├── Gastos.jsx
+│   │   │   ├── Ingresos.jsx
+│   │   │   ├── Inversiones.jsx
+│   │   │   ├── Transacciones.jsx
+│   │   │   └── components/
+│   │   │       ├── CardResumen.jsx
+│   │   │       ├── HistorialFiltrado.jsx
+│   │   │       └── ModalConfirmacion.jsx
+│   │   ├── ProtectedRoute.jsx       # Protección de rutas
+│   │   ├── Toast/                   # Notificaciones
+│   │   └── UserSettings/            # Configuración usuario
+│   ├── contexts/
+│   │   ├── CurrentUserContext.jsx   # Estado del usuario
+│   │   ├── SettingsContext.jsx      # Moneda y tema
+│   │   ├── ToastContext.jsx         # Notificaciones
+│   │   └── TransactionsContext.jsx  # CRUD transacciones
+│   ├── blocks/                      # CSS modular (BEM)
+│   ├── images/
+│   │   └── ImageReadme/             # Screenshots
+│   ├── utils/                       # APIs y helpers
+│   └── vendor/                      # Fuentes
+├── index.html
+├── vite.config.js
+├── vercel.json
 └── package.json
 ```
 
@@ -159,6 +197,13 @@ npm run dev
 
 La aplicación estará disponible en `http://localhost:3000`
 
+### Variables de Entorno
+
+Crea un archivo `.env` en la raíz:
+```env
+VITE_API_URL=https://api.myquanty.com
+```
+
 ### Build para producción
 ```bash
 npm run build
@@ -167,9 +212,32 @@ npm run preview
 
 ---
 
+## 🔌 Integración con Backend
+
+### Endpoints Principales
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST | `/signup` | Registro de usuario |
+| POST | `/signin` | Inicio de sesión |
+| GET | `/users/me` | Obtener perfil |
+| PATCH | `/users/me` | Actualizar perfil |
+| GET | `/transactions` | Listar transacciones |
+| POST | `/transactions` | Crear transacción |
+| DELETE | `/transactions/:id` | Eliminar transacción |
+
+### Autenticación
+
+Todas las rutas (excepto `/signup` y `/signin`) requieren el header:
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+---
+
 ## 🔌 Integración CoinGecko API
 
-### Endpoint utilizado
+### Endpoint
 ```
 GET https://api.coingecko.com/api/v3/simple/price
 ```
@@ -183,89 +251,25 @@ GET https://api.coingecko.com/api/v3/simple/price
 }
 ```
 
-### Ejemplo de respuesta
-```json
-{
-  "bitcoin": {
-    "eur": 81590.00,
-    "eur_24h_change": -3.7
-  },
-  "ethereum": {
-    "eur": 2722.34,
-    "eur_24h_change": -0.2
-  },
-  "pax-gold": {
-    "eur": 3497.96,
-    "eur_24h_change": -2.1
-  }
-}
-```
-
-### Implementación
-Archivo: `src/utils/CoinGeckoApi.js`
-```javascript
-export const getCryptoPrices = async () => {
-  const response = await fetch(
-    `${API_BASE_URL}/simple/price?ids=bitcoin,ethereum,pax-gold&vs_currencies=eur&include_24hr_change=true`
-  );
-  const data = await response.json();
-  return {
-    bitcoin: {
-      price: data.bitcoin.eur,
-      change24h: data.bitcoin.eur_24h_change
-    },
-    // ...
-  };
-};
-```
-
----
-
-## 🎨 Metodología CSS
-
-### Organización Modular
-- **BEM (Block Element Modifier)** para nomenclatura
-- Archivos CSS separados por bloque/componente
-- Variables CSS para theming consistente
-- Responsive con Mobile-First approach
-
-### Variables CSS Principales
-```css
-:root {
-  --bg-1: #061A2B;
-  --bg-2: #0B2840;
-  --cyan-accent: #38E1FF;
-  --text-primary: #FFFFFF;
-  --text-secondary: #B7C8D6;
-}
-```
-
 ---
 
 ## 📱 Responsive Design
 
 ### Breakpoints
-- **Mobile:** 320px - 767px
-- **Tablet:** 768px - 1024px
-- **Desktop:** 1025px+
 
-### Características Responsive
-- Menú hamburguesa animado en móvil
-- Tabla de inversiones con layout mobile (columnas → filas)
-- Gráfica de barras con altura ajustada
-- Grid de cards adaptativo
-- Imágenes optimizadas por tamaño
+| Dispositivo | Rango |
+|-------------|-------|
+| Mobile | 320px - 767px |
+| Tablet | 768px - 1024px |
+| Desktop | 1025px+ |
 
----
+### Características
 
-## 🧪 Pruebas
-
-### Probar la aplicación
-1. Visita [https://quanty-frontend.vercel.app](https://quanty-frontend.vercel.app)
-2. Explora el Dashboard
-3. Navega a Inversiones para ver precios en tiempo real
-4. Edita tu nombre de usuario
-5. Prueba el responsive (320px - 1920px)
+- Mobile-first approach
+- Menú hamburguesa animado
+- Tablas adaptativas
+- Gráficas responsivas
+- Fuentes con `clamp()` para escalado fluido
 
 ---
 
@@ -274,40 +278,44 @@ export const getCryptoPrices = async () => {
 **Lina Castro Rodriguez**  
 *Full Stack Developer Jr. - Bootcamp TripleTen*
 
-- 🔗 [LinkedIn](https://linkedin.com/in/lina-castro079)
-- 💻 [GitHub](https://github.com/Lina079)
-- 📧 linacastror079@gmail.com
+| Contacto | Enlace |
+|----------|--------|
+| LinkedIn | [linkedin.com/in/lina-castro079](https://linkedin.com/in/lina-castro079) |
+| GitHub | [github.com/Lina079](https://github.com/Lina079) |
+| Email | linacastror079@gmail.com |
 
 ---
 
 ## 📝 Notas del Proyecto
 
-Este proyecto fue desarrollado como **Etapa 1 del Proyecto Final** del Bootcamp de Desarrollo Web de TripleTen.
+Este proyecto fue desarrollado como **Proyecto Final** del Bootcamp de Desarrollo Web de TripleTen.
 
-### Características Destacadas
-✅ Arquitectura frontend React profesional  
-✅ Integración con API third-party (CoinGecko)  
-✅ CSS modular con metodología BEM  
-✅ Diseño responsive completo  
-✅ HTML semántico (`<main>`, `<section>`)  
-✅ Gestión de estado con React Hooks  
-✅ Persistencia con localStorage  
-✅ Deploy automático en Vercel  
+### Criterios Cumplidos
 
-### Próximos Pasos (Etapa 2 - Backend)
-- API REST con Node.js + Express
-- Base de datos MongoDB
-- Autenticación JWT
-- CRUD de transacciones real
-- Sistema de usuarios
+**Frontend (React + Auth):**
+- ✅ Componentes funcionales con Hooks
+- ✅ React Context para estado global
+- ✅ Rutas protegidas con ProtectedRoute
+- ✅ Autenticación JWT completa
+- ✅ Diseño responsive
+- ✅ Fetch API (sin axios)
+
+**Backend (Node + Express + MongoDB):**
+- ✅ API RESTful completa
+- ✅ Autenticación con JWT
+- ✅ Validación con Joi/Celebrate
+- ✅ Contraseñas hasheadas con bcrypt
+- ✅ Manejo centralizado de errores
+- ✅ Logging con Winston
+- ✅ Deploy en Google Cloud Run
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto es parte de un bootcamp educativo. El código está disponible con fines de portafolio y aprendizaje.
+Proyecto educativo desarrollado para el Bootcamp TripleTen. Código disponible con fines de portafolio y aprendizaje.
 
 ---
 
-**Versión:** 1.0.0 (Etapa 1 - Frontend)  
+**Versión:** 2.0.0 (Full-Stack)  
 **Última actualización:** Noviembre 2025
