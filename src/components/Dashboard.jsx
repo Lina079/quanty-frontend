@@ -178,13 +178,13 @@ function Dashboard() {
         <div 
           className="card"
           onClick={() => navigate('/ingresos')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <div className="card__icon">
             <img src={iconoIngresos} alt="Ingresos" />
           </div>
           <h3>Ingreso</h3>
-          <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
             {formatCurrency(financialData.ingresos.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
@@ -196,13 +196,13 @@ function Dashboard() {
         <div 
           className="card" 
           onClick={() => navigate('/inversiones')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <div className="card__icon">
             <img src={iconoInversion} alt="Inversión" />
           </div>
           <h3>Inversión</h3>
-          <p style={{ fontSize: '32px', fontWeight: '800', color: '#8B5CF6', marginTop: '12px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: '#8B5CF6', marginTop: '12px' }}>
             {formatCurrency(financialData.inversion.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
@@ -214,13 +214,13 @@ function Dashboard() {
         <div 
           className="card"
           onClick={() => navigate('/gastos')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <div className="card__icon">
             <img src={iconoGastos} alt="Gastos" />
           </div>
           <h3>Gastos</h3>
-          <p style={{ fontSize: '32px', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
             {formatCurrency(financialData.gastos.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
@@ -232,13 +232,13 @@ function Dashboard() {
         <div 
           className="card"
           onClick={() => navigate('/ahorros')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <div className="card__icon">
             <img src={iconoAhorro} alt="Ahorro" />
           </div>
           <h3>Ahorro</h3>
-          <p style={{ fontSize: '32px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
             {formatCurrency(financialData.ahorro.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>

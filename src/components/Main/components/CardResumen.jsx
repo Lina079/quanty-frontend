@@ -119,7 +119,7 @@ function CardResumen({
               Total {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
             </h3>
             <p style={{ 
-              fontSize: '36px', 
+              fontSize: 'clamp(18px, 5vw, 36px)', 
               fontWeight: '800', 
               color: currentConfig.color, 
               margin: 0 

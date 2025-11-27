@@ -80,17 +80,23 @@ export function SettingsProvider({ children }) {
    * Formatea un número con la moneda actual
    */
   const formatCurrency = (amount) => {
-    const symbols = {
-      EUR: '€',
-      USD: '$',
-      COP: '$',
-      MXN: '$',
-      GBP: '£',
-      JPY: '¥'
-    };
-    
-    const symbol = symbols[currency] || currency;
-    return `${symbol}${amount.toFixed(2)}`;
+  const config = {
+    EUR: { locale: 'es-ES', symbol: '€' },
+    USD: { locale: 'en-US', symbol: '$' },
+    COP: { locale: 'es-CO', symbol: '$' },
+    MXN: { locale: 'es-MX', symbol: '$' },
+    GBP: { locale: 'en-GB', symbol: '£' },
+    JPY: { locale: 'ja-JP', symbol: '¥' }
+  };
+  
+  const { locale, symbol } = config[currency] || { locale: 'en-US', symbol: currency };
+  
+  const formatted = amount.toLocaleString(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+  
+  return `${symbol}${formatted}`;
   };
 
   /**

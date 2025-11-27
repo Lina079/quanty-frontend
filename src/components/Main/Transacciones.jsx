@@ -297,10 +297,10 @@ function Transacciones() {
         <div 
           className="card"
           onClick={() => navigate('/gastos')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <h3>💸 Gastos Totales</h3>
-          <p style={{ fontSize: '36px', fontWeight: '800', color: '#EF4444', marginTop: '16px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: '#EF4444', marginTop: '16px' }}>
             {formatCurrency(totales.gastos)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
@@ -312,10 +312,10 @@ function Transacciones() {
         <div 
           className="card"
           onClick={() => navigate('/ingresos')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <h3>💰 Ingresos Totales</h3>
-          <p style={{ fontSize: '36px', fontWeight: '800', color: '#4ADE80', marginTop: '16px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: '#4ADE80', marginTop: '16px' }}>
             {formatCurrency(totales.ingresos)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
@@ -327,10 +327,10 @@ function Transacciones() {
         <div 
           className="card"
           onClick={() => navigate('/ahorros')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <h3>🏦 Ahorro Total</h3>
-          <p style={{ fontSize: '36px', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '16px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '16px' }}>
             {formatCurrency(totales.ahorro)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
@@ -342,10 +342,10 @@ function Transacciones() {
         <div 
           className="card"
           onClick={() => navigate('/inversiones')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', textAlign: 'center' }}
         >
           <h3>📈 Inversión Total</h3>
-          <p style={{ fontSize: '36px', fontWeight: '800', color: '#FFD700', marginTop: '16px' }}>
+          <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: '#FFD700', marginTop: '16px' }}>
             {formatCurrency(totales.inversion)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
@@ -419,8 +419,10 @@ function Transacciones() {
                 className="distribution-item"
                 style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  flexDirection: 'column',
+                  textAlign: 'center',
                   alignItems: 'center',
+                  gap: '8px',
                   padding: '16px',
                   background: 'rgba(14,49,71,.5)',
                   borderRadius: '12px',
@@ -440,7 +442,7 @@ function Transacciones() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <div style={{ 
-                    fontSize: '20px', 
+                    fontSize: 'clamp(14px, 4vw, 20px)', 
                     fontWeight: '800',
                     color: item.color
                   }}>

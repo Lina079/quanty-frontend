@@ -229,7 +229,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
                   Total
                 </p>
                 <p style={{ 
-                  fontSize: '42px', 
+                  fontSize: 'clamp(20px, 5vw, 42px)', 
                   fontWeight: '800', 
                   color: currentConfig.color, 
                   margin: 0 
@@ -323,7 +323,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
                         <div style={{ textAlign: 'right' }}>
                           <div style={{ 
                             fontWeight: '800', 
-                            fontSize: '18px',
+                            fontSize: 'clamp(14px, 4vw, 18px)',
                             color: color
                           }}>
                             {formatCurrency(item.total)}
