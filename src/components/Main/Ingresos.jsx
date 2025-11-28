@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useTransactions } from '../../contexts/TransactionsContext';
 import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
@@ -16,6 +17,7 @@ function Ingresos() {
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol } = useSettings();
+  const { t } = useLanguage();
 
   // Obtener ingresos del contexto
   const ingresosData = ingresos();
@@ -32,11 +34,11 @@ function Ingresos() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'sueldo', label: '💼 Sueldo' },
-    { value: 'freelance', label: '💻 Freelance' },
-    { value: 'comisiones', label: '💰 Comisiones' },
-    { value: 'dividendos', label: '📈 Dividendos' },
-    { value: 'otro', label: '📝 Otro' }
+  { value: 'sueldo', label: t('incomeCategories.salary') },
+  { value: 'freelance', label: t('incomeCategories.freelance') },
+  { value: 'comisiones', label: t('incomeCategories.commissions') },
+  { value: 'dividendos', label: t('incomeCategories.dividends') },
+  { value: 'otro', label: t('incomeCategories.other') }
   ];
 
   const [categorias, setCategorias] = useState(categoriasBase);
@@ -45,7 +47,7 @@ function Ingresos() {
     e.preventDefault();
     
     if (!formData.categoria || !formData.monto) {
-      showToast('Por favor completa los campos obligatorios', 'error');
+      showToast(t('form.requiredFields'), 'error');
       return;
     }
 
@@ -60,7 +62,7 @@ function Ingresos() {
         fecha: formData.fecha
       });
 
-      showToast('Ingreso guardado correctamente', 'success');
+      showToast(t('toast.savedSuccess'), 'success');
       
       // Reset form
       setFormData({
@@ -72,7 +74,7 @@ function Ingresos() {
       setMostrarFormulario(false);
     } catch (error) {
       console.error('Error al guardar ingreso:', error);
-      showToast(error || 'Error al guardar el ingreso', 'error');
+      showToast(error || t('toast.errorSaving'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -86,10 +88,10 @@ function Ingresos() {
   const confirmarEliminar = async () => {
     try {
       await deleteTransaction(ingresoAEliminar._id);
-      showToast('Ingreso eliminado correctamente', 'success');
+      showToast(t('toast.deletedSuccess'), 'success');
     } catch (error) {
       console.error('Error al eliminar ingreso:', error);
-      showToast(error || 'Error al eliminar el ingreso', 'error');
+      showToast(error || t('toast.errorDeleting'), 'error');
     } finally {
       setModalOpen(false);
       setIngresoAEliminar(null);
@@ -130,7 +132,7 @@ function Ingresos() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando ingresos...
+            {t('common.loading')}...
           </p>
         </div>
       </main>
@@ -139,16 +141,16 @@ function Ingresos() {
 
   return (
     <main className="wrapper">
-      <h1 style={{ textAlign: 'center' }}>Gestión de Ingresos</h1>
+      <h1 style={{ textAlign: 'center' }}>{t('income.title')}</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
-        Registra tus fuentes de ingreso
+        {t('income.subtitle')}
       </p>
 
       <CardResumen 
         tipo="ingresos"
         total={totalIngresos}
         cantidad={cantidadIngresos}
-        mensaje="💚 Cada ingreso es un paso hacia la abundancia. ¡Celebra tus logros!"
+        mensaje={t('income.quantumMessage')}
         mostrarFormulario={mostrarFormulario}
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
@@ -160,12 +162,12 @@ function Ingresos() {
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
             <div className="card">
-              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Ingreso</h3>
+              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>{t('income.newIncome')}</h3>
 
               {/* Categoría */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Categoría *
+                  {t('form.category')} *
                 </label>
                 <select
                   value={formData.categoria}
@@ -189,11 +191,11 @@ function Ingresos() {
                   required
                   disabled={isSubmitting}
                 >
-                  <option value="">Selecciona una categoría</option>
+                  <option value="">{t('form.selectCategory')}</option>
                   {categorias.map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
                   ))}
-                  <option value="custom">➕ Agregar categoría personalizada</option>
+                  <option value="custom">➕ {t('form.addCustomCategory')}</option>
                 </select>
               </div>
 
@@ -209,7 +211,7 @@ function Ingresos() {
                       type="text"
                       value={customCategory}
                       onChange={(e) => setCustomCategory(e.target.value)}
-                      placeholder="Nueva categoría..."
+                      placeholder={t('form.newCategory')}
                       style={{
                         flex: 1,
                         padding: '10px 12px',
@@ -243,7 +245,7 @@ function Ingresos() {
               {/* Monto */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Monto ({getCurrencySymbol()}) *
+                  {t('form.amount')} ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -271,13 +273,13 @@ function Ingresos() {
               {/* Descripción */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Descripción
+                  {t('form.description')}
                 </label>
                 <input
                   type="text"
                   value={formData.descripcion}
                   onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-                  placeholder="Opcional"
+                  placeholder={t('form.optional')}
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -295,7 +297,7 @@ function Ingresos() {
               {/* Fecha */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Fecha
+                  {t('form.date')}
                 </label>
                 <input
                   type="date"
@@ -333,7 +335,7 @@ function Ingresos() {
                   fontFamily: 'inherit'
                 }}
               >
-                {isSubmitting ? 'Guardando...' : '💾 Guardar Ingreso'}
+                {isSubmitting ? `${t('common.loading')}...` : `💾 ${t('income.addIncome')}` }
               </button>
             </div>
           </form>

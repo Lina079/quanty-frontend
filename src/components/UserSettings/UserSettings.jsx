@@ -1,4 +1,5 @@
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useToast } from '../../contexts/ToastContext';
 import { useNavigate } from 'react-router-dom';
 import './../../blocks/userSettings.css';
@@ -7,15 +8,15 @@ function UserSettings() {
   const navigate = useNavigate();
   const { currency, theme, changeCurrency, changeTheme } = useSettings();
   const { showToast } = useToast();
+  const { language, changeLanguage, languages, t } = useLanguage();
 
   // Opciones de moneda disponibles
   const currencies = [
-    { code: 'EUR', name: 'Euro', symbol: '€' },
-    { code: 'USD', name: 'Dólar Estadounidense', symbol: '$' },
-    { code: 'COP', name: 'Peso Colombiano', symbol: '$' },
-    { code: 'MXN', name: 'Peso Mexicano', symbol: '$' },
-    { code: 'GBP', name: 'Libra Esterlina', symbol: '£' },
-    { code: 'JPY', name: 'Yen Japonés', symbol: '¥' }
+  { code: 'USD', name: t('settings.currencies.USD'), symbol: '$' },
+  { code: 'COP', name: t('settings.currencies.COP'), symbol: '$' },
+  { code: 'MXN', name: t('settings.currencies.MXN'), symbol: '$' },
+  { code: 'GBP', name: t('settings.currencies.GBP'), symbol: '£' },
+  { code: 'JPY', name: t('settings.currencies.JPY'), symbol: '¥' }
   ];
 
   // Manejador para cambiar moneda
@@ -32,21 +33,28 @@ function UserSettings() {
     showToast(`Tema cambiado a ${themeName}`, 'success');
   };
 
+  // Manejador para cambiar idioma
+  const handleChangeLanguage = (newLanguage) => {
+    changeLanguage(newLanguage);
+    const langName = languages[newLanguage]?.name;
+    showToast(`${t('toast.languageChanged')} ${langName}`, 'success');
+  };
+
   return (
     <main className="user-settings-page">
       <div className="user-settings-container">
         
         {/* Título */}
-        <h1 className="user-settings-title">⚙️ Configuración</h1>
+        <h1 className="user-settings-title">⚙️ {t('settings.title')}</h1>
         <p className="user-settings-subtitle">
-          Personaliza tu experiencia en Quanty
+          {t('settings.subtitle')}
         </p>
 
         {/* Sección: Moneda */}
         <section className="settings-section">
-          <h2 className="settings-section-title">💰 Moneda</h2>
+          <h2 className="settings-section-title">💰 {t('settings.currency')}</h2>
           <p className="settings-section-description">
-            Selecciona la moneda que usarás en la aplicación
+            {t('settings.currencyDescription')}
           </p>
           
           <div className="currency-grid">
@@ -69,9 +77,9 @@ function UserSettings() {
 
         {/* Sección Tema */}
         <section className="settings-section">
-          <h2 className="settings-section-title">🎨 Tema</h2>
+          <h2 className="settings-section-title">🎨 {t('settings.theme')}</h2>
           <p className="settings-section-description">
-            Elige entre modo claro u oscuro
+            {t('settings.themeDescription')}
           </p>
           
           <div className="theme-options">
@@ -80,7 +88,7 @@ function UserSettings() {
               className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
             >
               <span className="theme-icon">🌙</span>
-              <span className="theme-name">Modo Oscuro</span>
+              <span className="theme-name">{t('settings.darkMode')}</span>
               {theme === 'dark' && (
                 <span className="theme-check">✓</span>
               )}
@@ -91,11 +99,35 @@ function UserSettings() {
               className={`theme-option ${theme === 'light' ? 'active' : ''}`}
             >
               <span className="theme-icon">☀️</span>
-              <span className="theme-name">Modo Claro</span>
+              <span className="theme-name">{t('settings.lightMode')}</span>
               {theme === 'light' && (
                 <span className="theme-check">✓</span>
               )}
             </button>
+          </div>
+        </section>
+
+        {/* Sección Idioma */}
+        <section className="settings-section">
+          <h2 className="settings-section-tittle">🌐 {t('settings.language')}</h2>
+          <p className="settings-section-description">
+            {t('settings.languageDescription')}
+          </p>
+
+          <div className="theme-options">
+            {Object.values(languages).map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleChangeLanguage(lang.code)}
+                className={`theme-option ${language === lang.code ? 'active' : ''}`}
+                >
+                  <span className="theme-icon">{lang.flag}</span>
+                  <span className="theme-name">{lang.name}</span>
+                  {language === lang.code && (
+                    <span className="theme-check">✓</span>
+                  )}
+                </button>
+            ))}
           </div>
         </section>
 

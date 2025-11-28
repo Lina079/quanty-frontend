@@ -4,6 +4,7 @@ import { CurrentUserProvider } from './contexts/CurrentUserContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { TransactionsProvider } from './contexts/TransactionsContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Dashboard from './components/Dashboard';
@@ -100,13 +101,15 @@ function App () {
   return (
     <BrowserRouter>
       <SettingsProvider>
-        <CurrentUserProvider>
-          <TransactionsProvider>
-            <ToastProvider>
-              <AppContent />
-            </ToastProvider>
-          </TransactionsProvider>
-        </CurrentUserProvider>
+        <LanguageProvider>
+          <CurrentUserProvider>
+            <TransactionsProvider>
+              <ToastProvider>
+                <AppContent />
+              </ToastProvider>
+            </TransactionsProvider>
+          </CurrentUserProvider>
+        </LanguageProvider>
       </SettingsProvider>
     </BrowserRouter>
   );

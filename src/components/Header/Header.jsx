@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import ModalEditarNombre from './ModalEditarNombre';
 import editIcon from '../../images/lapiz_edit_name.png';
 import editIconLight from '../../images/theme-light-images/quanty_edit_pencil_light.png';
@@ -15,6 +16,7 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [modalNombreOpen, setModalNombreOpen] = useState(false);
   const { theme } = useSettings();
+  const { t } = useLanguage();
   
   
   const toggleMenu = () => {
@@ -52,11 +54,11 @@ function Header() {
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
-    { path: '/dashboard', label: 'Inicio' },
-    { path: '/ingresos', label: 'Ingresos' },
-    { path: '/gastos', label: 'Gastos' },
-    { path: '/ahorros', label: 'Ahorros' },
-    { path: '/inversiones', label: 'Inversiones' }
+  { path: '/dashboard', label: t('nav.dashboard') },
+  { path: '/ingresos', label: t('nav.income') },
+  { path: '/gastos', label: t('nav.expenses') },
+  { path: '/ahorros', label: t('nav.savings') },
+  { path: '/inversiones', label: t('nav.investments') }
   ];
 
   return (
@@ -163,7 +165,7 @@ function Header() {
             borderBottom: isActive('/settings') ? '2px solid var(--cyan-accent)' : '2px solid transparent',
             fontSize: '20px'
           }}
-          title="Configuración"
+          title={t('nav.settings')}
           >
             ⚙️
           </Link>
@@ -231,7 +233,7 @@ function Header() {
               e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.3)';
             }}
           >
-            Cerrar sesión
+            {t('nav.logout')}
           </button>
         </nav>
 
@@ -306,7 +308,7 @@ function Header() {
               transition: 'color 0.2s',
             }}
             >
-            ⚙️ Configuración
+            ⚙️ {t('nav.settings')}
             </Link>
           
           {/* Nombre clickeable en móvil */}
@@ -323,7 +325,7 @@ function Header() {
               color: 'var(--text-secondary)',
               fontSize: '14px'
             }}>
-              Usuario
+              {t('common.user')}
             </span>
             <p style={{
               color: 'var(--cyan-accent)',
@@ -364,7 +366,7 @@ function Header() {
               fontFamily: 'inherit'
             }}
           >
-            Cerrar sesión
+            {t('nav.logout')}
           </button>
         </nav>
       </header>

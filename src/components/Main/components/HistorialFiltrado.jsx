@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useLanguage } from '../../../contexts/LanguageContext';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCurrency }) {
@@ -8,6 +9,12 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
   });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const { t } = useLanguage();
+  const translateCategory = (categoria) => {
+  const key = categoria.toLowerCase().replace(/\s+/g, '-');
+  const translated = t(`categoryLabels.${key}`);
+  return translated !== `categoryLabels.${key}` ? translated : categoria;
+  };
 
   // Detectar cambios de tamaño de pantalla
   useEffect(() => {
@@ -23,22 +30,22 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
     expense: {
       color: '#EF4444',
       emoji: '💸',
-      label: 'Gastos'
+      label: t('nav.expenses')
     },
     income: {
       color: '#10B981',
       emoji: '💰',
-      label: 'Ingresos'
+      label: t('nav.income')
     },
     saving: {
       color: '#F59E0B',
       emoji: '🏦',
-      label: 'Ahorros'
+      label: t('nav.savings')
     },
     investment: {
       color: '#8B5CF6',
       emoji: '📈',
-      label: 'Inversiones'
+      label: t('nav.investments')
     }
   };
 
@@ -92,10 +99,10 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
     });
 
     return Object.entries(grouped).map(([name, total]) => ({
-      name,
+      name: translateCategory(name),
       total: parseFloat(total.toFixed(2))
     }));
-  }, [filteredTransactions]);
+  }, [filteredTransactions, t]);
 
   // Notificar al padre cuando cambian los totales filtrados
   useEffect(() => {
@@ -124,13 +131,13 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-      <h3 style={{ marginBottom: '20px' }}>Historial de {currentConfig.label}</h3>
+      <h3 style={{ marginBottom: '20px' }}>{t('history.title')} {currentConfig.label}</h3>
 
       {allTransactions.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', padding: '60px 20px' }}>
           <p style={{ fontSize: '48px', margin: '0 0 16px' }}>📊</p>
           <p style={{ color: 'var(--text-secondary)' }}>
-            No hay {currentConfig.label.toLowerCase()} registrados. ¡Comienza agregando uno!
+            {t('history.noRecords')} {t('history.startAdding')}
           </p>
         </div>
       ) : (
@@ -145,10 +152,10 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
             }}>
               {['day', 'week', 'month', 'year'].map((filter) => {
                 const labels = {
-                  day: '📅 Por Día',
-                  week: '📅 Por Semana',
-                  month: '📆 Por Mes',
-                  year: '📊 Por Año'
+                  day: `📅  ${t('history.byDay')}`,
+                  week: `📅  ${t('history.byWeek')}`,
+                  month: `📆  ${t('history.byMonth')}`,
+                  year: `📊  ${t('history.byYear')}` 
                 };
                 return (
                   <button
@@ -189,7 +196,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
                 gap: '12px'
               }}>
                 <label style={{ fontSize: '15px', fontWeight: '600' }}>
-                  Seleccionar mes:
+                  {t('history.selectMonth')}:
                 </label>
                 <input
                   className="month-selector"
@@ -218,10 +225,10 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
           {chartData.length > 0 ? (
             <div className="card" style={{ marginBottom: '20px', padding: '24px' }}>
               <h4 style={{ marginBottom: '12px', textAlign: 'center' }}>
-                {filterType === 'day' && 'Hoy'}
-                {filterType === 'week' && 'Esta semana'}
-                {filterType === 'month' && new Date(selectedMonth + '-01').toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
-                {filterType === 'year' && 'Este año'}
+                {filterType === 'day' && t('history.today')}
+                {filterType === 'week' && t('history.thisWeek')}
+                {filterType === 'month' && new Date(selectedMonth + '-01').toLocaleDateString(t('common.locale'), { month: 'long', year: 'numeric' })}
+                {filterType === 'year' && t('history.thisYear')}
               </h4>
               
               <div style={{ textAlign: 'center', marginBottom: '24px' }}>
@@ -346,7 +353,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
             <div className="card" style={{ textAlign: 'center', padding: '40px 20px', marginBottom: '20px' }}>
               <p style={{ fontSize: '36px', margin: '0 0 12px' }}>📭</p>
               <p style={{ color: 'var(--text-secondary)' }}>
-                No hay {currentConfig.label.toLowerCase()} en este período
+                {t('history.noPeriod')} 
               </p>
             </div>
           )}
@@ -380,7 +387,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
                         textTransform: 'capitalize', 
                         fontSize: '18px' 
                       }}>
-                        {transaction.categoria}
+                        {translateCategory(transaction.categoria)}
                       </h3>
                       {transaction.descripcion && (
                         <p style={{ 
@@ -396,7 +403,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
                         color: 'var(--text-secondary)', 
                         margin: 0 
                       }}>
-                        {new Date(transaction.fecha).toLocaleDateString('es-ES')}
+                        {new Date(transaction.fecha).toLocaleDateString(t('common.locale'))}
                       </p>
                     </div>
                     <div style={{ textAlign: 'right', marginLeft: 'auto' }}>
@@ -437,7 +444,7 @@ function HistorialFiltrado({ type, onDelete, data = [], onTotalChange, formatCur
               <div className="card" style={{ textAlign: 'center', padding: '40px 20px' }}>
                 <p style={{ fontSize: '36px', margin: '0 0 12px' }}>📭</p>
                 <p style={{ color: 'var(--text-secondary)' }}>
-                  No hay {currentConfig.label.toLowerCase()} para mostrar en este período
+                  {t('history.noPeriod')}
                 </p>
               </div>
             )}

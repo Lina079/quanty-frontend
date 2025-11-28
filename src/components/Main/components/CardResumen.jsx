@@ -1,4 +1,5 @@
 import { useSettings } from '../../../contexts/SettingsContext';
+import { useLanguage } from '../../../contexts/LanguageContext';
 import quantumHalfDefault from '../../../images/quantum_half_fade_256x256.png';
 import quantumHalfLight from '../../../images/theme-light-images/quantum-halfbody2-light.png';
 import quantumInvestLight from '../../../images/theme-light-images/quantum-investment-light.png';
@@ -13,7 +14,10 @@ function CardResumen({
   esPeriodoFiltrado = false,
   imagenQuantum = quantumHalfDefault,
   formatCurrency
-}) {
+  }) {
+
+  const { theme } = useSettings();
+  const { t } = useLanguage();
   
   // Configuración según el tipo
   const config = {
@@ -21,39 +25,41 @@ function CardResumen({
       color: '#4ADE80',
       gradiente: 'linear-gradient(180deg, #4ADE80 0%, #22C55E 100%)',
       colorCancelado: 'rgba(74, 222, 128, 0.2)',
-      singular: 'ingreso',
-      plural: 'ingresos',
-      textoBoton: 'Agregar Ingreso'
+      totalLabel: t('income.totalIncome'),
+      periodoText: t('income.inPeriod'),
+      registeredText: t('income.registered'),
+      textoBoton: t('income.addIncome')
     },
     gastos: {
       color: '#EF4444',
       gradiente: 'linear-gradient(180deg, #2BE3FF 0%, #12B4D6 100%)',
       colorCancelado: 'rgba(239, 68, 68, 0.2)',
-      singular: 'gasto',
-      plural: 'gastos',
-      textoBoton: 'Agregar Gasto'
+      totalLabel: t('expenses.totalExpenses'),
+      periodoText: t('expenses.inPeriod'),
+      registeredText: t('expenses.registered'),
+      textoBoton: t('expenses.addExpense')
     },
     ahorros: {
       color: 'var(--cyan-accent)',
       gradiente: 'linear-gradient(180deg, #38E1FF 0%, #12B4D6 100%)',
       colorCancelado: 'rgba(56, 225, 255, 0.2)',
-      singular: 'ahorro',
-      plural: 'ahorros',
-      textoBoton: 'Agregar Ahorro'
+      totalLabel: t('saving.totalSavings'),
+      periodoText: t('saving.inPeriod'),
+      registeredText: t('savings.registered'),
+      textoBoton: t('savings.addSaving')
     },
     inversiones: {
       color: '#8B5CF6',
       gradiente: 'linear-gradient(180deg, #A78BFA 0%, #8B5CF6 100%)',
       colorCancelado: 'rgba(139, 92, 246, 0.2)',
-      singular: 'inversión',
-      plural: 'inversiones',
-      textoBoton: 'Agregar Inversión'
+      totalLabel: t('investments.totalInvestments'),
+      periodoText: t('investments.inPeriod'),
+      registeredText: t('investments.registered'),
+      textoBoton: t('investments.addInvestment')
     }
   };
 
   const currentConfig = config[tipo];
-
-  const { theme } = useSettings();
 
   // Determinar qué imagen usar según tema
   const getQuantumImage = () => {
@@ -116,7 +122,7 @@ function CardResumen({
         }}>
           <div>
             <h3 style={{ marginBottom: '8px' }}>
-              Total {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
+              {currentConfig.totalLabel}
             </h3>
             <p style={{ 
               fontSize: 'clamp(18px, 5vw, 36px)', 
@@ -131,7 +137,7 @@ function CardResumen({
               marginTop: '4px', 
               fontSize: '14px' 
             }}>
-              {cantidad} {cantidad === 1 ? currentConfig.singular : currentConfig.plural} {esPeriodoFiltrado ? 'en este período' : 'registrados'}
+              {cantidad} {esPeriodoFiltrado ? currentConfig.periodoText : currentConfig.registeredText}
             </p>
           </div>
           <button
@@ -153,7 +159,7 @@ function CardResumen({
               transition: 'all 0.2s'
             }}
           >
-            {mostrarFormulario ? '✕ Cancelar' : `+ ${currentConfig.textoBoton}`}
+            {mostrarFormulario ? `x ${t('common.cancel')}` : `+ ${currentConfig.textoBoton}`}
           </button>
         </div>
       </div>

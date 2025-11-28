@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useContext, useMemo } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useSettings } from '../contexts/SettingsContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { useTransactions } from '../contexts/TransactionsContext';
 import quantumImg from '../images/quantum_half_fade_256x256.png';
 import quantumImgLight from '../images/theme-light-images/quantum-halfbody2-light.png';
@@ -14,6 +15,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const { currentUser } = useContext(CurrentUserContext);
   const { formatCurrency, theme } = useSettings();
+  const { t } = useLanguage();
   const { gastos, ingresos, ahorros, inversiones, isLoading } = useTransactions();
   const [periodo, setPeriodo] = useState('mes');
 
@@ -71,7 +73,7 @@ function Dashboard() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando tu dashboard...
+            {t('common.loading')}...
           </p>
         </div>
       </main>
@@ -101,10 +103,10 @@ function Dashboard() {
 
         <div style={{ flex: 1 }}>
           <h1 style={{ margin: '0 0 12px', fontSize: '28px' }}>
-            Bienvenid@ a Quanty, {currentUser?.name || 'Usuario'}
+            {t('dashboard.welcome')}, {currentUser?.name || t('common.user')}
           </h1>
           <p className="subtitle" style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}>
-            Yo soy Quantum y estoy aquí para que juntos llevemos tus finanzas a un nivel cuántico! ✨
+            {t('dashboard.subtitle')} ✨
           </p>
         </div>
       </div>
@@ -136,7 +138,7 @@ function Dashboard() {
             transition: 'all 0.2s'
           }}
         >
-          📅 Mes actual
+          📅 {t('dashboard.currentMonth')}
         </button>
         
         <button
@@ -159,7 +161,7 @@ function Dashboard() {
             transition: 'all 0.2s'
           }}
         >
-          📊 Año actual
+          📊 {t('dashboard.currentYear')}
         </button>
       </div>
 
@@ -183,12 +185,12 @@ function Dashboard() {
           <div className="card__icon">
             <img src={iconoIngresos} alt="Ingresos" />
           </div>
-          <h3>Ingreso</h3>
+          <h3>{t('dashboard.income')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
             {formatCurrency(financialData.ingresos.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para gestionar
+            👉 {t('dashboard.clickToManage')}
           </p>
         </div>
 
@@ -201,12 +203,12 @@ function Dashboard() {
           <div className="card__icon">
             <img src={iconoInversion} alt="Inversión" />
           </div>
-          <h3>Inversión</h3>
+          <h3>{t('dashboard.investment')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: '#8B5CF6', marginTop: '12px' }}>
             {formatCurrency(financialData.inversion.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para gestionar
+            👉 {t('dashboard.clickToManage')}
           </p>
         </div>
 
@@ -219,12 +221,12 @@ function Dashboard() {
           <div className="card__icon">
             <img src={iconoGastos} alt="Gastos" />
           </div>
-          <h3>Gastos</h3>
+          <h3>{t('dashboard.expenses')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: '#EF4444', marginTop: '12px' }}>
             {formatCurrency(financialData.gastos.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para gestionar
+            👉 {t('dashboard.clickToManage')}
           </p>
         </div>      
 
@@ -237,12 +239,12 @@ function Dashboard() {
           <div className="card__icon">
             <img src={iconoAhorro} alt="Ahorro" />
           </div>
-          <h3>Ahorro</h3>
+          <h3>{t('dashboard.savings')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 32px)', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '12px' }}>
             {formatCurrency(financialData.ahorro.monto)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            👉 Click para gestionar
+            👉 {t('dashboard.clickToManage')}
           </p>
         </div> 
       </section>
