@@ -37,9 +37,38 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "loginButton": "Log in",
-    "registerButton": "Create account"
-  },
-  "dashboard": {
+    "registerButton": "Create account",
+    "welcomeBack": "Welcome back",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "Min. 8 alphanumeric characters",
+    "loginSuccess": "Login successful!",
+    "invalidCredentials": "Invalid credentials. Please try again.",
+    "recoverAccount": "Recover account?",
+    "joinQuanty": "Join Quanty",
+    "welcome": "Welcome",
+    "confirmPassword": "Confirm password",
+    "namePlaceholder": "Your name",
+    "confirmPasswordPlaceholder": "Repeat your password",
+    "emailAlreadyExists": "This email is already registered. Try another one."
+    },
+    "validation": {
+    "invalidEmail": "Please enter a valid email address",
+    "passwordRequirements": "Minimum 8 characters, must contain letters and numbers",
+    "passwordsNotMatch": "Passwords do not match",
+    "nameLength": "Name must be between 2 and 30 characters"
+    },
+    "editName": {
+    "title": "Edit name",
+    "subtitle": "Personalize your Quanty experience",
+    "label": "Your name or nickname",
+    "placeholder": "E.g.: Mary Jane",
+    "characters": "characters",
+    "emptyError": "Name cannot be empty",
+    "lettersOnly": "Only letters allowed (no numbers or special characters)",
+    "minLength": "Name must have at least 2 letters",
+    "maxLength": "Name cannot exceed 30 letters"
+    },
+    "dashboard": {
     "welcome": "Welcome to Quanty",
     "subtitle": "I'm Quantum and I'm here to help you take your finances to a quantum level!",
     "currentMonth": "Current month",
@@ -84,7 +113,8 @@
     "totalInvestment": "Total Investment",
     "seeDetail": "See details",
     "howYouUseIncome": "How do you use your income?",
-    "ofIncome": "of income"
+    "ofIncome": "of income",
+    "quantumMessage": "Your financial overview at a glance. Knowledge is power!"
   },
   "income": {
     "title": "Income Management",
@@ -94,7 +124,7 @@
     "totalIncome": "Total Income",
     "registered": "registered",
     "inPeriod": "in this period",
-    "quantumMessage": "💰 Every income counts! Record everything to see the full picture."
+    "quantumMessage": "💚 Every income counts! Record everything to see the full picture."
   },
   "incomeCategories": {
   "salary": "💼 Salary",
@@ -126,7 +156,12 @@
   "retiro": "Retirement",
   "bitcoin": "Bitcoin",
   "ethereum": "Ethereum",
-  "oro": "Gold"
+  "oro": "Gold",
+  "tranquilidad": "Emergency Fund",
+  "invertir": "Savings to Invest",
+  "viajar": "Travel Fund",
+  "casa": "House Fund",
+  "carro": "Car Fund"
   },
   "expenses": {
     "title": "Expense Management",
@@ -138,6 +173,19 @@
     "inPeriod": "in this period",
     "quantumMessage": "💸 Knowing your expenses is the first step to controlling them."
   },
+  "expenseCategories": {
+  "rent": "🏠 Rent",
+  "mortgage": "🏠 Mortgage",
+  "groceries": "🛒 Groceries",
+  "utilities": "💡 Utilities",
+  "transport": "🚗 Transport",
+  "creditCard": "💳 Credit Card",
+  "gym": "💪 Gym",
+  "health": "🏥 Health",
+  "travel": "✈️ Travel",
+  "entertainment": "🎉 Entertainment",
+  "other": "📝 Other"
+  },
   "savings": {
     "title": "Savings Management",
     "subtitle": "Build your financial future",
@@ -147,8 +195,16 @@
     "registered": "registered",
     "inPeriod": "in this period",
     "quantumMessage": "💎 Saving is planting seeds for your future. Every bit counts!"
-  },
-  "investments": {
+    },
+    "savingsCategories": {
+    "emergency": "🛡️ Peace of Mind Fund",
+    "invest": "📈 Savings to Invest",
+    "travel": "✈️ Travel Fund",
+    "house": "🏠 House Fund",
+    "car": "🚗 Car Fund",
+    "other": "📝 Other"
+    },
+    "investments": {
     "title": "Real-Time Prices",
     "subtitle": "Track your investments",
     "newInvestment": "New Investment",
@@ -166,9 +222,11 @@
     "totalInvested": "Total invested",
     "currentValue": "Current value",
     "gainLoss": "Gain/Loss",
-    "loadingPrices": "Loading real-time prices..."
-  },
-  "form": {
+    "loadingPrices": "Loading real-time prices...",
+    "marketDataBy": "Real-time market data provided by",
+    "referenceValue": "S&P 500 is a reference value"
+    },
+    "form": {
     "category": "Category",
     "amount": "Amount",
     "description": "Description",
@@ -217,5 +275,19 @@
     "tip6": "Set clear and achievable financial goals.",
     "tip7": "Review your expenses weekly to stay in control.",
     "tip8": "The best time to start saving was yesterday. The second best is today."
-  }
+  },
+  "months": {
+  "january": "January",
+  "february": "February",
+  "march": "March",
+  "april": "April",
+  "may": "May",
+  "june": "June",
+  "july": "July",
+  "august": "August",
+  "september": "September",
+  "october": "October",
+  "november": "November",
+  "december": "December"
+}
 }

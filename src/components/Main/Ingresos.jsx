@@ -358,7 +358,7 @@ function Ingresos() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmarEliminar}
-        mensaje="Este ingreso se eliminará permanentemente."
+        mensaje={t('modal.permanentDelete')}
       />
     </main>
   );

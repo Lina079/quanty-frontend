@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../contexts/ToastContext';
 import { useContext } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './../../blocks/login.css';
 import quantumFull from '../../images/Quantum-allBody.png';
@@ -15,6 +16,7 @@ function Register() {
   const { showToast } = useToast();
   const { login } = useContext(CurrentUserContext);
   const { theme } = useSettings();
+  const { t, randomTip } = useLanguage();
 
   // ========== ESTADOS DEL FORMULARIO ==========
   // Estados para los valores de los campos
@@ -37,22 +39,7 @@ function Register() {
 
   // ========== TIPS FINANCIEROS ALEATORIOS ==========
   // Array de consejos que Quantum mostrará
-  const tipsFinancieros = [
-    "Un buen presupuesto es clave para tus finanzas.",
-    "Ahorra al menos el 20% de tus ingresos cada mes.",
-    "Invierte en tu educación financiera constantemente.",
-    "Diversifica tus inversiones para minimizar riesgos.",
-    "Evita deudas innecesarias, tu futuro te lo agradecerá.",
-    "Establece metas financieras claras y alcanzables.",
-    "Revisa tus gastos semanalmente para mantener control.",
-    "El mejor momento para empezar a ahorrar fue ayer. El segundo mejor es hoy."
-  ];
-
-  // Seleccionar UN tip aleatorio cuando se carga el componente
-  const [tipActual] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * tipsFinancieros.length);
-    return tipsFinancieros[randomIndex];
-  });
+  const [tipActual] = useState(() => randomTip());
 
   // ========== FUNCIONES DE VALIDACIÓN ==========
   
@@ -111,7 +98,7 @@ function Register() {
     
     if (value.length > 0) {
       if (!validarEmail(value)) {
-        setEmailError('Introduce un correo electrónico válido');
+        setEmailError(t('validation.invalidEmail'));
       } else {
         setEmailError('');
       }
@@ -130,7 +117,7 @@ function Register() {
     
     if (value.length > 0) {
       if (!validarPasswordAlfanumerica(value)) {
-        setPasswordError('Mínimo 8 caracteres, debe contener letras y números');
+        setPasswordError(t('validation.passwordRequirements'));
       } else {
         setPasswordError('');
       }
@@ -141,7 +128,7 @@ function Register() {
     // Si ya escribió en confirmar password, revalidar coincidencia
     if (confirmPassword.length > 0) {
       if (!validarPasswordsCoinciden(value, confirmPassword)) {
-        setConfirmPasswordError('Las contraseñas no coinciden');
+        setConfirmPasswordError(t('validation.passwordsNotMatch'));
       } else {
         setConfirmPasswordError('');
       }
@@ -158,7 +145,7 @@ function Register() {
     
     if (value.length > 0) {
       if (!validarPasswordsCoinciden(password, value)) {
-        setConfirmPasswordError('Las contraseñas no coinciden');
+        setConfirmPasswordError(t('validation.passwordsNotMatch'));
       } else {
         setConfirmPasswordError('');
       }
@@ -177,7 +164,7 @@ function Register() {
     
     if (value.length > 0) {
       if (!validarNombre(value)) {
-        setNameError('El nombre debe tener entre 2 y 30 caracteres');
+        setNameError(t('validation.nameLength'));
       } else {
         setNameError('');
       }
@@ -233,14 +220,14 @@ function Register() {
       //Obtoner datos del usuario
       const userData = await MainApi.getCurrentUser(response.token);
 
-      showToast(`Bienvenid@, ${name}!`, 'success');
+      showToast(`${t('auth.welcome')}, ${name}!`, 'success');
 
       setTimeout(() => {
         login(userData, response.token);
       }, 1000);
     } catch (error) {
       console.error ('Error en registro:', error);
-      setServerError(error || 'Este mail ya esta registrado. Intenta de nuevo, con otro.');
+      setServerError(error || t('auth.emailAlreadyExists'));
     } finally {
       setIsLoading(false);
     }
@@ -258,7 +245,7 @@ function Register() {
         </div>
 
         {/* Título del registro */}
-        <h2 className="login-subtitle">Únete a Quanty</h2>
+        <h2 className="login-subtitle">{t('auth.joinQuanty')}</h2>
 
         {/* Layout: Quantum (secundario) + Formulario (protagonista) */}
         <div className="login-main-layout">
@@ -284,7 +271,7 @@ function Register() {
               {/* Campo de Nombre */}
               <div className="login-form-group">
                 <label htmlFor="name" className="login-label">
-                  Nombre
+                  {t('auth.name')}
                 </label>
                 <input
                   id="name"
@@ -292,7 +279,7 @@ function Register() {
                   className={`login-input ${nameError ? 'login-input-error' : ''}`}
                   value={name}
                   onChange={handleNameChange}
-                  placeholder="Tu nombre"
+                  placeholder={t('auth.namePlaceholder')}
                   disabled={isLoading}
                 />
                 {nameError && (
@@ -303,7 +290,7 @@ function Register() {
               {/* Campo de Correo Electrónico */}
               <div className="login-form-group">
                 <label htmlFor="email" className="login-label">
-                  Correo electrónico
+                  {t('auth.email')}
                 </label>
                 <input
                   id="email"
@@ -311,7 +298,7 @@ function Register() {
                   className={`login-input ${emailError ? 'login-input-error' : ''}`}
                   value={email}
                   onChange={handleEmailChange}
-                  placeholder="tu@email.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   disabled={isLoading}
                 />
                 {emailError && (
@@ -322,7 +309,7 @@ function Register() {
               {/* Campo de Contraseña */}
               <div className="login-form-group">
                 <label htmlFor="password" className="login-label">
-                  Contraseña
+                  {t('auth.password')}
                 </label>
                 <input
                   id="password"
@@ -330,7 +317,7 @@ function Register() {
                   className={`login-input ${passwordError ? 'login-input-error' : ''}`}
                   value={password}
                   onChange={handlePasswordChange}
-                  placeholder="Mín. 8 caracteres alfanuméricos"
+                  placeholder={t('auth.passwordPlaceholder')}
                   disabled={isLoading}
                 />
                 {passwordError && (
@@ -341,7 +328,7 @@ function Register() {
               {/* Campo de Confirmar Contraseña */}
               <div className="login-form-group">
                 <label htmlFor="confirmPassword" className="login-label">
-                  Confirmar contraseña
+                  {t('auth.confirmPassword')}
                 </label>
                 <input
                   id="confirmPassword"
@@ -349,7 +336,7 @@ function Register() {
                   className={`login-input ${confirmPasswordError ? 'login-input-error' : ''}`}
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
-                  placeholder="Repite tu contraseña"
+                  placeholder={t('auth.confirmPasswordPlaceholder')}
                   disabled={isLoading}
                 />
                 {confirmPasswordError && (
@@ -370,7 +357,7 @@ function Register() {
                 className="login-button"
                 disabled={!isFormValid() || isLoading}
               >
-                {isLoading ? 'Registrando...' : 'Registrarse'}
+                {isLoading ? `${t('common.loading')}...` : t('auth.registerButton')}
               </button>
 
             </form>
@@ -378,12 +365,12 @@ function Register() {
             {/* Links de navegación */}
             <div className="login-links">
               <p>
-                ¿Ya tienes cuenta?{' '}
+                {t('auth.haveAccount')}{' '}
                 <span 
                   className="login-link"
                   onClick={() => navigate('/login')}
                 >
-                  Inicia sesión
+                  {t('auth.login')}
                 </span>
               </p>
             </div>

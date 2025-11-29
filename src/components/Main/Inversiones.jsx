@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useTransactions } from '../../contexts/TransactionsContext';
 import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
@@ -22,6 +23,7 @@ function Inversiones() {
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol, currency } = useSettings();
+  const { t } = useLanguage();
 
   // Usar ref para evitar loop infinito
   const inversionesFiltradasRef = useRef([]);
@@ -42,7 +44,7 @@ function Inversiones() {
     e.preventDefault();
     
     if (!formData.activo || !formData.cantidad || !formData.precioCompra) {
-      showToast('Por favor completa los campos obligatorios', 'error');
+      showToast((t('form.requiredFields')), 'error');
       return;
     }
 
@@ -64,7 +66,7 @@ function Inversiones() {
         precioCompra: precioCompra
       });
 
-      showToast('Inversión guardada correctamente', 'success');
+      showToast(t('toast.savedSuccess'), 'success');
       
       setFormData({
         activo: '',
@@ -76,7 +78,7 @@ function Inversiones() {
       setMostrarFormulario(false);
     } catch (error) {
       console.error('Error al guardar inversión:', error);
-      showToast(error || 'Error al guardar la inversión', 'error');
+      showToast(error || t('toast.errorSaving'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -90,10 +92,10 @@ function Inversiones() {
   const confirmarEliminar = async () => {
     try {
       await deleteTransaction(inversionAEliminar._id);
-      showToast('Inversión eliminada correctamente', 'success');
+      showToast(t('toast.deletedSuccess'), 'success');
     } catch (error) {
       console.error('Error al eliminar inversión:', error);
-      showToast(error || 'Error al eliminar la inversión', 'error');
+      showToast(error || t('toast.errorDeleting'), 'error');
     } finally {
       setModalOpen(false);
       setInversionAEliminar(null);
@@ -137,7 +139,7 @@ function Inversiones() {
         icon: 'Ξ'
       },
       {
-        name: 'Oro',
+        name: t('categoryLabels.oro'),
         symbol: 'GOLD',
         price: prices.gold.price,
         change: prices.gold.change24h,
@@ -235,7 +237,7 @@ function Inversiones() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando inversiones...
+            {t('common.loading')}...
           </p>
         </div>
       </main>
@@ -248,7 +250,7 @@ function Inversiones() {
         tipo="inversiones"
         total={totalInversiones}
         cantidad={cantidadInversiones}
-        mensaje="Diversificar es multiplicar posibilidades 🌍✨"
+        mensaje={t('investments.quantumMessage')}
         mostrarFormulario={mostrarFormulario}
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
@@ -256,19 +258,19 @@ function Inversiones() {
         formatCurrency={formatCurrency}
       />
       
-      <h1 style={{ textAlign: 'center', marginBottom: '40px' }}>Precios en Tiempo Real</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '40px' }}>{t('investments.title')}</h1>
 
       {/* Formulario */}
       {mostrarFormulario && (
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
             <div className="card">
-              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nueva Inversión</h3>
+              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>{t('investments.newInvestment')}</h3>
 
               {/* Activo */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Activo *
+                  {t('investments.asset')} *
                 </label>
                 <select
                   value={formData.activo}
@@ -286,10 +288,10 @@ function Inversiones() {
                   required
                   disabled={isSubmitting}
                 >
-                  <option value="">Selecciona un activo</option>
+                  <option value="">{t('form.selectAsset')}</option>
                   <option value="bitcoin">₿ Bitcoin</option>
                   <option value="ethereum">Ξ Ethereum</option>
-                  <option value="oro">🪙 Oro</option>
+                  <option value="oro">🪙 {t('categoryLabels.oro')}</option>
                   <option value="sp500">📈 S&P 500</option>
                 </select>
               </div>
@@ -297,7 +299,7 @@ function Inversiones() {
               {/* Cantidad */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Cantidad *
+                  {t('investments.quantity')} *
                 </label>
                 <input
                   type="number"
@@ -324,7 +326,7 @@ function Inversiones() {
               {/* Precio de Compra */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Precio de Compra ({getCurrencySymbol()}) *
+                  {t('investments.purchasePrice')} ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -352,13 +354,13 @@ function Inversiones() {
               {/* Descripción */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Descripción
+                  {t('form.description')}
                 </label>
                 <input
                   type="text"
                   value={formData.descripcion}
                   onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-                  placeholder="Opcional"
+                  placeholder={t('form.optional')}
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -376,7 +378,7 @@ function Inversiones() {
               {/* Fecha */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Fecha
+                  {t('form.date')}
                 </label>
                 <input
                   type="date"
@@ -414,7 +416,7 @@ function Inversiones() {
                   fontFamily: 'inherit'
                 }}
               >
-                {isSubmitting ? 'Guardando...' : '💾 Guardar Inversión'}
+                {isSubmitting ? `${t('common.loading')}...` : `💾 ${t('investments.addInvestment')}`}
               </button>
             </div>
           </form>
@@ -433,7 +435,7 @@ function Inversiones() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando precios en tiempo real...
+            {t('investments.loadingPrices')}
           </p>
         </div>
       )}
@@ -452,24 +454,24 @@ function Inversiones() {
               <div className="card">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
                   <span style={{ fontSize: '32px' }}>💎</span>
-                  <h2 style={{ margin: 0 }}>Rendimiento de tus Inversiones</h2>
+                  <h2 style={{ margin: 0 }}>{t('investments.performance')}</h2>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
                   <div>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>Total invertido:</p>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>{t('investments.totalInvested')}:</p>
                     <p style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>
                       {formatCurrency(totalInversiones)}
                     </p>
                   </div>
                   <div>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>Valor actual:</p>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>{t('investments.currentValue')}</p>
                     <p style={{ fontSize: '24px', fontWeight: '700', margin: 0 }}>
                       {formatCurrency(totalValorActual)}
                     </p>
                   </div>
                   <div>
-                    <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>Ganancia/Pérdida:</p>
+                    <p style={{ color: 'var(--text-secondary)', marginBottom: '8px', fontSize: '14px' }}>{t('investments.gainLoss')}</p>
                     <p style={{ 
                       fontSize: '28px', 
                       fontWeight: '800', 
@@ -506,9 +508,9 @@ function Inversiones() {
                 fontWeight: '700',
                 color: 'var(--text-secondary)'
               }}>
-              <div>Activo</div>
-              <div>Precio actual</div>
-              <div>Variación 24h</div>
+              <div>{t('investments.asset')}</div>
+              <div>{t('investments.currentPrice')}</div>
+              <div>{t('investments.variation24h')}</div>
             </div>
 
             {marketData.map((asset, index) => (
@@ -546,14 +548,14 @@ function Inversiones() {
                   
                   <div style={{ display: 'grid', gap: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>Precio actual:</span>
+                      <span style={{ color: 'var(--text-secondary)' }}>{t('investments.currentPrice')}:</span>
                       <span style={{ fontWeight: '600', color: 'var(--cyan-accent)' }}>
                         {formatCurrency(asset.price)}
                       </span>
                     </div>
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>Variación 24h:</span>
+                      <span style={{ color: 'var(--text-secondary)' }}>{t('investments.variation24h')}:</span>
                       <span style={{ 
                         fontWeight: '700',
                         fontSize: '18px',
@@ -591,7 +593,7 @@ function Inversiones() {
               marginBottom: '8px',
               lineHeight: '1.6'
             }}>
-              📊 Datos de mercado en tiempo real proporcionados por{' '}
+              📊 {t('investments.marketDataBy')}{' '}
               <a 
                 href="https://www.coingecko.com/" 
                 target="_blank" 
@@ -611,7 +613,7 @@ function Inversiones() {
               margin: 0,
               opacity: 0.7
             }}>
-              S&P 500 es un valor de referencia
+              {t('investments.referenceValue')}
             </p>
           </div>
         </>
@@ -621,7 +623,7 @@ function Inversiones() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmarEliminar}
-        mensaje="Esta inversión se eliminará permanentemente."
+        mensaje={t('modal.permanentDelete')}
       />
     </main>
   );

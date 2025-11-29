@@ -9,12 +9,14 @@ import quantumHalfLight from '../../images/theme-light-images/quantum-fullbody-t
 import logoQuanty from '../../images/quanty-logo-gold.png';
 import * as MainApi from '../../utils/MainApi';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 function Login() {
     const navigate = useNavigate();
     const { showToast } = useToast();
     const { login } = useContext(CurrentUserContext);
     const { theme } = useSettings();
+    const { t, randomTip } = useLanguage();
 
 // ========== ESTADOS DEL FORMULARIO ==========
   // Estos estados guardan lo que el usuario escribe
@@ -32,22 +34,7 @@ function Login() {
   const [serverError, setServerError] = useState('');
 
   // ========== TIPS FINANCIEROS ALEATORIOS ==========
-  // Array (lista) de consejos que Quantum mostrará
-  const tipsFinancieros = [
-    "Un buen presupuesto es clave para tus finanzas.",
-    "Ahorra al menos el 20% de tus ingresos cada mes.",
-    "Invierte en tu educación financiera constantemente.",
-    "Diversifica tus inversiones para minimizar riesgos.",
-    "Evita deudas innecesarias, tu futuro te lo agradecerá.",
-    "Establece metas financieras claras y alcanzables.",
-    "Revisa tus gastos semanalmente para mantener control."
-  ];
-
-  // Seleccionar UN tip aleatorio cuando se carga el componente
-  const [tipActual] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * tipsFinancieros.length);
-    return tipsFinancieros[randomIndex];
-  });
+  const [tipActual] = useState(() => randomTip());
 
   // ========== FUNCIONES DE VALIDACIÓN ==========
   
@@ -94,7 +81,7 @@ function Login() {
     // Validar solo si el usuario ha empezado a escribir
     if (value.length > 0) {
       if (!validarEmail(value)) {
-        setEmailError('Introduce un correo electrónico válido');
+        setEmailError(t('validation.invalidEmail'));
       } else {
         setEmailError('');
       }
@@ -114,7 +101,7 @@ function Login() {
     // Validar solo si el usuario ha empezado a escribir
     if (value.length > 0) {
       if (!validarPasswordAlfanumerica(value)) {
-        setPasswordError('Mínimo 8 caracteres, debe contener letras y números');
+        setPasswordError(t('validation.passwordRequirements'));
       } else {
         setPasswordError('');
       }
@@ -161,7 +148,7 @@ function Login() {
 
       const userData = await MainApi.getCurrentUser(response.token);
 
-      showToast('¡Inicio de sesión exitoso!', 'success');
+      showToast((t('auth.loginSuccess')), 'success');
       
       setTimeout(() => {
         login(userData, response.token);
@@ -169,7 +156,7 @@ function Login() {
 
     } catch(error) {
       console.error('Error en login:', error);
-      setServerError(error || 'Credenciales incorrectas. Por favor, intenta de nuevo.');
+      setServerError(error || t('auth.invalidCredentials'));
     } finally {
       setIsLoading(false);
     }
@@ -187,7 +174,7 @@ function Login() {
         </div>
 
         {/* Saludo */}
-        <h2 className="login-subtitle">Bienvenid@ de nuevo</h2>
+        <h2 className="login-subtitle">{t('auth.welcomeBack')}</h2>
 
         {/* Layout: Quantum (secundario) + Formulario (protagonista) */}
         <div className="login-main-layout">
@@ -211,7 +198,7 @@ function Login() {
           {/* Campo de Correo Electrónico */}
           <div className="login-form-group">
             <label htmlFor="email" className="login-label">
-              Correo electrónico
+              {t('auth.email')}
             </label>
             <input
               id="email"
@@ -219,7 +206,7 @@ function Login() {
               className={`login-input ${emailError ? 'login-input-error' : ''}`}
               value={email}
               onChange={handleEmailChange}
-              placeholder="tu@email.com"
+              placeholder={t('auth.emailPlaceholder')}
               disabled={isLoading}
             />
             {/* Mostrar error de email si existe */}
@@ -231,7 +218,7 @@ function Login() {
           {/* Campo de Contraseña */}
           <div className="login-form-group">
             <label htmlFor="password" className="login-label">
-              Contraseña
+              {t('auth.password')}
             </label>
             <input
               id="password"
@@ -239,7 +226,7 @@ function Login() {
               className={`login-input ${passwordError ? 'login-input-error' : ''}`}
               value={password}
               onChange={handlePasswordChange}
-              placeholder="Mín. 8 caracteres alfanuméricos"
+              placeholder={t('auth.passwordPlaceholder')}
               disabled={isLoading}
             />
             {/* Mostrar error de contraseña si existe */}
@@ -261,18 +248,18 @@ function Login() {
             className="login-button"
             disabled={!isFormValid() || isLoading}
           >
-            {isLoading ? 'Entrando...' : 'Entrar'}
+            {isLoading ? `${t('common.loading')}...` : t('auth.loginButton')}
           </button>
         </form>
         {/* Links de navegación */}
         <div className="login-links">
           <p>
-            ¿No tienes cuenta?{' '}
+            {t('auth.noAccount')}{' '}
             <span 
               className="login-link"
               onClick={() => navigate('/register')}
             >
-              Regístrate
+              {t('auth.register')}
             </span>
           </p>
           <p>
@@ -280,7 +267,7 @@ function Login() {
               className="login-link"
               onClick={() => navigate('/recuperar-cuenta')}
             >
-              ¿Recuperar cuenta?
+              {t('auth.recoverAccount')}
             </span>
           </p>
         </div>

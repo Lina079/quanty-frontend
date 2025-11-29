@@ -43,8 +43,8 @@ function CardResumen({
       color: 'var(--cyan-accent)',
       gradiente: 'linear-gradient(180deg, #38E1FF 0%, #12B4D6 100%)',
       colorCancelado: 'rgba(56, 225, 255, 0.2)',
-      totalLabel: t('saving.totalSavings'),
-      periodoText: t('saving.inPeriod'),
+      totalLabel: t('savings.totalSavings'),
+      periodoText: t('savings.inPeriod'),
       registeredText: t('savings.registered'),
       textoBoton: t('savings.addSaving')
     },

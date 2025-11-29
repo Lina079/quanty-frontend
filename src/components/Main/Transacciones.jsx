@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useTransactions } from '../../contexts/TransactionsContext';
 import quantumHalf from '../../images/quantum_half_fade_256x256.png';
 import quantumHalfLight from '../../images/theme-light-images/quantum-halfbody2-light.png';
@@ -10,6 +11,7 @@ function Transacciones() {
   const navigate = useNavigate();
   const { gastos, ingresos, ahorros, inversiones, isLoading } = useTransactions();
   const { formatCurrency, theme } = useSettings();
+  const { t } = useLanguage();
 
   // Estados para selector de periodo
   const fechaActual = new Date();
@@ -55,25 +57,25 @@ function Transacciones() {
     
     return [
       {
-        name: 'Gastos',
+        name: t('nav.expenses'),
         value: totales.gastos,
         porcentaje: (totales.gastos / totalIngresos) * 100,
         color: '#EF4444'
       },
       {
-        name: 'Ahorros',
+        name: t('nav.savings'),
         value: totales.ahorro,
         porcentaje: (totales.ahorro / totalIngresos) * 100,
         color: '#38E1FF'
       },
       {
-        name: 'Inversiones',
+        name: t('nav.investments'),
         value: totales.inversion,
         porcentaje: (totales.inversion / totalIngresos) * 100,
         color: '#8B5CF6'
       }
     ];
-  }, [totales]);
+  }, [totales, t]);
 
   if (isLoading) {
     return (
@@ -89,7 +91,7 @@ function Transacciones() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando panorama financiero...
+            {t('common.loading')}...
           </p>
         </div>
       </main>
@@ -98,9 +100,9 @@ function Transacciones() {
 
   return (
     <main className="wrapper">
-      <h1 style={{ textAlign: 'center' }}>🔍 Panorama Financiero</h1>
+      <h1 style={{ textAlign: 'center' }}>🔍 {t('transactions.title')}</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
-        Visualiza y analiza tus finanzas en detalle
+        {t('transactions.subtitle')}
       </p>
 
       {/* Quantum con mensaje */}
@@ -134,7 +136,7 @@ function Transacciones() {
             margin: 0,
             lineHeight: '1.4'
           }}>
-            🌟 Tu panorama financiero en una vista. ¡El conocimiento es poder!
+            🌟 {t('transactions.quantumMessage')}
           </p>
         </div>
       </div>
@@ -149,7 +151,7 @@ function Transacciones() {
         border: '1px solid rgba(255,255,255,.08)'
       }}>
         <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>
-          📅 Selecciona el período a visualizar
+          📅 {t('transactions.selectPeriod')}
         </h3>
         
         {/* Botones de tipo de vista */}
@@ -179,7 +181,7 @@ function Transacciones() {
               transition: 'all 0.2s'
             }}
           >
-            📅 Mes específico
+            📅 {t('transactions.specificMonth')}
           </button>  
           <button
             className="periodo-btn"
@@ -201,7 +203,7 @@ function Transacciones() {
               transition: 'all 0.2s'
             }}
           >
-            📊 Año completo
+            📊 {t('transactions.fullYear')}
           </button>
         </div>
         
@@ -220,7 +222,7 @@ function Transacciones() {
                 fontSize: '14px',
                 color: 'var(--text-secondary)'
               }}>
-                Mes:
+                {t('transactions.month')}:
               </label>
               <select
                 className="selector-mes month-selector"
@@ -239,18 +241,18 @@ function Transacciones() {
                   cursor: 'pointer'
                 }}
               >
-                <option value={0}>Enero</option>
-                <option value={1}>Febrero</option>
-                <option value={2}>Marzo</option>
-                <option value={3}>Abril</option>
-                <option value={4}>Mayo</option>
-                <option value={5}>Junio</option>
-                <option value={6}>Julio</option>
-                <option value={7}>Agosto</option>
-                <option value={8}>Septiembre</option>
-                <option value={9}>Octubre</option>
-                <option value={10}>Noviembre</option>
-                <option value={11}>Diciembre</option>
+                <option value={0}>{t('months.january')}</option>
+                <option value={1}>{t('months.february')}</option>
+                <option value={2}>{t('months.march')}</option>
+                <option value={3}>{t('months.april')}</option>
+                <option value={4}>{t('months.may')}</option>
+                <option value={5}>{t('months.june')}</option>
+                <option value={6}>{t('months.july')}</option>
+                <option value={7}>{t('months.august')}</option>
+                <option value={8}>{t('months.september')}</option>
+                <option value={9}>{t('months.october')}</option>
+                <option value={10}>{t('months.november')}</option>
+                <option value={11}>{t('months.december')}</option>
               </select>
             </div>
           )}
@@ -264,7 +266,7 @@ function Transacciones() {
               fontSize: '14px',
               color: 'var(--text-secondary)'
             }}>
-              Año:
+              {t('transactions.year')}:
             </label>
             <select
               className="selector-año month-selector"
@@ -299,12 +301,12 @@ function Transacciones() {
           onClick={() => navigate('/gastos')}
           style={{ cursor: 'pointer', textAlign: 'center' }}
         >
-          <h3>💸 Gastos Totales</h3>
+          <h3>💸 {t('transactions.totalExpenses')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: '#EF4444', marginTop: '16px' }}>
             {formatCurrency(totales.gastos)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
-            👉 Ver detalle
+            👉 {t('transactions.seeDetail')}
           </p>
         </div>
 
@@ -314,12 +316,12 @@ function Transacciones() {
           onClick={() => navigate('/ingresos')}
           style={{ cursor: 'pointer', textAlign: 'center' }}
         >
-          <h3>💰 Ingresos Totales</h3>
+          <h3>💰 {t('transactions.totalIncome')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: '#4ADE80', marginTop: '16px' }}>
             {formatCurrency(totales.ingresos)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
-            👉 Ver detalle
+            👉 {t('transactions.seeDetail')}
           </p>
         </div>
 
@@ -329,12 +331,12 @@ function Transacciones() {
           onClick={() => navigate('/ahorros')}
           style={{ cursor: 'pointer', textAlign: 'center' }}
         >
-          <h3>🏦 Ahorro Total</h3>
+          <h3>🏦 {t('transactions.totalSavings')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: 'var(--cyan-accent)', marginTop: '16px' }}>
             {formatCurrency(totales.ahorro)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
-            👉 Ver detalle
+            👉 {t('transactions.seeDetail')}
           </p>
         </div>
 
@@ -344,12 +346,12 @@ function Transacciones() {
           onClick={() => navigate('/inversiones')}
           style={{ cursor: 'pointer', textAlign: 'center' }}
         >
-          <h3>📈 Inversión Total</h3>
+          <h3>📈 {t('transactions.totalInvestment')}</h3>
           <p style={{ fontSize: 'clamp(18px, 5vw, 36px)', fontWeight: '800', color: '#FFD700', marginTop: '16px' }}>
             {formatCurrency(totales.inversion)}
           </p>
           <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginTop: '12px' }}>
-            👉 Ver portfolio
+            👉 {t('dashboard.viewPortfolio')}
           </p>
         </div>
       </div>
@@ -369,7 +371,7 @@ function Transacciones() {
             marginBottom: '24px',
             fontSize: '22px'
           }}>
-            📊 ¿Cómo usas tus ingresos?
+            📊 {t('transactions.howYouUseIncome')}
           </h3>
           
           <ResponsiveContainer width="100%" height={300}>
@@ -454,7 +456,7 @@ function Transacciones() {
                     color: 'var(--text-secondary)',
                     marginTop: '4px'
                   }}>
-                    {item.porcentaje.toFixed(1)}% del ingreso
+                    {item.porcentaje.toFixed(1)}% {t('transactions.ofIncome')}
                   </div>
                 </div>
               </div>

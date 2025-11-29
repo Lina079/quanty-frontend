@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useTransactions } from '../../contexts/TransactionsContext';
 import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
@@ -16,6 +17,7 @@ function Ahorros() {
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol } = useSettings();
+  const { t } = useLanguage();
 
   // Obtener ahorros del contexto
   const ahorrosData = ahorros();
@@ -32,12 +34,12 @@ function Ahorros() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'tranquilidad', label: '🛡️ Ahorro de tranquilidad' },
-    { value: 'invertir', label: '📈 Ahorro para invertir' },
-    { value: 'viajar', label: '✈️ Ahorro para viajar' },
-    { value: 'casa', label: '🏠 Ahorro comprar casa' },
-    { value: 'carro', label: '🚗 Ahorro comprar carro' },
-    { value: 'otro', label: '📝 Otro' }
+  { value: 'tranquilidad', label: t('savingsCategories.emergency') },
+  { value: 'invertir', label: t('savingsCategories.invest') },
+  { value: 'viajar', label: t('savingsCategories.travel') },
+  { value: 'casa', label: t('savingsCategories.house') },
+  { value: 'carro', label: t('savingsCategories.car') },
+  { value: 'otro', label: t('savingsCategories.other') }
   ];
 
   const [categorias, setCategorias] = useState(categoriasBase);
@@ -46,7 +48,7 @@ function Ahorros() {
     e.preventDefault();
     
     if (!formData.categoria || !formData.monto) {
-      showToast('Por favor completa los campos obligatorios', 'error');
+      showToast(t('form.requiredFields'), 'error');
       return;
     }
 
@@ -61,7 +63,7 @@ function Ahorros() {
         fecha: formData.fecha
       });
 
-      showToast('Ahorro guardado correctamente', 'success');
+      showToast(t('toast.savedSuccess'), 'success');
       
       // Reset form
       setFormData({
@@ -73,7 +75,7 @@ function Ahorros() {
       setMostrarFormulario(false);
     } catch (error) {
       console.error('Error al guardar ahorro:', error);
-      showToast(error || 'Error al guardar el ahorro', 'error');
+      showToast(error || t('toast.errorSaving'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -87,10 +89,10 @@ function Ahorros() {
   const confirmarEliminar = async () => {
     try {
       await deleteTransaction(ahorroAEliminar._id);
-      showToast('Ahorro eliminado correctamente', 'success');
+      showToast(t('toast.deletedSuccess'), 'success');
     } catch (error) {
       console.error('Error al eliminar ahorro:', error);
-      showToast(error || 'Error al eliminar el ahorro', 'error');
+      showToast(error || t('toast.errorDeleting'), 'error');
     } finally {
       setModalOpen(false);
       setAhorroAEliminar(null);
@@ -131,7 +133,7 @@ function Ahorros() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando ahorros...
+            {t('common.loading')}...
           </p>
         </div>
       </main>
@@ -140,16 +142,16 @@ function Ahorros() {
 
   return (
     <main className="wrapper">
-      <h1 style={{ textAlign: 'center' }}>Gestión de Ahorros</h1>
+      <h1 style={{ textAlign: 'center' }}>{t('savings.title')}</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
-        Construye tu futuro financiero
+        {t('savings.subtitle')}
       </p>
 
       <CardResumen 
         tipo="ahorros"
         total={totalAhorros}
         cantidad={cantidadAhorros}
-        mensaje="💎 Ahorrar es plantar semillas para tu futuro. ¡Todo cuenta!"
+        mensaje={t('savings.quantumMessage')}
         mostrarFormulario={mostrarFormulario}
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
@@ -161,12 +163,12 @@ function Ahorros() {
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
             <div className="card">
-              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Ahorro</h3>
+              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>{t('savings.newSaving')}</h3>
 
               {/* Categoría */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Categoría *
+                  {t('form.category')} *
                 </label>
                 <select
                   value={formData.categoria}
@@ -190,11 +192,11 @@ function Ahorros() {
                   required
                   disabled={isSubmitting}
                 >
-                  <option value="">Selecciona una categoría</option>
+                  <option value="">{t('form.selectCategory')}</option>
                   {categorias.map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
                   ))}
-                  <option value="custom">➕ Agregar categoría personalizada</option>
+                  <option value="custom">➕ {t('form.addCustomCategory')}</option>
                 </select>
               </div>
 
@@ -210,7 +212,7 @@ function Ahorros() {
                       type="text"
                       value={customCategory}
                       onChange={(e) => setCustomCategory(e.target.value)}
-                      placeholder="Nueva categoría..."
+                      placeholder={t('form.newCategory')}
                       style={{
                         flex: 1,
                         padding: '10px 12px',
@@ -244,7 +246,7 @@ function Ahorros() {
               {/* Monto */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Monto ({getCurrencySymbol()}) *
+                  {t('form.amount')} ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -272,13 +274,13 @@ function Ahorros() {
               {/* Descripción */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Descripción
+                  {t('form.description')}
                 </label>
                 <input
                   type="text"
                   value={formData.descripcion}
                   onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-                  placeholder="Opcional"
+                  placeholder={t('form.optional')}
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -296,7 +298,7 @@ function Ahorros() {
               {/* Fecha */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Fecha
+                  {t('form.date')}
                 </label>
                 <input
                   type="date"
@@ -334,7 +336,7 @@ function Ahorros() {
                   fontFamily: 'inherit'
                 }}
               >
-                {isSubmitting ? 'Guardando...' : '💾 Guardar Ahorro'}
+                {isSubmitting ? `${t('common.loading')}...` : `💾 ${t('savings.addSaving')}`}
               </button>
             </div>
           </form>
@@ -357,7 +359,7 @@ function Ahorros() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmarEliminar}
-        mensaje="Este ahorro se eliminará permanentemente."
+        mensaje={t('modal.permanentDelete')}
       />
     </main>
   );

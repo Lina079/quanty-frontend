@@ -1,4 +1,8 @@
+import { useLanguage } from '../../../contexts/LanguageContext';
+
 function ModalConfirmacion({ isOpen, onClose, onConfirm, mensaje }) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   return (
@@ -21,14 +25,14 @@ function ModalConfirmacion({ isOpen, onClose, onConfirm, mensaje }) {
         animation: 'fadeIn 0.2s ease'
       }}>
         <h3 style={{ marginBottom: '16px', textAlign: 'center' }}>
-          ⚠️ Confirmar eliminación
+          ⚠️ {t('modal.confirmDelete')}
         </h3>
         <p style={{ 
           textAlign: 'center', 
           marginBottom: '24px',
           color: 'var(--text-secondary)'
         }}>
-          {mensaje || '¿Estás seguro de que quieres eliminar este elemento?'}
+          {mensaje || t('modal.deleteWarning')}
         </p>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
@@ -46,7 +50,7 @@ function ModalConfirmacion({ isOpen, onClose, onConfirm, mensaje }) {
               fontFamily: 'inherit'
             }}
           >
-            Cancelar
+            {t('common.cancel')}
           </button>
           <button
             onClick={onConfirm}
@@ -63,7 +67,7 @@ function ModalConfirmacion({ isOpen, onClose, onConfirm, mensaje }) {
               fontFamily: 'inherit'
             }}
           >
-            Eliminar
+            {t('common.delete')}
           </button>
         </div>
       </div>

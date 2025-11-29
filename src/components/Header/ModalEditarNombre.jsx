@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 import editIcon from '../../images/lapiz_edit_name.png';
 
 function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
   const [nombre, setNombre] = useState(nombreActual);
   const [error, setError] = useState('');
+  const { t } = useLanguage();
 
   if (!isOpen) return null;
 
@@ -12,19 +14,19 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
     const soloLetras = /^[a-záéíóúñüA-ZÁÉÍÓÚÑÜ\s]*$/;
     
     if (!valor.trim()) {
-      return 'El nombre no puede estar vacío';
+      return t('editName.emptyError');
     }
     
     if (!soloLetras.test(valor)) {
-      return 'Solo se permiten letras (sin números ni caracteres especiales)';
+      return t('editName.lettersOnly');
     }
     
     if (valor.trim().length < 2) {
-      return 'El nombre debe tener al menos 2 letras';
+      return t('editName.minLength');
     }
     
     if (valor.trim().length > 30) {
-      return 'El nombre no puede tener más de 30 letras';
+      return t('editName.maxLength');
     }
     
     return '';
@@ -91,7 +93,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
       >
         <h3 style={{ marginBottom: '8px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
         <img src={editIcon} alt="Editar" style={{ width: '24px', height: '24px' }} />
-            Editar nombre
+            {t('editName.title')}
         </h3>
         <p style={{ 
           textAlign: 'center', 
@@ -99,7 +101,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
           color: 'var(--text-secondary)',
           fontSize: '14px'
         }}>
-          Personaliza tu experiencia en Quanty
+          {t('editName.subtitle')}
         </p>
 
         <div style={{ marginBottom: '20px' }}>
@@ -113,7 +115,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
               fontWeight: '600'
             }}
           >
-            Tu nombre o apodo
+            {t('editName.label')}
           </label>
           <input
             id="nombre-input"
@@ -121,7 +123,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
             value={nombre}
             onChange={handleChange}
             onKeyDown={handleKeyPress}
-            placeholder="Ej: María Carmen"
+            placeholder={t('editName.placeholder')}
             autoFocus
             style={{
               width: '100%',
@@ -151,7 +153,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
             color: 'var(--text-secondary)',
             fontSize: '12px'
           }}>
-            {nombre.trim().length}/30 caracteres
+            {nombre.trim().length}/30 {t('editName.characters')}
           </p>
         </div>
 
@@ -171,7 +173,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
               fontFamily: 'inherit'
             }}
           >
-            Cancelar
+            {t('common.cancel')}
           </button>
           <button
             onClick={handleGuardar}
@@ -190,7 +192,7 @@ function ModalEditarNombre({ isOpen, onClose, onSave, nombreActual }) {
               opacity: error || !nombre.trim() ? 0.5 : 1
             }}
           >
-            Guardar
+            {t('common.save')}
           </button>
         </div>
       </div>

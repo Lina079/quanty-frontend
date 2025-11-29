@@ -37,7 +37,36 @@
     "noAccount": "¿No tienes cuenta?",
     "haveAccount": "¿Ya tienes cuenta?",
     "loginButton": "Entrar",
-    "registerButton": "Crear cuenta"
+    "registerButton": "Crear cuenta",
+    "welcomeBack": "Bienvenid@ de nuevo",
+    "emailPlaceholder": "tu@email.com",
+    "passwordPlaceholder": "Mín. 8 caracteres alfanuméricos",
+    "loginSuccess": "¡Inicio de sesión exitoso!",
+    "invalidCredentials": "Credenciales incorrectas. Por favor, intenta de nuevo.",
+    "recoverAccount": "¿Recuperar cuenta?",
+    "joinQuanty": "Únete a Quanty",
+    "welcome": "Bienvenid@",
+    "confirmPassword": "Confirmar contraseña",
+    "namePlaceholder": "Tu nombre",
+    "confirmPasswordPlaceholder": "Repite tu contraseña",
+    "emailAlreadyExists": "Este email ya está registrado. Intenta con otro."
+  },
+    "validation": {
+    "invalidEmail": "Introduce un correo electrónico válido",
+    "passwordRequirements": "Mínimo 8 caracteres, debe contener letras y números",
+    "passwordsNotMatch": "Las contraseñas no coinciden",
+    "nameLength": "El nombre debe tener entre 2 y 30 caracteres"
+  },
+  "editName": {
+  "title": "Editar nombre",
+  "subtitle": "Personaliza tu experiencia en Quanty",
+  "label": "Tu nombre o apodo",
+  "placeholder": "Ej: María Carmen",
+  "characters": "caracteres",
+  "emptyError": "El nombre no puede estar vacío",
+  "lettersOnly": "Solo se permiten letras (sin números ni caracteres especiales)",
+  "minLength": "El nombre debe tener al menos 2 letras",
+  "maxLength": "El nombre no puede tener más de 30 letras"
   },
   "dashboard": {
     "welcome": "Bienvenid@ a Quanty",
@@ -84,7 +113,8 @@
     "totalInvestment": "Inversión Total",
     "seeDetail": "Ver detalle",
     "howYouUseIncome": "¿Cómo usas tus ingresos?",
-    "ofIncome": "del ingreso"
+    "ofIncome": "del ingreso",
+    "quantumMessage": "Tu panorama financiero en una vista. ¡El conocimiento es poder!"
   },
   "income": {
     "title": "Gestión de Ingresos",
@@ -126,7 +156,12 @@
   "retiro": "Retiro",
   "bitcoin": "Bitcoin",
   "ethereum": "Ethereum",
-  "oro": "Oro"
+  "oro": "Oro",
+  "tranquilidad": "Ahorro de tranquilidad",
+  "invertir": "Ahorro para invertir",
+  "viajar": "Ahorro para viajar",
+  "casa": "Ahorro comprar casa",
+  "carro": "Ahorro comprar carro"
   },
   "expenses": {
     "title": "Gestión de Gastos",
@@ -138,6 +173,19 @@
     "inPeriod": "en este período",
     "quantumMessage": "💸 Conocer tus gastos es el primer paso para controlarlos."
   },
+  "expenseCategories": {
+  "rent": "🏠 Alquiler",
+  "mortgage": "🏠 Hipoteca",
+  "groceries": "🛒 La compra",
+  "utilities": "💡 Suministros",
+  "transport": "🚗 Transporte",
+  "creditCard": "💳 Tarjeta de crédito",
+  "gym": "💪 Gimnasio",
+  "health": "🏥 Salud",
+  "travel": "✈️ Viajes",
+  "entertainment": "🎉 Ocio",
+  "other": "📝 Otro"
+  },
   "savings": {
     "title": "Gestión de Ahorros",
     "subtitle": "Construye tu futuro financiero",
@@ -147,6 +195,14 @@
     "registered": "registrados",
     "inPeriod": "en este período",
     "quantumMessage": "💎 Ahorrar es plantar semillas para tu futuro. ¡Todo cuenta!"
+  },
+  "savingsCategories": {
+  "emergency": "🛡️ Ahorro de tranquilidad",
+  "invest": "📈 Ahorro para invertir",
+  "travel": "✈️ Ahorro para viajar",
+  "house": "🏠 Ahorro comprar casa",
+  "car": "🚗 Ahorro comprar carro",
+  "other": "📝 Otro"
   },
   "investments": {
     "title": "Precios en Tiempo Real",
@@ -166,7 +222,9 @@
     "totalInvested": "Total invertido",
     "currentValue": "Valor actual",
     "gainLoss": "Ganancia/Pérdida",
-    "loadingPrices": "Cargando precios en tiempo real..."
+    "loadingPrices": "Cargando precios en tiempo real...",
+    "marketDataBy": "Datos de mercado en tiempo real proporcionados por",
+    "referenceValue": "S&P 500 es un valor de referencia"
   },
   "form": {
     "category": "Categoría",
@@ -217,5 +275,19 @@
     "tip6": "Establece metas financieras claras y alcanzables.",
     "tip7": "Revisa tus gastos semanalmente para mantener control.",
     "tip8": "El mejor momento para empezar a ahorrar fue ayer. El segundo mejor es hoy."
+    },
+    "months": {
+    "january": "Enero",
+    "february": "Febrero",
+    "march": "Marzo",
+    "april": "Abril",
+    "may": "Mayo",
+    "june": "Junio",
+    "july": "Julio",
+    "august": "Agosto",
+    "september": "Septiembre",
+    "october": "Octubre",
+    "november": "Noviembre",
+    "december": "Diciembre"
     }
 }

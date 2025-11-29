@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { useTransactions } from '../../contexts/TransactionsContext';
 import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
@@ -16,6 +17,7 @@ function Gastos() {
   const [cantidadFiltrada, setCantidadFiltrada] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { formatCurrency, getCurrencySymbol } = useSettings();
+  const { t } = useLanguage();
 
   // Obtener gastos del contexto
   const gastosData = gastos();
@@ -32,17 +34,17 @@ function Gastos() {
   const [customCategory, setCustomCategory] = useState('');
 
   const categoriasBase = [
-    { value: 'alquiler', label: '🏠 Alquiler' },
-    { value: 'hipoteca', label: '🏠 Hipoteca' },
-    { value: 'compra', label: '🛒 La compra' },
-    { value: 'suministros', label: '💡 Suministros' },
-    { value: 'transporte', label: '🚗 Transporte' },
-    { value: 'tarjeta-credito', label: '💳 Tarjeta de crédito' },
-    { value: 'gimnasio', label: '💪 Gimnasio' },
-    { value: 'salud', label: '🏥 Salud' },
-    { value: 'viajes', label: '✈️ Viajes' },
-    { value: 'ocio', label: '🎉 Ocio' },
-    { value: 'otro', label: '📝 Otro' }
+  { value: 'alquiler', label: t('expenseCategories.rent') },
+  { value: 'hipoteca', label: t('expenseCategories.mortgage') },
+  { value: 'compra', label: t('expenseCategories.groceries') },
+  { value: 'suministros', label: t('expenseCategories.utilities') },
+  { value: 'transporte', label: t('expenseCategories.transport') },
+  { value: 'tarjeta-credito', label: t('expenseCategories.creditCard') },
+  { value: 'gimnasio', label: t('expenseCategories.gym') },
+  { value: 'salud', label: t('expenseCategories.health') },
+  { value: 'viajes', label: t('expenseCategories.travel') },
+  { value: 'ocio', label: t('expenseCategories.entertainment') },
+  { value: 'otro', label: t('expenseCategories.other') }
   ];
 
   const [categorias, setCategorias] = useState(categoriasBase);
@@ -51,7 +53,7 @@ function Gastos() {
     e.preventDefault();
     
     if (!formData.categoria || !formData.monto) {
-      showToast('Por favor completa los campos obligatorios', 'error');
+      showToast(t('form.requiredFields'), 'error');
       return;
     }
 
@@ -66,7 +68,7 @@ function Gastos() {
         fecha: formData.fecha
       });
 
-      showToast('Gasto guardado correctamente', 'success');
+      showToast(t('toast.savedSuccess'), 'success');
       
       // Reset form
       setFormData({
@@ -78,7 +80,7 @@ function Gastos() {
       setMostrarFormulario(false);
     } catch (error) {
       console.error('Error al guardar gasto:', error);
-      showToast(error || 'Error al guardar el gasto', 'error');
+      showToast(error || t('toast.errorSaving'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -92,10 +94,10 @@ function Gastos() {
   const confirmarEliminar = async () => {
     try {
       await deleteTransaction(gastoAEliminar._id);
-      showToast('Gasto eliminado correctamente', 'success');
+      showToast(t('toast.deletedSuccess'), 'success');
     } catch (error) {
       console.error('Error al eliminar gasto:', error);
-      showToast(error || 'Error al eliminar el gasto', 'error');
+      showToast(error || t('toast.errorDeleting'), 'error');
     } finally {
       setModalOpen(false);
       setGastoAEliminar(null);
@@ -136,7 +138,7 @@ function Gastos() {
             animation: 'spin 1s linear infinite'
           }}></div>
           <p style={{ marginTop: '20px', color: 'var(--text-secondary)' }}>
-            Cargando gastos...
+            {t('common.loading')}...
           </p>
         </div>
       </main>
@@ -145,16 +147,16 @@ function Gastos() {
 
   return (
     <main className="wrapper">
-      <h1 style={{ textAlign: 'center' }}>Gestión de Gastos</h1>
+      <h1 style={{ textAlign: 'center' }}>{t('expenses.title')}</h1>
       <p className="subtitle" style={{ textAlign: 'center' }}>
-        Controla tus gastos de manera efectiva
+        {t('expenses.subtitle')}
       </p>
 
       <CardResumen 
         tipo="gastos"
         total={totalGastos}
         cantidad={cantidadGastos}
-        mensaje="✨ Registra tu movimiento, pequeño impulso = gran cambio."
+        mensaje={t('expenses.quantumMessage')}
         mostrarFormulario={mostrarFormulario}
         onToggleFormulario={() => setMostrarFormulario(!mostrarFormulario)}
         esPeriodoFiltrado={totalFiltrado !== null}
@@ -166,12 +168,12 @@ function Gastos() {
         <div style={{ maxWidth: '700px', margin: '0 auto 40px' }}>
           <form onSubmit={handleSubmit}>
             <div className="card">
-              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>Nuevo Gasto</h3>
+              <h3 style={{ marginBottom: '24px', textAlign: 'center' }}>{t('expenses.newExpense')}</h3>
 
               {/* Categoría */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Categoría *
+                  {t('form.category')} *
                 </label>
                 <select
                   value={formData.categoria}
@@ -195,11 +197,11 @@ function Gastos() {
                   required
                   disabled={isSubmitting}
                 >
-                  <option value="">Selecciona una categoría</option>
+                  <option value="">{t('form.selectCategory')}</option>
                   {categorias.map(cat => (
                     <option key={cat.value} value={cat.value}>{cat.label}</option>
                   ))}
-                  <option value="custom">➕ Agregar categoría personalizada</option>
+                  <option value="custom">➕ {t('form.addCustomCategory')}</option>
                 </select>
               </div>
 
@@ -215,7 +217,7 @@ function Gastos() {
                       type="text"
                       value={customCategory}
                       onChange={(e) => setCustomCategory(e.target.value)}
-                      placeholder="Nueva categoría..."
+                      placeholder={t('form.newCategory')}
                       style={{
                         flex: 1,
                         padding: '10px 12px',
@@ -249,7 +251,7 @@ function Gastos() {
               {/* Monto */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Monto ({getCurrencySymbol()}) *
+                  {t('form.amount')} ({getCurrencySymbol()}) *
                 </label>
                 <input
                   type="number"
@@ -277,13 +279,13 @@ function Gastos() {
               {/* Descripción */}
               <div style={{ marginBottom: '20px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Descripción
+                  {t('form.description')}
                 </label>
                 <input
                   type="text"
                   value={formData.descripcion}
                   onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })}
-                  placeholder="Opcional"
+                  placeholder={t('form.optional')}
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -301,7 +303,7 @@ function Gastos() {
               {/* Fecha */}
               <div style={{ marginBottom: '24px' }}>
                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                  Fecha
+                  {t('form.date')}
                 </label>
                 <input
                   type="date"
@@ -339,7 +341,7 @@ function Gastos() {
                   fontFamily: 'inherit'
                 }}
               >
-                {isSubmitting ? 'Guardando...' : '💾 Guardar Gasto'}
+                {isSubmitting ? `${t('common.loading')}...` : `💾 ${t('expenses.addExpense')}`}
               </button>
             </div>
           </form>
@@ -362,7 +364,7 @@ function Gastos() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={confirmarEliminar}
-        mensaje="Este gasto se eliminará permanentemente."
+        mensaje={t('modal.permanentDelete')}
       />
     </main>
   );
