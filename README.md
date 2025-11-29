@@ -37,9 +37,9 @@ Aplicación web full-stack de gestión financiera personal basada en el método 
 ![Inversiones](./src/images/ImageReadme/Investment-Light.png)
 
 ### Configuración de Usuario
-| Selección de Moneda | Selección de Tema |
-|:-------------------:|:-----------------:|
-| ![Moneda](./src/images/ImageReadme/Settings-currency.png) | ![Tema](./src/images/ImageReadme/Settings-theme.png) |
+| Selección de Moneda | Selección de Tema | Selección de Idioma |
+|:-------------------:|:-----------------:|:-------------------:|
+| ![Moneda](./src/images/ImageReadme/Settings-currency.png) | ![Tema](./src/images/ImageReadme/Settings-theme.png) | ![Idioma](./src/images/ImageReadme/settings-language.png) (./src/images/ImageReadme/English-version.png) |
 
 ### Diseño Responsive
 ![Responsive](./src/images/ImageReadme/Responsive.png)
@@ -123,6 +123,12 @@ La app incluye a **Quantum**, un asistente financiero virtual que acompaña al u
 - Modo claro
 - Persistencia de preferencia
 
+### 🌐 Internacionalización (i18n)
+- Español (por defecto)
+- English
+- Persistencia de preferencia de idioma
+- Traducciones completas de interfaz
+
 ### 📈 Inversiones en Tiempo Real
 - Precios actualizados via CoinGecko API
 - Bitcoin, Ethereum, Oro (PAX Gold)
@@ -160,9 +166,14 @@ quanty-frontend/
 │   │   └── UserSettings/            # Configuración usuario
 │   ├── contexts/
 │   │   ├── CurrentUserContext.jsx   # Estado del usuario
+│   │   ├── LanguageContext.jsx      # Idioma de la app
 │   │   ├── SettingsContext.jsx      # Moneda y tema
 │   │   ├── ToastContext.jsx         # Notificaciones
 │   │   └── TransactionsContext.jsx  # CRUD transacciones
+│   ├── i18n/                        # Sistema de traducciones
+│   │   ├── es.json                  # Español
+│   │   ├── en.json                  # English
+│   │   └── index.js                 # Lógica de traducción
 │   ├── blocks/                      # CSS modular (BEM)
 │   ├── images/
 │   │   └── ImageReadme/             # Screenshots
@@ -173,7 +184,6 @@ quanty-frontend/
 ├── vercel.json
 └── package.json
 ```
-
 ---
 
 ## 🚀 Instalación y Ejecución Local
@@ -317,5 +327,5 @@ Proyecto educativo desarrollado para el Bootcamp TripleTen. Código disponible c
 
 ---
 
-**Versión:** 2.0.0 (Full-Stack)  
+**Versión:** 2.1.0 (Full-Stack + i18n)  
 **Última actualización:** Noviembre 2025
