@@ -92,6 +92,7 @@
     "language": "Language",
     "languageDescription": "Select the app language",
     "currencies": {
+    "EUR": "Euro",
     "USD": "US Dollar",
     "COP": "Colombian Peso",
     "MXN": "Mexican Peso",

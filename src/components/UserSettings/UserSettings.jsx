@@ -10,14 +10,14 @@ function UserSettings() {
   const { showToast } = useToast();
   const { language, changeLanguage, languages, t } = useLanguage();
 
-  // Opciones de moneda disponibles
-  const currencies = [
-  { code: 'USD', name: t('settings.currencies.USD'), symbol: '$' },
-  { code: 'COP', name: t('settings.currencies.COP'), symbol: '$' },
-  { code: 'MXN', name: t('settings.currencies.MXN'), symbol: '$' },
-  { code: 'GBP', name: t('settings.currencies.GBP'), symbol: '£' },
-  { code: 'JPY', name: t('settings.currencies.JPY'), symbol: '¥' }
-  ];
+const currencies = [
+{ code: 'EUR', name: t('settings.currencies.EUR'), symbol: '€' },
+{ code: 'USD', name: t('settings.currencies.USD'), symbol: '$' },
+{ code: 'COP', name: t('settings.currencies.COP'), symbol: '$' },
+{ code: 'MXN', name: t('settings.currencies.MXN'), symbol: '$' },
+{ code: 'GBP', name: t('settings.currencies.GBP'), symbol: '£' },
+{ code: 'JPY', name: t('settings.currencies.JPY'), symbol: '¥' }
+];
 
   // Manejador para cambiar moneda
   const handleChangeCurrency = (newCurrency) => {

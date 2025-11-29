@@ -92,14 +92,15 @@
     "language": "Idioma",
     "languageDescription": "Selecciona el idioma de la aplicación",
     "currencies": {
+    "EUR": "Euro",
     "USD": "Dólar Estadounidense",
     "COP": "Peso Colombiano",
     "MXN": "Peso Mexicano",
     "GBP": "Libra Esterlina",
     "JPY": "Yen Japonés"
     }
-  },
-  "transactions": {
+    },
+    "transactions": {
     "title": "Panorama Financiero",
     "subtitle": "Visualiza y analiza tus finanzas en detalle",
     "selectPeriod": "Selecciona el período a visualizar",
