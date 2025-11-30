@@ -78,7 +78,11 @@
     "savings": "Savings",
     "investment": "Investment",
     "clickToManage": "Click to manage",
-    "viewPortfolio": "View portfolio"
+    "viewPortfolio": "View portfolio",
+    "available": "Available",
+    "balancePositive": "Excellent! Keep it up, every decision counts ✨",
+    "balanceZero": "Your balance is even. Great control!",
+    "balanceNegative": "Don't worry, seeing it is the first step. You can do it! 💪"
   },
   "settings": {
     "title": "Settings",
@@ -172,8 +176,11 @@
     "totalExpenses": "Total Expenses",
     "registered": "registered",
     "inPeriod": "in this period",
-    "quantumMessage": "💸 Knowing your expenses is the first step to controlling them."
-  },
+    "quantumMessage": "💸 Knowing your expenses is the first step to controlling them.",
+    "balancePositive": "Good! You still have margin",
+    "balanceZero": "All allocated",
+    "balanceNegative": "Careful, you're in the red"
+    },
   "expenseCategories": {
   "rent": "🏠 Rent",
   "mortgage": "🏠 Mortgage",

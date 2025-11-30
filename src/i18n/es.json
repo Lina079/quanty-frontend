@@ -78,9 +78,13 @@
     "savings": "Ahorro",
     "investment": "Inversión",
     "clickToManage": "Click para gestionar",
-    "viewPortfolio": "Ver portfolio"
-  },
-  "settings": {
+    "viewPortfolio": "Ver portfolio",
+    "available": "Disponible",
+    "balancePositive": "¡Excelente! Sigue así, cada decisión cuenta ✨",
+    "balanceZero": "Tu balance está equilibrado. ¡Buen control!",
+    "balanceNegative": "No te preocupes, el primer paso es verlo. ¡Tú puedes! 💪"
+    },
+    "settings": {
     "title": "Configuración",
     "subtitle": "Personaliza tu experiencia en Quanty",
     "currency": "Moneda",
@@ -172,8 +176,11 @@
     "totalExpenses": "Total Gastos",
     "registered": "registrados",
     "inPeriod": "en este período",
-    "quantumMessage": "💸 Conocer tus gastos es el primer paso para controlarlos."
-  },
+    "quantumMessage": "💸 Conocer tus gastos es el primer paso para controlarlos.",
+    "balancePositive": "¡Bien! Aún tienes margen",
+    "balanceZero": "Todo asignado",
+    "balanceNegative": "Cuidado, estás en rojo"
+    },
   "expenseCategories": {
   "rent": "🏠 Alquiler",
   "mortgage": "🏠 Hipoteca",

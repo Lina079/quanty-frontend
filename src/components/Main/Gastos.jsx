@@ -6,9 +6,10 @@ import { useToast } from '../../contexts/ToastContext';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
+import quantumHead from '../../images/Quantum-only-head.png';
 
 function Gastos() {
-  const { gastos, createTransaction, deleteTransaction, isLoading } = useTransactions();
+  const { gastos, ingresos, ahorros, inversiones, createTransaction, deleteTransaction, isLoading } = useTransactions();
   const { showToast } = useToast();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -21,6 +22,27 @@ function Gastos() {
 
   // Obtener gastos del contexto
   const gastosData = gastos();
+  const ahorrosData = ahorros();
+  const inversionesData = inversiones();
+  const ingresosData = ingresos();
+
+  // Calcular balance disponible
+  const sumIngresos = ingresosData.reduce((sum, i) => sum + i.monto, 0);
+  const sumGastos = gastosData.reduce((sum, g) => sum + g.monto, 0);
+  const sumAhorros = ahorrosData.reduce((sum, a) => sum + a.monto, 0);
+  const sumInversiones = inversionesData.reduce((sum, inv) => sum + inv.monto, 0);
+  const balanceDisponible = sumIngresos - sumGastos - sumAhorros - sumInversiones;
+
+  // Determinar color y mensaje del balance
+  const getBalanceInfo = () => {
+    if (balanceDisponible > 0) {
+      return { color: '#4ADE80', mensaje: t('expenses.balancePositive') }; 
+    } else if (balanceDisponible === 0) {
+      return { color: '#F59E0B', mensaje: t('expenses.balanceZero') };
+    } else {
+      return { color: '#EF4444', mensaje: t('expenses.balanceNegative') };
+    }
+  };
 
   // Form state
   const [formData, setFormData] = useState({
@@ -162,6 +184,51 @@ function Gastos() {
         esPeriodoFiltrado={totalFiltrado !== null}
         formatCurrency={formatCurrency}
       />
+
+        {/* Balance Disponible */}
+      <div style={{
+          maxWidth: '700px',
+          margin: '0 auto 24px',
+          padding: '16px 24px',
+          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+          border: '1px solid rgba(255,255,255,.1)',
+          borderRadius: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '16px'
+        }}>
+        {/* Balance a la izquierda */}
+        <div>
+        <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
+          {t('dashboard.available')}
+        </p>
+        <p style={{ 
+            margin: '4px 0 0', 
+            fontSize: '28px', 
+            fontWeight: '800',
+            color: getBalanceInfo().color
+          }}>
+          {balanceDisponible >= 0 ? '+' : ''}{formatCurrency(balanceDisponible)}
+        </p>
+        </div>
+  
+          {/* Quantum + Mensaje a la derecha */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <img 
+          src={quantumHead} 
+          alt="Quantum" 
+          style={{ width: '40px', height: '40px' }} 
+        />
+        <p style={{ 
+          margin: 0, 
+          fontSize: '14px', 
+          color: 'var(--text-secondary)'
+          }}>
+            {getBalanceInfo().mensaje}
+        </p>
+        </div>
+        </div>
 
       {/* Formulario */}
       {mostrarFormulario && (

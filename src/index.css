@@ -16,3 +16,13 @@
 @import url('./blocks/investments.css');
 @import url('./blocks/login.css');
 @import url('./blocks/toast.css');
+
+/* Animación flotante de Quantum */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

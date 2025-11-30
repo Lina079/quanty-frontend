@@ -4,8 +4,8 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTransactions } from '../contexts/TransactionsContext';
-import quantumImg from '../images/quantum_half_fade_256x256.png';
-import quantumImgLight from '../images/theme-light-images/quantum-halfbody2-light.png';
+import quantumImg from '../images/Quantum-allBody.png';
+import quantumImgLight from '../images/theme-light-images/quantum-fullbody-theme-light.png';
 import iconoGastos from '../images/Icono_caja_gastos.png';
 import iconoIngresos from '../images/ingresos_moneda_256x256.png';
 import iconoAhorro from '../images/ahorro_caja_fuerte_256x256.png';
@@ -43,21 +43,49 @@ function Dashboard() {
     const ahorrosFiltrados = filtrarPorPeriodo(ahorros());
     const inversionesFiltradas = filtrarPorPeriodo(inversiones());
 
+    const totalIngresos = ingresosFiltrados.reduce((sum, i) => sum + i.monto, 0);
+    const totalGastos = gastosFiltrados.reduce((sum, g) => sum + g.monto, 0);
+    const totalAhorros = ahorrosFiltrados.reduce((sum, a) => sum + a.monto, 0);
+    const totalInversiones = inversionesFiltradas.reduce((sum, inv) => sum + inv.monto, 0);
+
+    // Balance disponible = Ingresos - Gastos - Ahorros - Inversiones
+    const disponible = totalIngresos - totalGastos - totalAhorros - totalInversiones;
+
     return {
-      gastos: { 
-        monto: gastosFiltrados.reduce((sum, g) => sum + g.monto, 0)
-      },
-      ingresos: { 
-        monto: ingresosFiltrados.reduce((sum, i) => sum + i.monto, 0)
-      },
-      ahorro: { 
-        monto: ahorrosFiltrados.reduce((sum, a) => sum + a.monto, 0)
-      },
-      inversion: { 
-        monto: inversionesFiltradas.reduce((sum, inv) => sum + inv.monto, 0)
+      gastos: { monto: totalGastos },
+      ingresos: { monto: totalIngresos },
+      ahorro: { monto: totalAhorros },
+      inversion: { monto: totalInversiones },
+      disponible: disponible 
+    };
+    }, [gastos, ingresos, ahorros, inversiones, periodo]);
+
+    // Obtener mensajes y color de Quantum según el balance disponible
+    const getQuantumMessage = () => {
+      const disponible = financialData.disponible;
+
+      if (disponible > 0) {
+        return {
+          color: '#4ADE80', // Verde
+          mensaje: t('dashboard.balancePositive'),
+          balance: `+${formatCurrency(disponible)}`
+        };
+      } else if (disponible === 0) {
+        return {
+          color: '#FBBF24', // Amarillo
+          mensaje: t('dashboard.balanceZero'),
+          balance: formatCurrency(0)
+        };
+      } else {
+        return {
+          color: '#EF4444', // Rojo
+          mensaje: t('dashboard.balanceNegative'),
+          balance: formatCurrency(disponible)
+        };
       }
     };
-  }, [gastos, ingresos, ahorros, inversiones, periodo]);
+
+    const quantumData = getQuantumMessage();
 
   if (isLoading) {
     return (
@@ -85,32 +113,56 @@ function Dashboard() {
       {/* Quantum + Mensaje */}
       <div className="dashboard-welcome" style={{ 
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: '32px',
-        maxWidth: '760px',
-        margin: '0 auto 20px auto'
+        textAlign: 'center',
+        maxWidth: '600px',
+        margin: '0 auto 32px auto'
       }}>
-        <div style={{ 
-          flexShrink: 0,
-          width: '100px'
+        {/* Título de bienvenida */}
+        <h1 style={{ margin: '0 0 20px', fontSize: '28px' }}>
+          {t('dashboard.welcome')}, {currentUser?.name || t('common.user')}
+        </h1>
+
+        {/* Burbuja con mensaje de Quantum */}
+        <div style={{
+          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+          border: '1px solid rgba(255,255,255,.1)',
+          borderRadius: '20px',
+          padding: '16px 24px',
+          marginBottom: '12px',
+          maxWidth: '400px'
         }}>
-          <img 
-            src={theme === 'light' ? quantumImgLight : quantumImg} 
-            alt="Quantum - Tu asistente financiero"
-            style={{ width: '100%', height: 'auto' }}
-          />
+        <p style={{ 
+          margin: '0 0 8px', 
+          fontSize: '16px', 
+          lineHeight: '1.5',
+          color: 'var(--text-secondary)'
+        }}>
+            {quantumData.mensaje}
+        </p>
+        <p style={{ 
+          margin: 0, 
+        fontSize: '28px', 
+        fontWeight: '800',
+        color: quantumData.color
+        }}>
+          {t('dashboard.available')}: {quantumData.balance}
+        </p>
         </div>
 
-        <div style={{ flex: 1 }}>
-          <h1 style={{ margin: '0 0 12px', fontSize: '28px' }}>
-            {t('dashboard.welcome')}, {currentUser?.name || t('common.user')}
-          </h1>
-          <p className="subtitle" style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}>
-            {t('dashboard.subtitle')} ✨
-          </p>
+        {/* Quantum flotante */}
+        <img 
+        src={theme === 'light' ? quantumImgLight : quantumImg} 
+        alt="Quantum - Tu asistente financiero"
+        style={{ 
+        width: '120px', 
+        height: '120px',
+        animation: 'float 3s ease-in-out infinite'
+        }}
+        />
         </div>
-      </div>
-      
+        
       {/* Selector de período */}
       <div style={{
         display: 'flex',
