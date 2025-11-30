@@ -132,7 +132,7 @@ function Dashboard() {
         padding: '20px 24px',
         marginBottom: '12px',
         width: '100%',
-        maxWidth: '450px'
+        maxWidth: '800px'
       }}>
         {/* Trabajando para ti (Ahorro + Inversión) */}
       <div style={{ marginBottom: '16px' }}>
