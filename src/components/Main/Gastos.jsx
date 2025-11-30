@@ -185,50 +185,89 @@ function Gastos() {
         formatCurrency={formatCurrency}
       />
 
-        {/* Balance Disponible */}
+        {/* Balance Disponible - Estilo Kakeibo */}
       <div style={{
-          maxWidth: '700px',
-          margin: '0 auto 24px',
-          padding: '16px 24px',
-          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
-          border: '1px solid rgba(255,255,255,.1)',
-          borderRadius: '16px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '16px'
-        }}>
-        {/* Balance a la izquierda */}
-        <div>
-        <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
-          {t('dashboard.available')}
-        </p>
-        <p style={{ 
-            margin: '4px 0 0', 
-            fontSize: '28px', 
-            fontWeight: '800',
-            color: getBalanceInfo().color
-          }}>
-          {balanceDisponible >= 0 ? '+' : ''}{formatCurrency(balanceDisponible)}
-        </p>
-        </div>
-  
-          {/* Quantum + Mensaje a la derecha */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <img 
-          src={quantumHead} 
-          alt="Quantum" 
-          style={{ width: '40px', height: '40px' }} 
-        />
-        <p style={{ 
-          margin: 0, 
-          fontSize: '14px', 
-          color: 'var(--text-secondary)'
-          }}>
-            {getBalanceInfo().mensaje}
-        </p>
-        </div>
-        </div>
+      maxWidth: '700px',
+      margin: '0 auto 24px',
+      padding: '20px 24px',
+      background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+      border: '1px solid rgba(255,255,255,.1)',
+      borderRadius: '16px'
+      }}>
+        {/* Trabajando para ti (Ahorro + Inversión) */}
+      <div style={{ marginBottom: '16px' }}>
+      <p style={{ 
+      margin: 0, 
+      fontSize: '14px', 
+      color: 'var(--text-secondary)' 
+      }}>
+        🌱 {t('expenses.workingForYou')}
+      </p>
+      <p style={{ 
+      margin: '4px 0 0', 
+      fontSize: '24px', 
+      fontWeight: '800',
+      color: '#4ADE80'
+      }}>
+        {formatCurrency(sumAhorros + sumInversiones)}
+      </p>
+      <p style={{ 
+      margin: '4px 0 0', 
+      fontSize: '12px', 
+      color: 'var(--text-secondary)' 
+      }}>
+        ({t('nav.savings')} {formatCurrency(sumAhorros)} + {t('nav.investments')} {formatCurrency(sumInversiones)})
+      </p>
+      </div>
+
+        {/* Separador */}
+      <div style={{ 
+        borderTop: '1px solid rgba(255,255,255,.1)', 
+        margin: '16px 0' 
+      }}></div>
+
+      {/* Libre para gastar */}
+      <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center' 
+    }}>
+      <div>
+      <p style={{ 
+        margin: 0, 
+        fontSize: '14px', 
+        color: 'var(--text-secondary)' 
+      }}>
+        💳 {t('expenses.freeToSpend')}
+      </p>
+      <p style={{ 
+        margin: '4px 0 0', 
+        fontSize: '24px', 
+        fontWeight: '800',
+        color: getBalanceInfo().color
+      }}>
+        {formatCurrency(balanceDisponible)}
+      </p>
+    </div>
+    
+    {/* Quantum + Mensaje */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <img 
+        src={quantumHead} 
+        alt="Quantum" 
+        style={{ width: '40px', height: '40px' }} 
+      />
+      <p style={{ 
+        margin: 0, 
+        fontSize: '14px', 
+        color: 'var(--text-secondary)',
+        maxWidth: '150px'
+      }}>
+        {getBalanceInfo().mensaje}
+      </p>
+    </div>
+    </div>
+    </div>
 
       {/* Formulario */}
       {mostrarFormulario && (

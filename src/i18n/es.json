@@ -78,11 +78,13 @@
     "savings": "Ahorro",
     "investment": "Inversión",
     "clickToManage": "Click para gestionar",
-    "viewPortfolio": "Ver portfolio",
+    "viewPortfolio": "Ver portafolio",
     "available": "Disponible",
     "balancePositive": "¡Excelente! Sigue así, cada decisión cuenta ✨",
     "balanceZero": "Tu balance está equilibrado. ¡Buen control!",
-    "balanceNegative": "No te preocupes, el primer paso es verlo. ¡Tú puedes! 💪"
+    "balanceNegative": "No te preocupes, el primer paso es verlo. ¡Tú puedes! 💪",
+    "workingForYou": "Trabajando para ti",
+    "freeToSpend": "Libre para gastar"
     },
     "settings": {
     "title": "Configuración",
@@ -179,7 +181,9 @@
     "quantumMessage": "💸 Conocer tus gastos es el primer paso para controlarlos.",
     "balancePositive": "¡Bien! Aún tienes margen",
     "balanceZero": "Todo asignado",
-    "balanceNegative": "Cuidado, estás en rojo"
+    "balanceNegative": "Cuidado, estás en rojo",
+    "workingForYou": "Trabajando para ti",
+    "freeToSpend": "Libre para gastar"
     },
   "expenseCategories": {
   "rent": "🏠 Alquiler",

@@ -111,7 +111,7 @@ function Dashboard() {
   return (
     <main className="wrapper">
       {/* Quantum + Mensaje */}
-      <div className="dashboard-welcome" style={{ 
+    <div className="dashboard-welcome" style={{ 
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -119,38 +119,80 @@ function Dashboard() {
         maxWidth: '600px',
         margin: '0 auto 32px auto'
       }}>
-        {/* Título de bienvenida */}
-        <h1 style={{ margin: '0 0 20px', fontSize: '28px' }}>
-          {t('dashboard.welcome')}, {currentUser?.name || t('common.user')}
-        </h1>
+      {/* Título de bienvenida */}
+      <h1 style={{ margin: '0 0 20px', fontSize: '28px' }}>
+        {t('dashboard.welcome')}, {currentUser?.name || t('common.user')}
+      </h1>
 
-        {/* Burbuja con mensaje de Quantum */}
-        <div style={{
-          background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
-          border: '1px solid rgba(255,255,255,.1)',
-          borderRadius: '20px',
-          padding: '16px 24px',
-          marginBottom: '12px',
-          maxWidth: '400px'
-        }}>
-        <p style={{ 
-          margin: '0 0 8px', 
-          fontSize: '16px', 
-          lineHeight: '1.5',
-          color: 'var(--text-secondary)'
-        }}>
-            {quantumData.mensaje}
-        </p>
-        <p style={{ 
-          margin: 0, 
+      {/* Tarjeta de Balance - Estilo Kakeibo */}
+      <div style={{
+        background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+        border: '1px solid rgba(255,255,255,.1)',
+        borderRadius: '20px',
+        padding: '20px 24px',
+        marginBottom: '12px',
+        width: '100%',
+        maxWidth: '450px'
+      }}>
+        {/* Trabajando para ti (Ahorro + Inversión) */}
+      <div style={{ marginBottom: '16px' }}>
+      <p style={{ 
+        margin: 0, 
+        fontSize: '14px', 
+        color: 'var(--text-secondary)' 
+      }}>
+         {t('dashboard.workingForYou')} 🌱
+      </p>
+      <p style={{ 
+        margin: '4px 0 0', 
+        fontSize: '24px', 
+        fontWeight: '800',
+        color: '#4ADE80'
+      }}>
+        {formatCurrency(financialData.ahorro.monto + financialData.inversion.monto)}
+      </p>
+      <p style={{ 
+        margin: '4px 0 0', 
+        fontSize: '12px', 
+        color: 'var(--text-secondary)' 
+      }}>
+        ({t('nav.savings')} {formatCurrency(financialData.ahorro.monto)} + {t('nav.investments')} {formatCurrency(financialData.inversion.monto)})
+      </p>
+    </div>
+
+        {/* Separador */}
+      <div style={{ 
+        borderTop: '1px solid rgba(255,255,255,.1)', 
+        margin: '16px 0' 
+        }}></div>
+
+        {/* Libre para gastar */}
+      <div>
+      <p style={{ 
+        margin: 0, 
+        fontSize: '14px', 
+        color: 'var(--text-secondary)' 
+      }}>
+         {t('dashboard.freeToSpend')} 💳
+      </p>
+      <p style={{ 
+        margin: '4px 0 0', 
         fontSize: '28px', 
         fontWeight: '800',
         color: quantumData.color
-        }}>
-          {t('dashboard.available')}: {quantumData.balance}
-        </p>
-        </div>
-
+      }}>
+        {quantumData.balance}
+      </p>
+      <p style={{ 
+        margin: '8px 0 0', 
+        fontSize: '14px', 
+        color: 'var(--text-secondary)' 
+      }}>
+        {quantumData.mensaje}
+      </p>
+      </div>
+      </div>
+    
         {/* Quantum flotante */}
         <img 
         src={theme === 'light' ? quantumImgLight : quantumImg} 

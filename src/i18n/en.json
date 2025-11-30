@@ -82,7 +82,9 @@
     "available": "Available",
     "balancePositive": "Excellent! Keep it up, every decision counts ✨",
     "balanceZero": "Your balance is even. Great control!",
-    "balanceNegative": "Don't worry, seeing it is the first step. You can do it! 💪"
+    "balanceNegative": "Don't worry, seeing it is the first step. You can do it! 💪",
+    "workingForYou": "Working for you",
+    "freeToSpend": "Free to spend"
   },
   "settings": {
     "title": "Settings",
@@ -179,7 +181,9 @@
     "quantumMessage": "💸 Knowing your expenses is the first step to controlling them.",
     "balancePositive": "Good! You still have margin",
     "balanceZero": "All allocated",
-    "balanceNegative": "Careful, you're in the red"
+    "balanceNegative": "Careful, you're in the red",
+    "workingForYou": "Working for you",
+    "freeToSpend": "Free to spend"
     },
   "expenseCategories": {
   "rent": "🏠 Rent",
