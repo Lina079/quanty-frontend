@@ -184,3 +184,14 @@ h3 {
     font-size: 24px !important;
   }
 }
+
+[data-theme="light"] {
+  /* ... variables que ya tienes ... */
+  
+  /* Variables para BudgetCard y componentes similares */
+  --card-item-bg: rgba(168, 212, 214, 0.25);
+  --input-bg: rgba(255, 255, 255, 0.8);
+  --progress-bg: rgba(168, 212, 214, 0.3);
+  --form-bg: rgba(0, 163, 196, 0.08);
+  --border-color: rgba(30, 58, 95, 0.15);
+}

@@ -3,6 +3,7 @@ import { useSettings } from '../../contexts/SettingsContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useTransactions } from '../../contexts/TransactionsContext';
 import { useToast } from '../../contexts/ToastContext';
+import BudgetCard from '../Budget/BudgetCard';
 import ModalConfirmacion from './components/ModalConfirmacion';
 import CardResumen from './components/CardResumen';
 import HistorialFiltrado from './components/HistorialFiltrado';
@@ -264,6 +265,9 @@ function Gastos() {
     </div>
     </div>
     </div>
+
+    {/* Presupuesto */}
+      <BudgetCard tipo="gasto" />
 
       {/* Formulario */}
       {mostrarFormulario && (

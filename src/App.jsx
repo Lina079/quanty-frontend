@@ -13,6 +13,7 @@ import Transacciones from './components/Main/Transacciones';
 import Gastos from './components/Main/Gastos';
 import Ingresos from './components/Main/Ingresos';
 import Ahorros from './components/Main/Ahorros';
+import { BudgetsProvider } from './contexts/BudgetsContext';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -104,9 +105,11 @@ function App () {
         <LanguageProvider>
           <CurrentUserProvider>
             <TransactionsProvider>
+              <BudgetsProvider>
               <ToastProvider>
                 <AppContent />
               </ToastProvider>
+              </BudgetsProvider>
             </TransactionsProvider>
           </CurrentUserProvider>
         </LanguageProvider>

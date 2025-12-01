@@ -301,5 +301,35 @@
   "october": "October",
   "november": "November",
   "december": "December"
+  },
+  "budget": {
+  "title": "Your budget",
+  "titleIncome": "Your income goals",
+  "noBudgets": "No budgets defined yet",
+  "addCategory": "+ Add category",
+  "selectCategory": "Select category",
+  "customCategory": "Other (custom)",
+  "customPlaceholder": "Category name",
+  "plannedAmount": "Planned amount",
+  "totalBudget": "Total budget",
+  "totalSpent": "Spent",
+  "totalEarned": "Earned",
+  "remaining": "You have",
+  "left": "left",
+  "exceededBy": "Over by",
+  "deleteConfirm": "Delete budget?",
+  "deleteWarning": "The budget for",
+  "willBeDeleted": "will be permanently deleted.",
+  "budgetAdded": "Budget added",
+  "budgetDeleted": "Budget deleted",
+  "duplicateError": "You already have a budget for this category",
+  "status": {
+    "good": "Looking great!",
+    "caution": "Good, but watch out...",
+    "alert": "Almost at the limit",
+    "completed": "✓ Completed",
+    "exceededExpense": "Over budget!",
+    "exceededIncome": "Goal reached!"
+  }
 }
 }

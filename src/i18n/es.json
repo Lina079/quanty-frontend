@@ -301,5 +301,35 @@
     "october": "Octubre",
     "november": "Noviembre",
     "december": "Diciembre"
+    },
+    "budget": {
+    "title": "Tu presupuesto",
+    "titleIncome": "Tus metas de ingreso",
+    "noBudgets": "Aún no tienes presupuestos definidos",
+    "addCategory": "+ Añadir categoría",
+    "selectCategory": "Selecciona categoría",
+    "customCategory": "Otra (personalizada)",
+    "customPlaceholder": "Nombre de la categoría",
+    "plannedAmount": "Monto previsto",
+    "totalBudget": "Presupuesto total",
+    "totalSpent": "Gastado",
+    "totalEarned": "Ingresado",
+    "remaining": "Te quedan",
+    "left": "por usar",
+    "exceededBy": "Te pasaste por",
+    "deleteConfirm": "¿Eliminar presupuesto?",
+    "deleteWarning": "El presupuesto de",
+    "willBeDeleted": "se eliminará permanentemente.",
+    "budgetAdded": "Presupuesto añadido",
+    "budgetDeleted": "Presupuesto eliminado",
+    "duplicateError": "Ya tienes un presupuesto para esta categoría",
+    "status": {
+    "good": "¡Vas genial!",
+    "caution": "Bien, pero ojo...",
+    "alert": "Casi en el límite",
+    "completed": "✓ Completado",
+    "exceededExpense": "¡Te has pasado!",
+    "exceededIncome": "¡Meta alcanzada!"
     }
+  }
 }
