@@ -303,7 +303,7 @@
     "december": "Diciembre"
     },
     "budget": {
-    "title": "Tu presupuesto",
+    "title": "Tu presupuesto de gastos",
     "titleIncome": "Tus metas de ingreso",
     "noBudgets": "Aún no tienes presupuestos definidos",
     "addCategory": "+ Añadir categoría",
