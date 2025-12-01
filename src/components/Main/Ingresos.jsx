@@ -310,7 +310,7 @@ function Ingresos() {
                     border: '1px solid rgba(255,255,255,.2)',
                     background: 'rgba(14,49,71,.5)',
                     color: 'var(--text-primary)',
-                    fontSize: '22px',
+                    fontSize:'clamp(14px, 4vw, 20px)',
                     fontFamily: 'inherit'
                   }}
                   disabled={isSubmitting}

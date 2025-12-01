@@ -391,7 +391,7 @@ function Inversiones() {
                     border: '1px solid rgba(255,255,255,.2)',
                     background: 'rgba(14,49,71,.5)',
                     color: 'var(--text-primary)',
-                    fontSize: '16px',
+                    fontSize: 'clamp(14px, 2vw, 20px)',
                     fontFamily: 'inherit'
                   }}
                   disabled={isSubmitting}

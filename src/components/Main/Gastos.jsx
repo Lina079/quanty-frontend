@@ -227,44 +227,40 @@ function Gastos() {
       }}></div>
 
       {/* Libre para gastar */}
-      <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center' 
+    <div className="kakeibo-balance-content">
+    <div>
+    <p style={{ 
+      margin: 0, 
+      fontSize: '14px', 
+      color: 'var(--text-secondary)' 
     }}>
-      <div>
-      <p style={{ 
-        margin: 0, 
-        fontSize: '14px', 
-        color: 'var(--text-secondary)' 
-      }}>
-        💳 {t('expenses.freeToSpend')}
-      </p>
-      <p style={{ 
-        margin: '4px 0 0', 
-        fontSize: '24px', 
-        fontWeight: '800',
-        color: getBalanceInfo().color
-      }}>
-        {formatCurrency(balanceDisponible)}
-      </p>
-    </div>
+      💳 {t('expenses.freeToSpend')}
+    </p>
+    <p style={{ 
+      margin: '4px 0 0', 
+      fontSize: '24px', 
+      fontWeight: '800',
+      color: getBalanceInfo().color
+    }}>
+      {formatCurrency(balanceDisponible)}
+    </p>
+  </div>
     
-    {/* Quantum + Mensaje */}
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <img 
-        src={quantumHead} 
-        alt="Quantum" 
-        style={{ width: '40px', height: '40px' }} 
-      />
-      <p style={{ 
-        margin: 0, 
-        fontSize: '14px', 
-        color: 'var(--text-secondary)',
-        maxWidth: '150px'
-      }}>
-        {getBalanceInfo().mensaje}
-      </p>
+  {/* Quantum + Mensaje */}
+  <div className="quantum-msg" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <img 
+      src={quantumHead} 
+      alt="Quantum" 
+      style={{ width: '40px', height: '40px' }} 
+    />
+    <p style={{ 
+      margin: 0, 
+      fontSize: '14px', 
+      color: 'var(--text-secondary)',
+      maxWidth: '150px'
+    }}>
+      {getBalanceInfo().mensaje}
+    </p>
     </div>
     </div>
     </div>
@@ -422,7 +418,7 @@ function Gastos() {
                     border: '1px solid rgba(255,255,255,.2)',
                     background: 'rgba(14,49,71,.5)',
                     color: 'var(--text-primary)',
-                    fontSize: '22px',
+                    fontSize: 'clamp(14px, 2vw, 20px)',
                     fontFamily: 'inherit'
                   }}
                   disabled={isSubmitting}
