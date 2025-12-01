@@ -186,11 +186,11 @@ function Gastos() {
       />
 
         {/* Balance Disponible - Estilo Kakeibo */}
-      <div style={{
+      <div className="kakeibo-balance-box" style={{
       maxWidth: '800px',
       margin: '0 auto 24px',
       padding: '20px 24px',
-      background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+      background: 'linear-gradient(160deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%)',
       border: '1px solid rgba(255,255,255,.1)',
       borderRadius: '16px'
       }}>

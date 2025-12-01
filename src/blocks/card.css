@@ -183,3 +183,9 @@
 [data-theme="light"] .distribution-item {
   background: rgba(255, 255, 255, 0.5) !important;
 }
+
+/* ===== BOX DE BALANCE KAKEIBO EN MODO CLARO ===== */
+[data-theme="light"] .kakeibo-balance-box {
+  background: rgba(245, 252, 248, 0.7) !important;
+  border: 1px solid rgba(168, 212, 214, 0.4) !important;
+}

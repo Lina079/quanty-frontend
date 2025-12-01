@@ -125,8 +125,8 @@ function Dashboard() {
       </h1>
 
       {/* Tarjeta de Balance - Estilo Kakeibo */}
-      <div style={{
-        background: 'linear-gradient(160deg, rgba(14,49,71,.85) 0%, rgba(11,36,54,.85) 100%)',
+      <div className="kakeibo-balance-box" style={{
+        background:'linear-gradient(160deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%)',
         border: '1px solid rgba(255,255,255,.1)',
         borderRadius: '20px',
         padding: '20px 24px',
